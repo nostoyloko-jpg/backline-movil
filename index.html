@@ -120,7 +120,7 @@ button.card:active{background:var(--azulsuave)}
 .lin:first-of-type{border-top:0;padding-top:2px}
 .lin .cab{display:flex;gap:8px;align-items:flex-start}
 .lin .cab input{margin:0;padding:9px 10px;font-size:15px}
-.lin .nums{display:grid;grid-template-columns:1.25fr .8fr .8fr 1.25fr;gap:7px;margin-top:7px;align-items:end}
+.lin .nums{display:grid;grid-template-columns:1.2fr .75fr .75fr .8fr 1.25fr;gap:6px;margin-top:7px;align-items:end}
 .lin .nums label{font-size:11.5px;margin-bottom:3px}
 .lin .nums input{margin:0;padding:9px 8px;font-size:15px;text-align:right}
 .lin .imp{font-weight:700;font-variant-numeric:tabular-nums;text-align:right;padding-bottom:9px;font-size:15px}
@@ -174,6 +174,11 @@ nav button{flex:1;background:none;border:0;padding:9px 2px 10px;color:var(--suav
 nav button.on{color:var(--azul)}
 nav svg{width:23px;height:23px;stroke:currentColor;fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
 nav[hidden],header .sesion[hidden]{display:none}
+#hojaCapa{position:fixed;inset:0;z-index:60;background:#e9ecf2}
+#hojaCapa[hidden]{display:none}
+#hojaCapa iframe{position:absolute;inset:0;width:100%;height:100%;border:0;background:#e9ecf2}
+.hojaCarga{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#667085;font-size:15px;z-index:1;background:#e9ecf2}
+.hojaCarga[hidden]{display:none}
 #toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(78px + var(--sab));background:var(--texto);color:var(--fondo);
   padding:10px 16px;border-radius:99px;font-size:14.5px;z-index:40;max-width:90vw;text-align:center}
 #toast[hidden]{display:none}
@@ -556,7 +561,8 @@ function presuNuevo(){ return {cli:null, cliTxt:'', con:null, evento:'', lugar:'
 function presuCarga(){ try{ P = JSON.parse(lee('borrador') || 'null'); }catch(e){ P = null; } if(!P || !P.secs) P = presuNuevo(); }
 function presuGuarda(){ guarda('borrador', JSON.stringify(P)); }
 const diasP = () => P.ini ? nDias(P.ini, P.fin || P.ini) : 1;
-const lineImp = l => N0(l.pvp) * N0(l.cant) * N0(l.dias) * (1 - N0(l.dto) / 100);
+const lineImp = l => N0(l.pvp) * N0(l.cant) * N0(l.dias) * (1 - Math.min(100, N0(l.dto)) / 100);
+const impTxt = l => (l.dto !== '' && l.dto != null && N0(l.dto) === 100) ? 'S/C' : eur(lineImp(l));
 function totales(){
   const C = CFG(); let base0 = 0; const sub = {};
   SECS.forEach(([s]) => { sub[s] = P.secs[s].reduce((t, l) => t + lineImp(l), 0); base0 += sub[s]; });
@@ -613,7 +619,8 @@ function pintaPresu(){
           '<div><label>Precio</label><input inputmode="decimal" data-l="pvp" value="' + esc(numTxt(l.pvp)) + '"></div>' +
           '<div><label>Cant.</label><input inputmode="decimal" data-l="cant" value="' + esc(numTxt(l.cant)) + '"></div>' +
           '<div><label>Días</label><input inputmode="decimal" data-l="dias" value="' + esc(numTxt(l.dias)) + '"></div>' +
-          '<div class="imp" data-imp>' + eur(lineImp(l)) + '</div>' +
+          '<div><label>Dto. %</label><input inputmode="decimal" data-l="dto" value="' + esc(numTxt(l.dto)) + '"></div>' +
+          '<div class="imp" data-imp>' + impTxt(l) + '</div>' +
         '</div>' + st + '</div>';
     });
     h += '<div class="mas">' + (s === 'BACKLINE:' ? '<button class="btn chico" data-act="material">＋ Material</button>' : '') +
@@ -701,7 +708,7 @@ function preguntaGuardar(){
 function docDeP(){
   const C = CFG(), d = hoyISO();
   const lineas = s => { const L = P.secs[s].filter(l => String(l.concepto).trim() || hasP(l.pvp)).map(l => {
-      const o = {id:uid(), kind:'item', concepto:String(l.concepto).trim(), pvp: l.pvp === '' ? '' : N0(l.pvp), cant: N0(l.cant), dto:'', dias: N0(l.dias)};
+      const o = {id:uid(), kind:'item', concepto:String(l.concepto).trim(), pvp: l.pvp === '' ? '' : N0(l.pvp), cant: N0(l.cant), dto: (l.dto === '' || l.dto == null) ? '' : N0(l.dto), dias: N0(l.dias)};
       if(l.inv) o.inv = l.inv; return o; });
     const n = (SECS.find(x => x[0] === s) || [0, 2])[1];
     while(L.length < n) L.push({id:uid(), kind:'item', concepto:'', pvp:'', cant:'', dto:'', dias:''});
@@ -751,7 +758,7 @@ async function guardar(boton){
       const meta = {numero:P.num, nombre:(P.evento || P.cli.cliente || '').trim(), cliente:P.cli.cliente || '', evento:P.evento.trim(), fechas:D.concepto.fechas, estado:'pend'};
       const j = await api('guardar', {id:P.docId, tipo:'presupuesto', meta, datos:JSON.stringify(D), version:null, estado:'pend'}, 90000);
       if(j.error === 'conflicto') throw new Error('Ese presupuesto ya existía en el almacén con otra versión. Ábrelo desde el ordenador.');
-      P.docOk = true; P.doc = D; presuGuarda();
+      P.docOk = true; P.doc = D; P.docVer = j.version || 1; presuGuarda();
     }
     if(!P.planOk){
       paso('Apuntando en el Planning…');
@@ -775,127 +782,79 @@ function pintaHecho(){
   $('#prCuerpo').innerHTML = '<div class="hecho"><div class="ok">✓</div><h2>Guardado en el almacén</h2>' +
     '<div class="ref">' + esc(P.num) + '</div>' +
     '<p class="hint">' + esc(P.cli.cliente) + (P.evento ? ' · ' + esc(P.evento) : '') + '<br>' + eur(T.total) + ' con IVA · Por confirmar · ya está en el Planning</p></div>' +
-    '<div class="acciones"><button class="btn" data-act="pdf">Mandar en PDF</button>' +
+    '<div class="acciones"><button class="btn" data-act="hoja">Ver la hoja y el email</button>' +
     '<button class="btn sec" data-act="nuevo">Hacer otro presupuesto</button></div>' +
-    '<p class="hint" style="margin-top:14px">El PDF del móvil es un resumen limpio. El de siempre, con el formato de la hoja, sale desde el ordenador.</p>';
+    '<p class="hint" style="margin-top:14px">En la hoja puedes retocar el email, usar la edición libre, mandarlo por WhatsApp o email y exportarlo a Drive.</p>';
 }
 
-/* ---------- PDF (con pdf-lib, que se carga solo cuando hace falta) ---------- */
-function cargaPdfLib(){
-  if(window.PDFLib) return Promise.resolve();
-  return new Promise((ok, mal) => { const s = document.createElement('script'); s.src = 'pdf-lib.min.js';
-    s.onload = ok; s.onerror = () => mal(new Error('No pude cargar el generador de PDF. ¿Tienes cobertura?')); document.head.appendChild(s); });
-}
-/* Helvetica solo sabe escribir los caracteres de Windows-1252: lo demás se cambia */
-const W1252 = '€‚ƒ„…†‡ˆ‰Š‹ŒŽ‘’“”•–—˜™š›œžŸ';
-const pdfTxt = s => String(s ?? '').replace(/[→]/g, '->').split('').map(ch => { const c = ch.charCodeAt(0);
-  return (c >= 32 && c <= 126) || (c >= 160 && c <= 255) || W1252.includes(ch) ? ch : (ch === '\n' ? '\n' : '?'); }).join('');
-async function logoBytes(src){
-  if(!src) return null;
-  /* cualquier logo (png, jpg o svg) pasa por un lienzo y sale en PNG */
-  return new Promise(ok => { const im = new Image(); im.onload = () => { try{
-      const r = Math.min(1, 600 / Math.max(im.naturalWidth || 600, im.naturalHeight || 300)), c = document.createElement('canvas');
-      c.width = Math.max(1, Math.round((im.naturalWidth || 600) * r)); c.height = Math.max(1, Math.round((im.naturalHeight || 300) * r));
-      c.getContext('2d').drawImage(im, 0, 0, c.width, c.height);
-      c.toBlob(b => b ? b.arrayBuffer().then(a => ok({bytes:new Uint8Array(a), w:c.width, h:c.height})) : ok(null), 'image/png');
-    }catch(e){ ok(null); } }; im.onerror = () => ok(null); im.src = src; });
-}
-async function hazPdf(){
-  await cargaPdfLib();
-  const {PDFDocument, StandardFonts, rgb} = window.PDFLib;
-  const C = CFG(), D = P.doc || docDeP(), T = totales();
-  const pdf = await PDFDocument.create();
-  pdf.setTitle(pdfTxt('Presupuesto ' + P.num)); pdf.setAuthor(pdfTxt(C.empresa.nombre || 'Backline'));
-  const F = await pdf.embedFont(StandardFonts.Helvetica), FB = await pdf.embedFont(StandardFonts.HelveticaBold);
-  const W = 595.28, H = 841.89, M = 42, navy = rgb(0.122, 0.208, 0.314), gris = rgb(0.4, 0.44, 0.52), linea = rgb(0.82, 0.84, 0.87), claro = rgb(0.93, 0.95, 0.97);
-  let pg = pdf.addPage([W, H]), y = H - M;
-  const txt = (s, x, yy, o = {}) => { const f = o.b ? FB : F, sz = o.s || 9.5, t = pdfTxt(s);
-    const xx = o.r ? x - f.widthOfTextAtSize(t, sz) : (o.c ? x - f.widthOfTextAtSize(t, sz) / 2 : x);
-    pg.drawText(t, {x:xx, y:yy, size:sz, font:f, color:o.col || rgb(0.06, 0.09, 0.16)}); };
-  const parte = (s, w, f, sz) => { const out = []; String(s || '').split('\n').forEach(par => { let lin = '';
-    pdfTxt(par).split(' ').forEach(p => { const t = lin ? lin + ' ' + p : p; if(f.widthOfTextAtSize(t, sz) > w && lin){ out.push(lin); lin = p; } else lin = t; });
-    out.push(lin); }); return out; };
-  const nueva = () => { pg = pdf.addPage([W, H]); y = H - M; };
-  const sitio = h => { if(y - h < M + 30) nueva(); };
-
-  /* cabecera: logo y empresa */
-  const lg = await logoBytes(C.logo);
-  if(lg){ try{ const im = await pdf.embedPng(lg.bytes), hh = 52, ww = Math.min(170, hh * lg.w / lg.h); pg.drawImage(im, {x:M, y:y - hh, width:ww, height:hh * (ww / (hh * lg.w / lg.h))}); }catch(e){} }
-  const E = C.empresa; let ye = y - 8;
-  [E.nombre && [E.nombre, true], ...String(E.dir || '').split('\n').map(x => [x]), E.cif && ['CIF ' + E.cif], E.tel && [E.tel], E.email && [E.email], E.web && [E.web]]
-    .filter(Boolean).filter(x => x[0]).forEach(([t, b]) => { txt(t, W - M, ye, {r:true, b, s: b ? 10.5 : 8.5, col: b ? undefined : gris}); ye -= b ? 13 : 11; });
-  y = Math.min(y - 62, ye - 6);
-
-  /* título */
-  pg.drawRectangle({x:M, y:y - 30, width:W - 2*M, height:30, color:navy});
-  txt('PRESUPUESTO', M + 12, y - 20, {b:true, s:14, col:rgb(1,1,1)});
-  txt(P.num + '   ·   ' + fNum(D.meta.fecha), W - M - 12, y - 20, {r:true, b:true, s:11, col:rgb(1,1,1)});
-  y -= 46;
-
-  /* cliente y bolo */
-  const col2 = M + (W - 2*M) / 2 + 8, y0 = y;
-  txt('CLIENTE', M, y, {b:true, s:8, col:gris}); y -= 13;
-  const cl = D.cliente; [[cl.cliente, true], [cl.cif && 'CIF ' + cl.cif], [cl.domicilio], [cl.email], [cl.tlfn]]
-    .filter(x => x[0]).forEach(([t, b]) => { parte(t, (W - 2*M)/2 - 14, b ? FB : F, b ? 10.5 : 9).forEach(l => { txt(l, M, y, {b, s: b ? 10.5 : 9}); y -= b ? 13 : 11.5; }); });
-  if(D.contacto.nombre){ txt('Contacto: ' + [D.contacto.nombre, D.contacto.movil || D.contacto.tlfn].filter(Boolean).join(' · '), M, y, {s:9, col:gris}); y -= 11.5; }
-  let y2 = y0; txt('BOLO', col2, y2, {b:true, s:8, col:gris}); y2 -= 13;
-  [['Concepto', D.concepto.texto], ['Evento', D.concepto.evento], ['Fechas', D.concepto.fechas || 'sin fechas'], ['Lugar', [D.concepto.lugar, D.concepto.localidad].filter(Boolean).join(', ')]]
-    .filter(x => x[1]).forEach(([k, v]) => { txt(k, col2, y2, {s:8.5, col:gris}); parte(v, W - M - col2 - 58, F, 9.5).forEach((l, i) => { txt(l, col2 + 58, y2, {s:9.5}); y2 -= 12; }); });
-  y = Math.min(y, y2) - 14;
-
-  /* tabla */
-  const X = {c:M + 6, p:W - M - 210, q:W - M - 140, d:W - M - 85, i:W - M - 6};
-  const cab = () => { pg.drawRectangle({x:M, y:y - 6, width:W - 2*M, height:18, color:claro});
-    txt('CONCEPTO', X.c, y, {b:true, s:8}); txt('PRECIO', X.p + 40, y, {b:true, s:8, r:true}); txt('CANT.', X.q + 22, y, {b:true, s:8, r:true});
-    txt('DÍAS', X.d + 22, y, {b:true, s:8, r:true}); txt('IMPORTE', X.i, y, {b:true, s:8, r:true}); y -= 20; };
-  cab();
-  SECS.forEach(([s]) => {
-    const L = P.secs[s].filter(l => String(l.concepto).trim() || hasP(l.pvp)); if(!L.length) return;
-    sitio(40); txt(SEC_NOM[s].toUpperCase(), X.c, y, {b:true, s:9.5, col:navy}); txt(eur(T.sub[s]), X.i, y, {b:true, s:9.5, r:true, col:navy});
-    y -= 5; pg.drawLine({start:{x:M, y}, end:{x:W - M, y}, thickness:.6, color:navy}); y -= 12;
-    L.forEach(l => { const ls = parte(l.concepto, X.p - X.c - 30, F, 9.5); sitio(ls.length * 12 + 6);
-      ls.forEach((t, i) => txt(t, X.c, y - i * 12, {s:9.5}));
-      txt(hasP(l.pvp) ? eur(l.pvp) : '', X.p + 40, y, {s:9.5, r:true}); txt(numTxt(l.cant), X.q + 22, y, {s:9.5, r:true});
-      txt(numTxt(l.dias), X.d + 22, y, {s:9.5, r:true}); txt(eur(lineImp(l)), X.i, y, {s:9.5, r:true});
-      y -= ls.length * 12 + 4; pg.drawLine({start:{x:M, y:y + 2}, end:{x:W - M, y:y + 2}, thickness:.4, color:linea}); y -= 6; });
-    y -= 6;
+/* ============================================================
+   LA HOJA: el mismo motor del ordenador (presupuesto, email,
+   edición libre, PDF y Drive), en motor.html, a pantalla completa.
+   ============================================================ */
+const HOJA = {frame:null, listo:null};
+function hojaFrame(){
+  if(HOJA.listo) return HOJA.listo;
+  const capa = document.createElement('div'); capa.id = 'hojaCapa'; capa.hidden = true;
+  capa.innerHTML = '<div class="hojaCarga" id="hojaCarga">Abriendo la hoja…</div><iframe id="hojaIf" title="Hoja del presupuesto" src="motor.html"></iframe>';
+  document.body.appendChild(capa);
+  HOJA.frame = $('#hojaIf');
+  HOJA.listo = new Promise((ok, mal) => {
+    HOJA.frame.addEventListener('load', () => { try{ HOJA.frame.contentWindow.motor.arranca(window.bkMovil); ok(HOJA.frame.contentWindow.motor); }catch(e){ mal(e); } }, {once:true});
+    HOJA.frame.addEventListener('error', () => mal(new Error('No se pudo abrir la hoja')), {once:true});
   });
-
-  /* totales */
-  sitio(80);
-  const tx = W - M - 200;
-  txt('Total sin IVA', tx, y, {s:10}); txt(eur(T.base), X.i, y, {s:10, r:true}); y -= 15;
-  txt('IVA ' + T.ivaP + ' %', tx, y, {s:10}); txt(eur(T.iva), X.i, y, {s:10, r:true}); y -= 8;
-  pg.drawRectangle({x:tx - 10, y:y - 22, width:W - M - tx + 10, height:24, color:navy});
-  txt('TOTAL', tx, y - 15, {b:true, s:12, col:rgb(1,1,1)}); txt(eur(T.total), X.i, y - 15, {b:true, s:12, r:true, col:rgb(1,1,1)});
-  y -= 44;
-
-  /* condiciones */
-  const cond = [['Validez', D.validez], ['Forma de pago', ((C.fp && C.fp.length ? C.fp : CFG_DEF.fp)[(+D.fp || 0) - 1]) || ''], ['Observaciones', D.concepto.obs]].filter(x => x[1]);
-  cond.forEach(([k, v]) => { const ls = parte(v, W - 2*M - 95, F, 9); sitio(ls.length * 11.5 + 6);
-    txt(k, M, y, {b:true, s:9, col:gris}); ls.forEach((l, i) => txt(l, M + 95, y - i * 11.5, {s:9})); y -= ls.length * 11.5 + 6; });
-
-  /* pie en todas las páginas */
-  const pags = pdf.getPages();
-  pags.forEach((p, i) => { const t = pdfTxt((C.empresa.nombre || '') + (C.empresa.nombre ? '  ·  ' : '') + P.num + (pags.length > 1 ? '  ·  ' + (i + 1) + '/' + pags.length : ''));
-    p.drawText(t, {x:W / 2 - F.widthOfTextAtSize(t, 7.5) / 2, y:24, size:7.5, font:F, color:gris}); });
-  return await pdf.save();
+  HOJA.listo.catch(() => { HOJA.listo = null; capa.remove(); });
+  return HOJA.listo;
 }
-async function mandaPdf(boton){
-  const txt0 = boton.textContent; boton.disabled = true; boton.textContent = 'Haciendo el PDF…';
+const copia = o => JSON.parse(JSON.stringify(o));
+async function abreHojaPresu(vista){
+  if(!P || !P.docOk){ return; }
+  $('#prAviso').textContent = '';
+  const pm = hojaFrame(); const capa0 = $('#hojaCapa'); if(capa0){ capa0.hidden = false; $('#hojaCarga').hidden = false; }
   try{
-    const bytes = await hazPdf();
-    const nombre = (P.num + ' ' + (P.evento || P.cli.cliente || '')).replace(/[\\/:*?"<>|]+/g, ' ').replace(/\s+/g, ' ').trim() + '.pdf';
-    const file = new File([bytes], nombre, {type:'application/pdf'});
+    const m = await pm;
+    const capa = $('#hojaCapa'); capa.hidden = false; $('#hojaCarga').hidden = false;
+    const cfg = DATOS.ajustes.items.find(x => x.id === 'cfg') || {}, logo = (DATOS.ajustes.items.find(x => x.id === 'logo') || {}).img || '';
+    const C = copia(cfg); delete C.id; delete C._v;
+    m.cargar({doc:copia(P.doc), cloud:{id:P.docId, version:P.docVer || 1}, cfg:C, logo,
+      inv:copia(DATOS.inventario.items), plan:copia(DATOS.planning.items), cli:copia(DATOS.clientes.items), usuario:USUARIO, vista:vista || 'mail'});
+    $('#hojaCarga').hidden = true;
+  }catch(e){ const c = $('#hojaCapa'); if(c) c.hidden = true; $('#prAviso').textContent = 'No se pudo abrir la hoja: ' + e.message; }
+}
+/* lo que el motor le pide a esta página (que es la que tiene la sesión del almacén) */
+window.bkMovil = {
+  api: (accion, extra, ms) => api(accion, extra, ms),
+  async guardaPlan(job){
+    const L = DATOS.planning.items, i = L.findIndex(x => x.id === job.id), j = copia(job);
+    if(i < 0) j._v = null;
+    const r = await guardaCol('planning', [j], o => (o.concepto || '(sin concepto)') + (o.ini ? ' · ' + fechaCorta(o.ini) : ''));
+    if(r.conflicto) return r;
+    if(i >= 0) L[i] = j; else L.push(j);
+    INV_CACHE && (INV_CACHE.jobs = null); pintaSemana();
+    return r;
+  },
+  docGuardado(doc){
+    const d = copia(doc); const c = d.cloud || {}; delete d.cloud;
+    P.doc = d; P.docVer = c.version || P.docVer; presuGuarda();
+  },
+  async compartir(bytes, nombre){
+    const file = new File([bytes], nombre.replace(/[\\/:*?"<>|]+/g, ' ').replace(/\s+/g, ' ').trim(), {type:'application/pdf'});
+    const descarga = () => { const a = document.createElement('a'); a.href = URL.createObjectURL(file); a.download = file.name; document.body.appendChild(a); a.click();
+      setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 4000); toast('PDF descargado'); };
     if(navigator.canShare && navigator.canShare({files:[file]})){
-      try{ await navigator.share({files:[file], title:nombre}); }catch(e){ if(e.name !== 'AbortError') throw e; }
-    } else {
-      const a = document.createElement('a'); a.href = URL.createObjectURL(file); a.download = nombre; document.body.appendChild(a); a.click();
-      setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 4000);
-      toast('PDF descargado');
+      try{ await navigator.share({files:[file], title:file.name}); return; }
+      catch(e){ if(e.name === 'AbortError') return;
+        /* si el móvil pide un toque nuevo (el PDF ha tardado), se le ofrece */
+        if(e.name === 'NotAllowedError'){ listoParaMandar(file, descarga); return; }
+        throw e; }
     }
-  }catch(e){ $('#prAviso').textContent = 'No se pudo hacer el PDF: ' + e.message; }
-  finally{ boton.disabled = false; boton.textContent = txt0; }
+    descarga();
+  },
+  cerrarHoja(){ const c = $('#hojaCapa'); if(c) c.hidden = true; pintaPresu(); }
+};
+function listoParaMandar(file, descarga){
+  abreHoja('<h2>El PDF está listo</h2><div class="sub">' + esc(file.name) + '</div>' +
+    '<div class="acciones"><button class="btn" data-act="mandaYa">Mandar por WhatsApp, email…</button><button class="btn sec" data-act="bajaYa">Guardarlo en el móvil</button><button class="btn sec" data-cerrar>Cerrar</button></div>');
+  HOJA.pend = {file, descarga};
 }
 
 /* ============================================================
@@ -1062,19 +1021,38 @@ $('#bRecargar').addEventListener('click', () => recarga());
 
 /* ---------- cargar todo ---------- */
 let cargando = false;
+function pintaTodo(){ INV_CACHE = null; pintaSemana(); pintaPresu(); pintaLibre(); pintaCobros(); }
+/* lo que ya había en el móvil se enseña al momento; luego se pregunta al almacén qué ha cambiado */
+function cargaCache(){
+  let algo = false;
+  COLS.forEach(c => { try{ const x = JSON.parse(lee('col_' + c) || 'null'); if(x && Array.isArray(x.items)){ DATOS[c] = {items:x.items, firma:x.firma || '', listo:true}; algo = true; } }catch(e){} });
+  return algo;
+}
 async function recarga(){
   if(cargando) return; cargando = true;
   const b = $('#bRecargar'); b.textContent = '…';
   ['semAviso','cobAviso','liAviso','prAviso'].forEach(id => $('#' + id).textContent = '');
-  const paso = async (cols, pinta, aviso, falla) => {
-    try{ for(const c of cols) await traeCol(c); INV_CACHE && (INV_CACHE.jobs = null); pinta(); }
-    catch(e){ $('#' + aviso).textContent = e.message; if(falla) falla(); }
-  };
-  /* primero lo ligero; luego inventario y compañía */
-  await paso(['planning'], pintaSemana, 'semAviso', () => $('#semLista').innerHTML = '<p class="vacio">No he podido leer el Planning.</p>');
-  await paso(['ajustes','clientes','inventario','devoluciones'], () => { pintaPresu(); pintaLibre(); }, 'prAviso',
-    () => { $('#liAviso').textContent = $('#prAviso').textContent; });
-  await paso(['libro','liquidaciones'], pintaCobros, 'cobAviso', () => $('#cobLista').innerHTML = '<p class="vacio">No he podido leer el libro.</p>');
+  try{
+    /* todo en una sola petición: el almacén lee su hoja una vez y solo manda lo que ha cambiado */
+    const firmas = {}; COLS.forEach(c => { if(DATOS[c].listo && DATOS[c].firma) firmas[c] = DATOS[c].firma; });
+    let j;
+    try{ j = await api('col_todas', {cols:COLS, firmas}, 180000); }
+    catch(e){ if(/accion/.test(e.message)) j = null; else throw e; }
+    if(j && j.cols){
+      COLS.forEach(c => { const r = j.cols[c]; if(!r) return;
+        if(r.igual && DATOS[c].listo) return;
+        const out = [];
+        (r.items || []).forEach(it => { if(it.borrado || !it.datos) return; let o; try{ o = JSON.parse(it.datos); }catch(e){ return; } if(!o) return; o.id = it.id; o._v = it.version || 0; out.push(o); });
+        DATOS[c] = {items:out, firma:r.firma || '', listo:true};
+        guarda('col_' + c, JSON.stringify({firma:r.firma || '', items:out}));
+      });
+    } else { for(const c of COLS) await traeCol(c); }   /* almacén antiguo: de una en una */
+    pintaTodo();
+  }catch(e){
+    ['semAviso','cobAviso','liAviso','prAviso'].forEach(id => $('#' + id).textContent = e.message);
+    if(!DATOS.planning.listo) $('#semLista').innerHTML = '<p class="vacio">No he podido leer el Planning.</p>';
+    if(!DATOS.libro.listo) $('#cobLista').innerHTML = '<p class="vacio">No he podido leer el libro.</p>';
+  }
   b.textContent = '↻'; cargando = false;
 }
 
@@ -1100,7 +1078,7 @@ document.addEventListener('input', e => {
     const w = t.closest('.lin'), l = P.secs[w.dataset.s][+w.dataset.i], k = t.dataset.l;
     l[k] = k === 'concepto' ? t.value : (t.value.trim() === '' ? '' : t.value.replace(',', '.'));
     presuGuarda();
-    const im = w.querySelector('[data-imp]'); if(im) im.textContent = eur(lineImp(l));
+    const im = w.querySelector('[data-imp]'); if(im) im.textContent = impTxt(l);
     pintaTotales(); return;
   }
 });
@@ -1140,13 +1118,15 @@ document.addEventListener('click', e => {
       '<div class="acciones"><button class="btn" data-act="nuevo">Borrar y empezar</button><button class="btn sec" data-cerrar>Seguir con este</button></div>');
   }
   else if(act === 'nuevo'){ cierraHoja(); P = presuNuevo(); presuGuarda(); $('#prAviso').textContent = ''; pintaPresu(); $('main').scrollTop = 0; }
-  else if(act === 'pdf') mandaPdf(a);
+  else if(act === 'hoja') abreHojaPresu('mail');
+  else if(act === 'mandaYa'){ const p = HOJA.pend; cierraHoja(); if(p) navigator.share({files:[p.file], title:p.file.name}).catch(e => { if(e.name !== 'AbortError') p.descarga(); }); }
+  else if(act === 'bajaYa'){ const p = HOJA.pend; cierraHoja(); if(p) p.descarga(); }
 });
 
 /* ---------- arranque ---------- */
 presuCarga();
 $('#liDesde').value = hoyISO(); $('#liHasta').value = hoyISO();
-if(TOKEN){ sesionVisible(true); recarga(); } else sesionVisible(false);
+if(TOKEN){ sesionVisible(true); if(cargaCache()) pintaTodo(); recarga(); } else sesionVisible(false);
 window.addEventListener('pageshow', e => { if(e.persisted && TOKEN) recarga(); });
 </script>
 </body>
