@@ -296,8 +296,9 @@ const $ = s => document.querySelector(s);
 const $$ = s => Array.from(document.querySelectorAll(s));
 const esc = s => String(s ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 const N0 = v => { const n = typeof v === 'number' ? v : parseFloat(String(v ?? '').replace(/\s/g,'').replace(',', '.')); return isFinite(n) ? n : 0; };
-const eur = n => N0(n).toLocaleString('es-ES', {minimumFractionDigits:2, maximumFractionDigits:2}) + ' €';
-const eur0 = n => Math.round(N0(n)).toLocaleString('es-ES') + ' €';
+const milesP = s => String(s).replace(/\B(?=(\d{3})+(?!\d))/g,'.');
+const eur = n => { const x=Math.round(N0(n)*100)/100; const [i,d]=Math.abs(x).toFixed(2).split('.'); return (x<0?'-':'')+milesP(i)+','+d+' €'; };
+
 const norm = s => String(s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/\s+/g,' ').trim();
 const hasP = v => v !== '' && v != null && !isNaN(+v) && +v > 0;
 let _uid = 0;
@@ -1018,8 +1019,8 @@ function pintaCobros(){
   if(!DATOS.libro.listo) return;
   const L = DATOS.libro.items.slice().sort((a,b) => (b.y - a.y) || (b.m - a.m) || String(a.num).localeCompare(String(b.num)));
   const pend = L.filter(r => !r.cob), cobr = L.filter(r => r.cob);
-  $('#totPend').textContent = eur0(pend.reduce((s,r) => s + lbBase(r), 0));
-  $('#totSin').textContent  = eur0(cobr.filter(r => !lbLiq(r.id)).reduce((s,r) => s + lbBase(r), 0));
+  $('#totPend').textContent = eur(pend.reduce((s,r) => s + lbBase(r), 0));
+  $('#totSin').textContent  = eur(cobr.filter(r => !lbLiq(r.id)).reduce((s,r) => s + lbBase(r), 0));
   const lista = FILTRO === 'pend' ? pend : cobr, host = $('#cobLista');
   if(!lista.length){ host.innerHTML = '<p class="vacio">' + (FILTRO === 'pend' ? 'Nada pendiente de cobro.<br>Bien ahí.' : 'Todavía no hay bolos cobrados.') + '</p>'; return; }
   let html = '', mesAct = '';

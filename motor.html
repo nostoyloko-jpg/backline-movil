@@ -643,6 +643,8 @@ nav.tabs button#tabContra{display:inline-flex;align-items:center}
 button.csel{max-width:380px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap} button.csel .csl{font-weight:400;opacity:.75} button.csel .cnt{font-weight:400;opacity:.6}
 #contra .chx .mvi{overflow:visible}
 #contra .chx .cverb{display:inline-block;border:1px solid #000;color:#000;padding:0 1mm;font-size:8pt;line-height:3.4mm;margin-left:1mm}
+.head .lab .cverb{display:inline-block;border:1px solid #1f3550;color:#1f3550;padding:0 4px;font-size:10px;line-height:15px;margin-left:5px;border-radius:3px;font-weight:700}
+@media print{.head .lab .cverb{border-color:#000;color:#000}}
 #contra .chx .mvi input{width:34mm;border:1px solid #000;height:4.6mm;font:inherit;font-weight:700;font-size:8.5pt;padding:0 1mm;background:#fff;text-align:center;box-sizing:border-box}
 #contra .chx .mvi input:focus{background:var(--amar);outline:none}
 #contra .chx .mva{position:absolute;left:161mm;top:34mm;width:34mm;font-weight:700;font-size:9.5pt;line-height:5mm;border:0;border-bottom:1px solid #d0d5dd;background:transparent;padding:0;font-family:inherit;color:#000;outline:none}
@@ -1023,7 +1025,14 @@ table.g.gp td.lk,table.g.gp td.nt{background-color:transparent}
 #pLibre.on{background:#fff4e5!important;border-color:#f5c27a!important;color:#7a4b00!important;font-weight:700}
 .plibre .plbr{display:flex;gap:12px;align-items:center;justify-content:space-between;margin:0 0 10px;max-width:100%;box-sizing:border-box;width:100%;background:#fff4e5;border-color:#f5c27a;color:#7a4b00}
 .plibre .plbr button{flex:none}.plibre{width:0;min-width:100%}.plibre .plbr span{flex:1;min-width:0}
-#ppto td.gd.man{background:#fff6d6!important;color:#7a4b00;font-weight:700;box-shadow:inset 0 0 0 1px #f5c27a}
+#ppto td.gd.man,#contra td.gd.man{background:#fff6d6!important;color:#7a4b00;font-weight:700;box-shadow:inset 0 0 0 1px #f5c27a}
+body.pdfgen #contra td.gd.man{background:transparent!important;color:inherit;font-weight:inherit;box-shadow:none}
+@media print{#contra td.gd.man{background:transparent!important;color:inherit;font-weight:inherit;box-shadow:none}}
+#contra .chx input.cev{border:0;border-bottom:1px dashed #d0d5dd;background:transparent;padding:0;font-family:inherit;color:#000;outline:none;width:125mm}
+#contra .chx input.cev:focus{background:var(--amar)}
+#contra .chx input.cev.man{background:#fff6d6;color:#7a4b00}
+body.pdfgen #contra .chx input.cev{border:0;background:transparent;color:#000}
+@media print{#contra .chx input.cev{border:0!important;background:transparent!important;color:#000!important}}
 body.pdfgen #ppto td.gd.man{background:transparent!important;color:inherit;font-weight:inherit;box-shadow:none}
 @media print{#ppto td.gd.man{background:transparent!important;color:inherit;font-weight:inherit;box-shadow:none}}
 #bolo .pnote{font-weight:400;font-size:11px;opacity:.8}#bolo select.pimp{width:100%;font:inherit;font-size:11px;border:1px solid #f0b46a;background:#fff8ec;border-radius:4px;padding:1px 2px;color:#7a4b00}#bolo button.pmove{margin-left:8px;font-size:11px;padding:1px 8px;border-radius:4px;background:#fff;color:var(--navy);border:1px solid #98a2b3;font-weight:600;vertical-align:middle}
@@ -1034,6 +1043,11 @@ body.pdfgen #ppto td.gd.man{background:transparent!important;color:inherit;font-
 #busy .spin{width:26px;height:26px;border-radius:50%;border:3px solid #d6e0f5;border-top-color:var(--navy);animation:bkspin .8s linear infinite;flex:none}
 @keyframes bkspin{to{transform:rotate(360deg)}}
 @media print{#busy{display:none!important}}
+/* versión anulada: ⌘P no imprime nada */
+@media print{body.vanulprint *{visibility:hidden!important} body.vanulprint::before{content:"Esta versión del presupuesto está anulada: no se imprime.";visibility:visible;display:block;font:700 20px Arial;padding:40px}}
+/* casillas sin rellenar: al imprimir y en el PDF no se ve el texto de ayuda («Nombre del contrarider», «Nº»…) */
+@media print{input::placeholder,textarea::placeholder{color:transparent!important;opacity:0!important}}
+body.pdfgen input::placeholder,body.pdfgen textarea::placeholder{color:transparent!important}
 #ctx{position:fixed;z-index:100;display:none;background:#fff;border:1px solid #d0d5dd;border-radius:8px;box-shadow:0 12px 32px rgba(16,24,40,.2);padding:4px;min-width:230px}
 #ctx button{display:block;width:100%;text-align:left;background:none;color:#1d2433;border-radius:4px;padding:6px 10px;font-size:12.5px}
 #ctx button:hover:not(:disabled){background:#eef4fd;filter:none}
@@ -1669,7 +1683,9 @@ const esc = s => String(s ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').repl
 const clone = o => JSON.parse(JSON.stringify(o));
 const today = () => new Date().toISOString().slice(0,10);
 const r2 = n => Math.round((+n||0)*100)/100;
-const eur = n => (n==null||n===''||isNaN(n)) ? '' : Number(n).toLocaleString('es-ES',{minimumFractionDigits:2,maximumFractionDigits:2});
+/* importes: siempre 2 decimales, punto en los miles (también 1.234,50: el formato del sistema no lo pone con 4 cifras) y coma en los céntimos */
+const milesP = s => String(s).replace(/\B(?=(\d{3})+(?!\d))/g,'.');
+const eur = n => { if(n==null||n===''||isNaN(n)) return ''; const x=Math.round(Number(n)*100)/100; const [i,d]=Math.abs(x).toFixed(2).split('.'); return (x<0?'-':'')+milesP(i)+','+d; };
 const eurS = n => (n==='S/C') ? 'S/C' : ((n==null||n===''||isNaN(n)) ? '' : eur(n)+' €');
 function pnum(v){                       /* texto → número (admite coma decimal y %) */
   if(typeof v==='number') return v;
@@ -2001,7 +2017,9 @@ function redo(){ if(!fut.length){ toast('Nada que rehacer','#c60'); return; } hi
 
 /* ---------- cálculos del presupuesto ---------- */
 /* edición libre del presupuesto: el importe de una línea escrito a mano manda; las sumas, el IVA y el total se siguen calculando */
-const libreOn = D => !!((D||DOC).libre && (D||DOC).libre.on);
+/* edición libre: libreOn = lo escrito a mano cuenta (está activada, o se desactivó y se quedó lo escrito); libreEd = se puede escribir */
+const libreOn = D => !!((D||DOC).libre);
+const libreEd = D => !!((D||DOC).libre && (D||DOC).libre.on);
 /* VACIA: casilla borrada a mano (se ve vacía; las fórmulas siguen usando su valor calculado) */
 const VACIA='∅';
 const manNum = v => v!=null && v!=='' && v!==VACIA;
@@ -2923,7 +2941,9 @@ function pptoDef(){
   const hb={b:true,ha:'center',bd:BDALL};
   add('ph',{A:L('Partidas',hb),B:L('Material / Concepto',hb),C:L('pvp unidad',hb),D:L('Cant.',hb),E:L('Dto. %',hb),F:L('dias',hb),G:L('IMPORTE    € (Euros)',hb)});
 
-  const mode=(DOC.link&&DOC.link.mode)||'off', libre=libreOn();
+  const mode=(DOC.link&&DOC.link.mode)||'off', libre=libreOn(), ED=libreEd();
+  /* edición libre desactivada con cosas escritas: se ven (en amarillo) pero escribir pregunta antes si se vuelve a activar */
+  const LK=c=>{ if(ED || !c || !c.set) return c; const s0=c.set; c.set=v=>{ setTimeout(async()=>{ await pptoLibre(true); if(libreEd()){ s0(v); save(); if(typeof syncFactura==='function') syncFactura(); } renderPpto(); },0); }; return c; };
   /* celda que en edición libre se puede escribir a mano: si coincide con la fórmula, vuelve a ser fórmula */
   /* borrarla la deja vacía (las fórmulas siguen con su valor); escribir lo mismo que la fórmula la devuelve a la fórmula */
   const MC=(val,calc,setv,base,extra)=>Object.assign({t:'num', v:val===VACIA?'':manNum(val)?N0(val):(typeof calc==='number'?calc:''), cur:true, base, cls:manV(val)?'man':'', sum:manNum(val)?N0(val):(typeof calc==='number'?calc:0), calc:typeof calc==='number'?calc:undefined,
@@ -2931,21 +2951,21 @@ function pptoDef(){
   /* sin edición libre: se puede escribir igual, pero antes pregunta si se activa la edición libre */
   const AC=(calc,apply,base)=>({t:'num', v:typeof calc==='number'?calc:'', cur:true, base, sum:typeof calc==='number'?calc:0,
     set:v=>{ if(v!=='' && v!=null && typeof calc==='number' && Math.abs(N0(v)-calc)<0.005) return; const val=(v===''||v==null) ? VACIA : Math.round(N0(v)*100)/100;
-      setTimeout(async()=>{ await pptoLibre(true); if(libreOn()){ apply(val); save(); if(typeof syncFactura==='function') syncFactura(); } renderPpto(); },0); }});
+      setTimeout(async()=>{ await pptoLibre(true); if(libreEd()){ apply(val); save(); if(typeof syncFactura==='function') syncFactura(); } renderPpto(); },0); }});
   DOC.secciones.forEach((s,si)=>{
     const c=secCalc(s); const P=`secciones.${si}`;
     const g=S_(ST.gray,{bd:BDALL});
     add('s:'+s.id,{
-      A:T(P+'.nombre',S_(g,{b:true})), B:T(P+'.nota',g), C:libre ? MC(s.subMan,c.sub0,v=>{ if(v==null) delete s.subMan; else s.subMan=v; },g) : AC(c.sub,v=>{ s.subMan=v; },g),
+      A:T(P+'.nombre',S_(g,{b:true})), B:T(P+'.nota',g), C:libre ? LK(MC(s.subMan,c.sub0,v=>{ if(v==null) delete s.subMan; else s.subMan=v; },g)) : AC(c.sub,v=>{ s.subMan=v; },g),
       D:{t:'num',v:s.cant,set:v=>s.cant=v,base:g}, E:{t:'num',v:s.dto,set:v=>s.dto=v,base:g,pct:true}, F:{t:'num',v:s.dias,set:v=>s.dias=v,base:g},
-      G:Object.assign(libre ? MC(s.impMan,c.imp0,v=>{ if(v==null) delete s.impMan; else s.impMan=v; },S_(g,{b:true})) : AC(c.imp,v=>{ s.impMan=v; },S_(g,{b:true})), {tip:ajTxt(secCalc(s,false).imp, c.imp)})
+      G:Object.assign(libre ? LK(MC(s.impMan,c.imp0,v=>{ if(v==null) delete s.impMan; else s.impMan=v; },S_(g,{b:true}))) : AC(c.imp,v=>{ s.impMan=v; },S_(g,{b:true})), {tip:ajTxt(secCalc(s,false).imp, c.imp)})
     },{kind:'sec',ref:{si,li:-1},ins:true});
     s.lineas.forEach((l,li)=>{
       const id='l:'+l.id; const it=l.src==='contra'; const tot=l.link==='ctotal';
       const V={bd:BD(0,1,0,1)};
       const lock = it ? 'Esta línea viene del contrarider: edítala allí (o cambia el modo de enlace, o activa «✎ Edición libre»).' : null;
-      const ro=it&&!libre, mk=k=>(l.man&&k in l.man)?' man':'';
-      const setL=(k,v)=>{ l[k]=v; if(it||tot){ if(libre){ (l.man=l.man||{})[k]=v; } } else pptoAutofill(l,k); };
+      const ro=it&&!ED, mk=k=>(l.man&&k in l.man)?' man':'';
+      const setL=(k,v)=>{ l[k]=v; if(it||tot){ if(ED){ (l.man=l.man||{})[k]=v; } } else pptoAutofill(l,k); };
       const cellT=(k,base,extra)=>Object.assign({t:'txt',v:l[k]??'',set:v=>setL(k,v),base:S_(V,{wr:true},base||{}),ro,lockMsg:lock,cls:(it?'lk':'')+mk(k)},extra||{});
       const cellN=(k,extra)=>Object.assign({t:'num',v:l[k],set:v=>setL(k,v),base:V,ro,lockMsg:lock,cls:(it?'lk':'')+mk(k)},extra||{});
       const o={kind:l.kind||'item',ref:{si,li},ins:true,mov:!it,del:true};
@@ -2959,16 +2979,16 @@ function pptoDef(){
       add(id,{
         A:colA, B:cellT('concepto',{},it?{}:{ac:true, acOpen:pptoAcOpen, pick:x=>pptoPickItem(l,x),
           pre: pit?`<span class="lnk" title="Enlazado al inventario: ${esc(itemLabel(pit))} · cuenta para el stock">🔗</span>${!PRINT.on&&typeof stockBadge==='function'?stockBadge(l.inv):''}`:''}),
-        C:cellN('pvp',tot?{ro:!libre,lockMsg:'El precio viene del total del contrarider (o activa «✎ Edición libre»)',cur:true}:{cur:true}), D:cellN('cant'), E:cellN('dto',{pct:true}), F:cellN('dias'),
-        G: libre ? {t:'num', v:l.impMan===VACIA?'':man?N0(l.impMan):(noData(l)||typeof calc!=='number'?'':calc), cur:true, sum:typeof imp==='number'?imp:0, base:V, cls:(manV(l.impMan)?'man':'')+(it?' lk':''),
-              set:v=>{ if(v===''||v==null){ if(noData(l)) delete l.impMan; else l.impMan=VACIA; } else if(typeof calc==='number' && Math.abs(N0(v)-calc)<0.005) delete l.impMan; else l.impMan=Math.round(N0(v)*100)/100; }}
+        C:cellN('pvp',tot?{ro:!ED,lockMsg:'El precio viene del total del contrarider (o activa «✎ Edición libre»)',cur:true}:{cur:true}), D:cellN('cant'), E:cellN('dto',{pct:true}), F:cellN('dias'),
+        G: libre ? LK({t:'num', v:l.impMan===VACIA?'':man?N0(l.impMan):(noData(l)||typeof calc!=='number'?'':calc), cur:true, sum:typeof imp==='number'?imp:0, base:V, cls:(manV(l.impMan)?'man':'')+(it?' lk':''),
+              set:v=>{ if(v===''||v==null){ if(noData(l)) delete l.impMan; else l.impMan=VACIA; } else if(typeof calc==='number' && Math.abs(N0(v)-calc)<0.005) delete l.impMan; else l.impMan=Math.round(N0(v)*100)/100; }})
           : {t:'out',d:noData(l)?'':eurS(imp),sum:typeof imp==='number'?imp:0,base:V,cls:it?'lk':''}
       },o);
     });
   });
   const T3=pptoTotals();
   const tl=S_(ST.gray,{b:true,bd:BDALL});
-  const TM=(k,calc,base)=>{ const M=libre?((DOC.libre.tot=DOC.libre.tot||{})):{}; return libre ? MC(M[k],calc,v=>{ if(v==null) delete M[k]; else M[k]=v; },base) : {t:'out',d:eurS(T3[k]),base}; };
+  const TM=(k,calc,base)=>{ const M=libre?((DOC.libre.tot=DOC.libre.tot||{})):{}; return libre ? LK(MC(M[k],calc,v=>{ if(v==null) delete M[k]; else M[k]=v; },base)) : {t:'out',d:eurS(T3[k]),base}; };
   add('t1',{A:L('',{bd:BD(1,0,0,0)}),B:L('',{bd:BD(1,0,0,0)}),C:L('',{bd:BD(1,0,0,0)}),D:L('TOTAL',tl),G:Object.assign(TM('base',T3.base0,{b:true,bd:BDALL}),{tip:ajTxt(T3.puro,T3.base)})}); M('t1','D',1,3);
   add('t2',{D:L(`I.V.A. (${IVA()}%)`,{b:true,bd:BDALL}),G:TM('iva',T3.iva0,{bd:BDALL})}); M('t2','D',1,3);
   add('t3',{D:L('TOTAL PRESUPUESTO',{b:true,bd:BDALL}),G:TM('total',T3.total0,{b:true,fs:14,bd:BDALL})}); M('t3','D',1,3);
@@ -3076,7 +3096,7 @@ function renderPpto(){
   $('#pHead').innerHTML=`
     <div>${logoImg(logoPx(1))}</div>
     <div class="boxes" style="--gw:${gColW('ppto','G',168)}px">
-      <div class="lab">Ref. Presupuesto</div><div class="bx" title="Nº de presupuesto">${inp('meta.num',{ph:'Nº'})}</div>
+      <div class="lab">Ref. Presupuesto${(typeof verSt==='function'&&verSt().max>1)?` <span class="cverb" title="Versión del presupuesto">V${verSt().cur}</span>`:''}</div><div class="bx" title="Nº de presupuesto">${inp('meta.num',{ph:'Nº'})}</div>
       ${verHeadHtml()}
       <div class="lab">FECHA</div><div class="bx">${inp('meta.fecha',{type:'date'})}</div>
       <div class="lab">Fecha modificación</div><div class="bx">${inp('meta.fechaMod',{type:'date'})}</div>
@@ -3088,11 +3108,19 @@ function renderPpto(){
 /* ---------- estado del presupuesto: el mismo que el del trabajo en el Planning ---------- */
 const docJob = () => { const c=DOC.cloud&&DOC.cloud.id; return PLAN.jobs.find(x=>(c&&x.cloudId===c)||(DOC.jobId&&x.jobId===DOC.jobId))||null; };
 function docEstado(){ const j=docJob(); if(j && j.estado && DOC.estado!==j.estado) DOC.estado=j.estado; return (j&&j.estado)||DOC.estado||'pend'; }
-function pEstadoPaint(){ const e=docEstado();
+function pEstadoPaint(){ const e=(typeof verCurAnul==='function' && verCurAnul()) ? 'anul' : docEstado();
   $$('#pEstado button').forEach(b=>b.classList.toggle('on',b.dataset.e===e));
   const m=$('#pAnul'); if(m) m.classList.toggle('on',e==='anul'); }
 async function setDocEstado(e){
-  const cur=docEstado(); if(e===cur) return;
+  /* viendo una versión anulada: primero se quita la anulación de esa versión */
+  if(typeof verCurAnul==='function' && verCurAnul()){ if(e==='anul') return; if(!await verDesanular(verSt().cur)) return; }
+  const cur=docEstado(); if(e===cur){ pEstadoPaint(); return; }
+  /* con varias versiones: ¿anular solo esta versión o el presupuesto entero? */
+  if(e==='anul' && typeof verMulti==='function' && verMulti() && verVivas().length>1){
+    const V=verSt(), k=await askDlg({title:'¿Qué quieres anular?', text:'Este presupuesto tiene varias versiones.',
+      options:[{k:'ver', icon:'v'+V.cur, label:`Solo la versión ${V.cur}`, desc:'La que estás viendo. El presupuesto sigue con las demás versiones', primary:true},
+               {k:'todo', icon:'✕', label:'Todo el presupuesto', desc:'Todas las versiones: en el Planning queda como anulado'}]});
+    if(!k) return; if(k==='ver'){ await verAnular(V.cur); pEstadoPaint(); return; } }
   const nm=DOC.meta.num||DOC.concepto.evento||'este presupuesto';
   if(e==='anul' && !await confirmDlg(`¿Anular ${nm}?`, 'Saldrá «ANULADO» en grande sobre el presupuesto y en el Planning quedará como anulado (su material deja de contar como fuera).', {ok:'Anular', danger:true})) return;
   if(cur==='anul' && !await confirmDlg('Quitar la anulación', `¿Quitar la anulación de ${nm}?`, {ok:'Quitar la anulación'})) return;
@@ -3113,25 +3141,35 @@ function pAjustePaint(){ const el=$('#pAjuste'); if(!el) return; const T=pptoTot
   el.innerHTML = t ? `<div class="pajb"><b>TOTAL sin IVA</b> · ${esc(t)}${red?` <span class="hint">(incluye redondeo de ${eurS(Math.round((T.base-T.baseM)*100)/100)})</span>`:''}</div>` : ''; }
 const impManN = () => DOC.secciones.reduce((t,s)=>t+s.lineas.filter(l=>manV(l.impMan)).length+s.lineas.reduce((u,l)=>u+(l.man?Object.keys(l.man).length:0),0)+(manV(s.subMan)?1:0)+(manV(s.impMan)?1:0),0) + Object.values((DOC.libre&&DOC.libre.tot)||{}).filter(manV).length;
 function pLibrePaint(){
-  const on=libreOn(), b=$('#pLibre'), bar=$('#pLibreBar');
-  if(b){ b.classList.toggle('on',on); b.textContent=on?'✎ Edición libre: activada':'✎ Edición libre'; }
-  if(!bar) return; const L=DOC.libre||{}, n=impManN();
-  bar.innerHTML = on ? `<div class="banner plbr"><span>✎ <b>Edición libre</b> desde el ${esc(xlDMY(L.en||''))}${L.por?' ('+esc(L.por)+')':''}: lo que está en amarillo está escrito a mano y el presupuesto <b>puede no coincidir con los precios del inventario</b>. Lo que no se toca se sigue calculando con sus fórmulas.${n?` · ${n} casilla${n===1?'':'s'} a mano`:''}</span><button class="sec" id="pLibreOff">Volver a calcular</button></div>` : '';
+  const ed=libreEd(), hay=libreOn(), b=$('#pLibre'), bar=$('#pLibreBar');
+  if(b){ b.classList.toggle('on',ed); b.textContent=ed?'✎ Edición libre: activada':'✎ Edición libre'; }
+  if(!bar) return; const L=DOC.libre||{}, n=impManN(), cuando=`${L.en?' del '+esc(xlDMY(L.en)):''}${L.por?' ('+esc(L.por)+')':''}`;
+  bar.innerHTML = ed ? `<div class="banner plbr"><span>✎ <b>Edición libre</b> desde el ${esc(xlDMY(L.en||''))}${L.por?' ('+esc(L.por)+')':''}: lo que está en amarillo está escrito a mano y el presupuesto <b>puede no coincidir con los precios del inventario</b>. Lo que no se toca se sigue calculando con sus fórmulas.${n?` · ${n} casilla${n===1?'':'s'} a mano`:''}</span><button class="sec" id="pLibreOff" title="Las casillas dejan de poder escribirse; lo escrito a mano se queda">Desactivar (se queda lo escrito)</button>${n?'<button class="sec" id="pLibreRec" title="Borra todo lo escrito a mano">Volver a calcular todo</button>':''}</div>`
+    : hay ? `<div class="banner plbr"><span>✎ Hay <b>${n} casilla${n===1?'':'s'} escrita${n===1?'':'s'} a mano</b> (edición libre${cuando}): se mantienen en amarillo. Para cambiarlas, activa «✎ Edición libre».</span><button class="sec" id="pLibreRec" title="Borra todo lo escrito a mano">Volver a calcular todo</button></div>` : '';
 }
 async function pptoLibre(on){
   if(on){
+    if(libreEd()) return;
     if(!await confirmDlg('Edición libre del presupuesto', 'Podrás cambiar a mano todos los precios e importes: los de las líneas (también las que vienen del contrarider y del inventario), los subtotales, el IVA y el total. Lo que no toques se sigue calculando con sus fórmulas. A partir de ahora el presupuesto puede no coincidir con los precios del inventario, y quedará anotado en el presupuesto.', {ok:'Activar edición libre'})) return;
-    snap(); DOC.libre={on:true, por:(typeof CLOUD!=='undefined'&&CLOUD.usuario)||'', en:today()};
+    snap(); DOC.libre=Object.assign(DOC.libre||{}, {on:true, por:(typeof CLOUD!=='undefined'&&CLOUD.usuario)||'', en:today()});
+    toast('Edición libre activada: ya puedes cambiar cualquier precio o importe','#b54708');
   } else {
-    const n=impManN();
-    if(!await confirmDlg('Volver a calcular', n?`Se borran ${n===1?'la casilla escrita':'las '+n+' casillas escritas'} a mano: precios, importes, subtotales y totales vuelven a calcularse, y las líneas del contrarider vuelven a ser las del contrarider.`:'Se quita la edición libre: todo se calcula con pvp × cantidad × días.', {ok:'Volver a calcular', danger:n>0})) return;
-    snap(); delete DOC.libre; DOC.secciones.forEach(s=>{ delete s.subMan; delete s.impMan; s.lineas.forEach(l=>{ delete l.impMan; delete l.man; }); }); if(typeof linkSync==='function') linkSync();
+    if(!libreEd()) return;
+    snap(); if(impManN()) DOC.libre.on=false; else delete DOC.libre;
+    toast(DOC.libre?'Edición libre desactivada: lo escrito a mano se queda':'Edición libre desactivada','#067647');
   }
-  save(); if(typeof syncFactura==='function') syncFactura(); renderPpto(); toast(on?'Edición libre activada: ya puedes cambiar cualquier precio o importe':'Presupuesto calculado otra vez', on?'#b54708':'#067647');
+  save(); if(typeof syncFactura==='function') syncFactura(); renderPpto();
+}
+/* borrar todo lo escrito a mano: solo con el botón «Volver a calcular todo» */
+async function pptoRecalc(){
+  const n=impManN();
+  if(!await confirmDlg('Volver a calcular todo', n?`Se borran ${n===1?'la casilla escrita':'las '+n+' casillas escritas'} a mano: precios, importes, subtotales y totales vuelven a calcularse, y las líneas del contrarider vuelven a ser las del contrarider.`:'Se quita la edición libre: todo se calcula con pvp × cantidad × días.', {ok:'Volver a calcular', danger:n>0})) return;
+  snap(); delete DOC.libre; DOC.secciones.forEach(s=>{ delete s.subMan; delete s.impMan; s.lineas.forEach(l=>{ delete l.impMan; delete l.man; }); }); if(typeof linkSync==='function') linkSync();
+  save(); if(typeof syncFactura==='function') syncFactura(); renderPpto(); toast('Presupuesto calculado otra vez','#067647');
 }
 function initPpto(){ gToolbar('ppto',$('#fx-ppto'));
-  $('#pLibre').onclick=()=>pptoLibre(!libreOn());
-  $('#ppto').addEventListener('click',e=>{ if(e.target.closest('#pLibreOff')) pptoLibre(false); }); $('#pEstado').onclick=async e=>{ const b=e.target.closest('[data-e]'); if(!b) return;
+  $('#pLibre').onclick=()=>pptoLibre(!libreEd());
+  $('#ppto').addEventListener('click',e=>{ if(e.target.closest('#pLibreOff')) pptoLibre(false); if(e.target.closest('#pLibreRec')) pptoRecalc(); }); $('#pEstado').onclick=async e=>{ const b=e.target.closest('[data-e]'); if(!b) return;
   if(b.dataset.e==='conf' && docEstado()!=='conf' && verMulti()){ const n=await verAskConf(b); if(!n || !(await verSetOk(n))) return; }
   await setDocEstado(b.dataset.e); verPaint(); }; }
 
@@ -3262,7 +3300,7 @@ function renderMail(){
   $('#mHead').innerHTML=`
     <div>${logoImg(logoPx(1))}</div>
     <div class="boxes" style="--gw:${gColW('mail','G',168)}px">
-      <div class="lab">Ref. Presupuesto</div><div class="bx" title="Nº de presupuesto">${inp('mail.head.num',{ph:'Nº'})}</div>
+      <div class="lab">Ref. Presupuesto${(typeof verSt==='function'&&verSt().max>1)?` <span class="cverb" title="Versión del presupuesto">V${verSt().cur}</span>`:''}</div><div class="bx" title="Nº de presupuesto">${inp('mail.head.num',{ph:'Nº'})}</div>
       <div style="height:6px"></div><div></div>
       <div class="lab">FECHA</div><div class="bx">${inp('mail.head.fecha')}</div>
       <div class="lab">Fecha modificación</div><div class="bx">${inp('mail.head.fechaMod')}</div>
@@ -3755,8 +3793,15 @@ const fmtDate = s => { if(!s) return ''; const m=String(s).match(/^(\d{4})-(\d{2
 const udsSet = l => !(l.uds===''||l.uds==null);
 const udsOf = l => udsSet(l) ? l.uds : l.cant;
 const contraImp = l => lineImp(Object.assign({},l,{cant:udsOf(l)}));
-function contraTotalOf(lineas){ let t=0; lineas.forEach(l=>{ const v=contraImp(l); if(typeof v==='number') t+=v; }); return t; }
-function contraTotal(){ return contraTotalOf(DOC.contra); }
+/* lo escrito a mano en el importe de una línea o en el TOTAL manda; si se borra, vuelve a la fórmula */
+const contraImpEf = l => manNum(l.impMan) ? N0(l.impMan) : contraImp(l);
+function contraTotalOf(lineas){ let t=0; lineas.forEach(l=>{ const v=contraImpEf(l); if(typeof v==='number') t+=v; }); return t; }
+const contraTotalEf = cc => manNum(cc.totMan) ? N0(cc.totMan) : contraTotalOf(cc.lineas);
+function contraTotal(){ return contraTotalEf(contraAct()); }
+/* textos propios de cada contrarider (títulos de columna, TOTAL, evento y fecha): vacío = el de siempre */
+const cCab = (k,def) => { const C=(contraAct()||{}).cab||{}; return C[k]!=null ? C[k] : def; };
+const cCabSet = (k,def) => v => { const c=contraAct(); c.cab=c.cab||{}; if(v===''||v==null||v===def) delete c.cab[k]; else c.cab[k]=v; };
+const cCabMan = k => ((contraAct()||{}).cab||{})[k]!=null;
 const contraBlank = l => (l.kind||'item')==='item' && !l.req && !l.prop && (l.pvp===''||l.pvp==null) && !l.nota && (l.cantR===''||l.cantR==null);
 const qx = v => (v===''||v==null) ? '' : fmtIn(v)+' x';
 function invById(id){ return id ? INV.find(i=>i.id===id) : null; }
@@ -3769,7 +3814,8 @@ function contraDef(){
   const cc=CFG.cColor||'#548DD4';
   const band=S_(ST.band,{bg:cc,bd:BD(2,2,2,2)});
   const pb=S_(ST.band,{bg:cc,fs:11,bd:BDALL});
-  rows.push({id:'hdr',cells:{A:L('MATERIAL REQUERIDO',band),C:L('MATERIAL PROPUESTO',band),E:L('pvp unidad',pb),U:L('Uds.',pb),F:L('Dto. %',pb),G:L('Días',pb),H:L('Importe €',pb),I:L('Anotaciones',{fc:'#8a6d1d',b:true,bg:'#fff8e1',bd:BDALL})},h:24});
+  const HC=(k,def,base)=>({t:'txt',v:cCab(k,def),set:cCabSet(k,def),base,cls:cCabMan(k)?'man':''});
+  rows.push({id:'hdr',cells:{A:HC('A','MATERIAL REQUERIDO',band),C:HC('C','MATERIAL PROPUESTO',band),E:HC('E','pvp unidad',pb),U:HC('U','Uds.',pb),F:HC('F','Dto. %',pb),G:HC('G','Días',pb),H:HC('H','Importe €',pb),I:HC('I','Anotaciones',{fc:'#8a6d1d',b:true,bg:'#fff8e1',bd:BDALL})},h:24});
   auto.push({r:'hdr',c:'A',rs:1,cs:2},{r:'hdr',c:'C',rs:1,cs:2});
   let lastUsed=-1; DOC.contra.forEach((l,i)=>{ if(!contraBlank(l)) lastUsed=i; });
   DOC.contra.forEach((l,i)=>{
@@ -3801,12 +3847,16 @@ function contraDef(){
         base:S_(B1,udsSet(l)&&String(l.uds)!==String(l.cant)?{b:true,fc:'#b54708'}:{}),cls:'uds'},
       F:{t:'num',v:l.dto,d:(l.dto===0||l.dto==='0')?'':fmtIn(l.dto),set:v=>l.dto=v===''?0:v,base:B1,pct:true},
       G:{t:'num',v:l.dias,d:blank?'':fmtIn(l.dias),set:v=>l.dias=v,base:B1},
-      H:{t:'out',d:(blank || !(hasNum(l.pvp)||hasNum(l.cant)))?'':eurS(imp),sum:typeof imp==='number'?imp:0,base:S_(B1,{b:true}),cls:imp==='S/C'?'sc':''},
+      H:(()=>{ const man=manNum(l.impMan), calc=typeof imp==='number'?imp:undefined, v=man?N0(l.impMan):(calc!=null?calc:'');
+        return {t:'num', v, calc, d:man?eurS(N0(l.impMan)):((blank || !(hasNum(l.pvp)||hasNum(l.cant)))?'':eurS(imp)), sum:man?N0(l.impMan):(calc||0), base:S_(B1,{b:true}), cls:man?'man':(imp==='S/C'?'sc':''),
+          set:x=>{ if(x===''||x==null || (calc!=null && Math.abs(N0(x)-calc)<0.005)) delete l.impMan; else l.impMan=Math.round(N0(x)*100)/100; }}; })(),
       I:nota
     }},o));
   });
-  const tt=contraTotal();
-  if(!PRINT.on || (CFG.cPrintCols||{}).H) rows.push({id:'tot',cells:{G:L('TOTAL',{b:true,ha:'right'}),H:{t:'out',d:eurS(tt),base:{b:true,fs:14,fc:'#002060',bd:BD(2,0,0,0)}}},h:28});
+  const ac=contraAct(), ttc=contraTotalOf(DOC.contra), tman=manNum(ac.totMan), tt=tman?N0(ac.totMan):ttc;
+  if(!PRINT.on || (CFG.cPrintCols||{}).H) rows.push({id:'tot',cells:{G:HC('tot','TOTAL',{b:true,ha:'right'}),
+    H:{t:'num',v:tt,calc:ttc,d:eurS(tt),base:{b:true,fs:14,fc:'#002060',bd:BD(2,0,0,0)},cls:tman?'man':'',
+      set:x=>{ if(x===''||x==null || Math.abs(N0(x)-ttc)<0.005) delete ac.totMan; else ac.totMan=Math.round(N0(x)*100)/100; }}},h:28});
   return {
     cols:[{k:'A',w:33},{k:'B',w:355},{k:'C',w:33},{k:'D',w:355},{k:'E',w:82,pcol:true},{k:'U',w:52,pcol:true},{k:'F',w:82,pcol:true},{k:'G',w:82,pcol:true},{k:'H',w:82,pcol:true},{k:'I',w:180,pcol:true}],
     rows, auto, ops:CONTRA_OPS, lastData:rows.length-2, grow:n=>{ for(let k=0;k<n;k++) DOC.contra.push(emptyC()); },
@@ -3891,12 +3941,15 @@ function renderContra(){
     <div class="ml" style="top:9mm">FECHA:</div><div class="mv mvi" style="top:9mm">${inp('meta.fecha',{type:'date'})}</div>
     <div class="ml" style="top:14mm">Fecha modificación:</div><div class="mv mvi" style="top:14mm">${inp('meta.fechaMod',{type:'date'})}</div>
     <div class="ml" style="top:19mm">REALIZADO:</div><div class="mv mvi" style="top:19mm">${inp('meta.realizado')}</div>
-    <div class="el">EVENTO:</div><div class="ev1">${esc(DOC.concepto.evento)}</div>
-    <div class="el2">FECHA:</div><div class="ev2">${esc(DOC.concepto.fechas)}</div>
-    ${DOC.contras.length>1?`<div class="ml" style="top:34.6mm">ARTISTA:</div><input class="mva" id="cArtista" value="${esc(contraAct().artista||'')}" placeholder="${esc(contraName(contraAct()))}" spellcheck="false" title="Nombre del artista: es lo que sale en el desplegable de contrariders">`:''}
+    <div class="el">${esc(cCab('evL','EVENTO:'))}</div><input class="ev1 cev${cCabMan('evento')?' man':''}" data-cev="evento" value="${esc(cCab('evento',DOC.concepto.evento||''))}" spellcheck="false" title="Sale del presupuesto; si lo cambias aquí, solo cambia en este contrarider">
+    <div class="el2">${esc(cCab('feL','FECHA:'))}</div><input class="ev2 cev${cCabMan('fechas')?' man':''}" data-cev="fechas" value="${esc(cCab('fechas',DOC.concepto.fechas||''))}" spellcheck="false" title="Sale del presupuesto; si lo cambias aquí, solo cambia en este contrarider">
+    ${DOC.contras.length>1?`<input class="mva" id="cArtista" value="${esc(contraAct().artista||'')}" placeholder="Nombre del contrarider" spellcheck="false" title="Nombre de este contrarider (artista, escenario…): es lo que sale en el desplegable">`:''}
   </div>`;
   if(typeof renderRiderChip==='function') renderRiderChip();
   const ai=$('#cArtista'); if(ai){ ai.onfocus=()=>snap(); ai.oninput=()=>{ contraAct().artista=ai.value; save(); renderCSel(); linkSync(); }; }
+  $$('#cHead input.cev').forEach(x=>{ const k=x.dataset.cev, def=()=>DOC.concepto[k]||'';
+    x.onfocus=()=>snap(); x.oninput=()=>{ cCabSet(k,def())(x.value); x.classList.toggle('man',cCabMan(k)); save(); };
+    x.onchange=()=>{ if(!cCabMan(k)) x.value=def(); }; });
   renderCSel();
   $$('#tab-contra [data-pc]').forEach(c=>c.checked=!!CFG.cPrintCols[c.dataset.pc]);
   gRender('contra');
@@ -3924,12 +3977,12 @@ function cPanel(btn,withActions){
   const used=c=>c.lineas.filter(l=>!contraBlank(l)).length;
   P.innerHTML=`<div class="cph">Elige el contrarider · a la izquierda, cómo pasa al presupuesto</div>
     ${DOC.contras.map((c,i)=>`<div class="cpr${c.id===DOC.cAct&&withActions?' on':''}"><select data-cpp="${c.id}" title="Cómo pasa al presupuesto">${[['off','No pasa'],['items','Línea a línea'],['total','Total']].map(([v,t])=>`<option value="${v}" ${c.pp===v?'selected':''}>${t}</option>`).join('')}</select>
-      ${withActions?`<button data-csel="${c.id}"><b>${esc(contraName(c,i))}</b><small>${used(c)} línea${used(c)===1?'':'s'}</small></button><button class="cren" data-cren="${c.id}" title="Cambiar el nombre">✎</button><span class="cmv"><button data-cmv="${c.id}" data-d="-1" title="Subir" ${i===0?'disabled':''}>↑</button><button data-cmv="${c.id}" data-d="1" title="Bajar" ${i===DOC.contras.length-1?'disabled':''}>↓</button></span>`:`<span class="cpn"><b>${esc(contraName(c,i))}</b><small>${used(c)} líneas · ${eur(contraTotalOf(c.lineas))} €</small></span>`}</div>`).join('')}
+      ${withActions?`<button data-csel="${c.id}"><b>${esc(contraName(c,i))}</b><small>${used(c)} línea${used(c)===1?'':'s'}</small></button><button class="cren" data-cren="${c.id}" title="Cambiar el nombre">✎</button><span class="cmv"><button data-cmv="${c.id}" data-d="-1" title="Subir" ${i===0?'disabled':''}>↑</button><button data-cmv="${c.id}" data-d="1" title="Bajar" ${i===DOC.contras.length-1?'disabled':''}>↓</button></span>`:`<span class="cpn"><b>${esc(contraName(c,i))}</b><small>${used(c)} líneas · ${eur(contraTotalEf(c))} €</small></span>`}</div>`).join('')}
     ${withActions?`<hr><button data-cact="new">＋ Nuevo contrarider</button><button data-cact="dup">Duplicar este</button><button data-cact="del" ${DOC.contras.length<2?'disabled':''}>Eliminar este</button>`:''}`;
   const r=btn.getBoundingClientRect(); P.style.left='0px'; P.style.top=(r.bottom+4)+'px'; P.style.display='block';
   P.style.left=Math.max(8,Math.min(r.left,innerWidth-P.offsetWidth-12))+'px';   /* crece hacia el centro sin salirse */
 }
-/* cambiar el nombre desde el panel: es el mismo dato que la casilla ARTISTA */
+/* cambiar el nombre desde el panel: es el mismo dato que la casilla del nombre en la cabecera */
 function cRenombrar(id){
   const P=$('#cPanel'), c=DOC.contras.find(x=>x.id===id); if(!c) return;
   const row=P.querySelector(`[data-csel="${id}"]`); if(!row) return;
@@ -3947,8 +4000,8 @@ function cRenombrar(id){
 function cSelect(id){ DOC.cAct=id; save(); const G=GRIDS.contra; if(G){ G.act={r:0,c:0}; G.sel=null; } renderContra(); }
 async function cAction(a){
   const c=contraAct();
-  if(a==='new'){ if(TAB!=='contra') switchTab('contra'); const nm=await promptDlg('Nuevo contrarider','Nombre del artista:','',{ok:'Crear'}); if(nm==null) return; snap(); const n=newContraObj(nm.trim()); DOC.contras.push(n); cSelect(n.id); linkSync(); toast(`Contrarider «${contraName(n)}» creado`); }
-  if(a==='dup'){ snap(); const n=JSON.parse(JSON.stringify(c)); n.id='c'+uid(); n.artista=(c.artista||contraName(c))+' (copia)'; n.lineas.forEach(l=>l.id=uid()); DOC.contras.splice(DOC.contras.indexOf(c)+1,0,n); cSelect(n.id); linkSync(); toast('Contrarider duplicado: cambia el nombre en ARTISTA'); }
+  if(a==='new'){ if(TAB!=='contra') switchTab('contra'); const nm=await promptDlg('Nuevo contrarider','Nombre del contrarider (artista, escenario, telonero…):','',{ok:'Crear'}); if(nm==null) return; snap(); const n=newContraObj(nm.trim()); DOC.contras.push(n); cSelect(n.id); linkSync(); toast(`Contrarider «${contraName(n)}» creado`); }
+  if(a==='dup'){ snap(); const n=JSON.parse(JSON.stringify(c)); n.id='c'+uid(); n.artista=(c.artista||contraName(c))+' (copia)'; n.lineas.forEach(l=>l.id=uid()); DOC.contras.splice(DOC.contras.indexOf(c)+1,0,n); cSelect(n.id); linkSync(); toast('Contrarider duplicado: cámbiale el nombre con el ✎ del menú'); }
   if(a==='del'){ if(DOC.contras.length<2) return; if(!await confirmDlg('Eliminar contrarider', `¿Eliminar «${contraName(c)}»? Sus líneas también se quitan del presupuesto.`, {ok:'Eliminar', danger:true})) return; snap();
     const i=DOC.contras.indexOf(c); DOC.contras.splice(i,1); cSelect(DOC.contras[Math.max(0,i-1)].id); linkSync(); toast('Contrarider eliminado'); }
 }
@@ -3960,6 +4013,7 @@ function initCSel(){
     if(mv){ if(mv.disabled) return; const i=DOC.contras.findIndex(c=>c.id===mv.dataset.cmv), j=i+(+mv.dataset.d); if(j<0||j>=DOC.contras.length) return;
       snap(); const [c]=DOC.contras.splice(i,1); DOC.contras.splice(j,0,c); linkSync(); save(); renderContra(); if(TAB==='ppto') renderPpto(); P.style.display='none'; cPanel($('#tabContra'),true); return; }
     const rn=e.target.closest('[data-cren]'); if(rn){ cRenombrar(rn.dataset.cren); return; }
+    if(e.target.closest('[data-crehaz]')){ P.style.display='none'; contraRehaz(DOC.contras.filter(c=>c.pp==='items')); return; }
     const s=e.target.closest('[data-csel]'), a=e.target.closest('[data-cact]');
     if(s){ P.style.display='none'; cSelect(s.dataset.csel); if(TAB!=='contra') switchTab('contra'); }
     if(a && !a.disabled){ P.style.display='none'; cAction(a.dataset.cact); } });
@@ -3998,23 +4052,24 @@ function linkSync(){
   let idx; if(first>=0) idx=old.slice(0,first).filter(l=>!inBlock(l)).length;
   else { let last=-1; others.forEach((l,i)=>{ if(!isBlank(l)) last=i; }); idx=last+1; }
   /* el bloque sigue el orden de la lista de contrariders */
-  const gen=[];
+  const gen=[]; let aMano=false;
   DOC.contras.forEach((cc,ci)=>{
     if(cc.pp==='items'){
       const lines=cc.lineas.filter(l=>!contraBlank(l) && !l.noPpto && (l.kind||'item')!=='sep'); if(!lines.length) return;
       if(multi) gen.push({id:'crh'+cc.id,kind:'sub',concepto:contraName(cc,ci),pvp:'',cant:'',dto:'',dias:'',src:'contra',a:prevA['crh'+cc.id]||''});
       lines.forEach(l=>{ const k=l.kind||'item';
         if(k!=='item') gen.push({id:'cr'+l.id,kind:k,concepto:(l.prop||l.req||''),pvp:'',cant:'',dto:'',dias:'',src:'contra',a:prevA['cr'+l.id]||''});
-        else gen.push({id:'cr'+l.id,a:prevA['cr'+l.id]||'',kind:'item',concepto:(!l.prop||okLike(l.prop))?(l.req||l.prop):l.prop,pvp:l.pvp,cant:udsOf(l),dto:(l.dto===0?'':l.dto),dias:l.dias,src:'contra',...(prevI['cr'+l.id]!=null?{impMan:prevI['cr'+l.id]}:{})}); });
+        else { const im=manNum(l.impMan)?{impMan:N0(l.impMan)}:(prevI['cr'+l.id]!=null?{impMan:prevI['cr'+l.id]}:{}); if(manNum(l.impMan)) aMano=true;
+          gen.push({id:'cr'+l.id,a:prevA['cr'+l.id]||'',kind:'item',concepto:(!l.prop||okLike(l.prop))?(l.req||l.prop):l.prop,pvp:l.pvp,cant:udsOf(l),dto:(l.dto===0?'':l.dto),dias:l.dias,src:'contra',...im}); } });
       if(libreOn()) gen.forEach(g=>{ const m=prevM[g.id]; if(m){ Object.assign(g,m); g.man=m; } });
     }
     if(cc.pp==='total'){
       const txt=multi?`${LINK_TXT} · ${contraName(cc,ci)}`:LINK_TXT;
       let t=outside.get(cc.id);
-      if(t){ t.pvp=r2(contraTotalOf(cc.lineas)); if(t.auto) t.concepto=txt; if(libreOn() && t.man) Object.assign(t,t.man); return; }
+      if(t){ t.pvp=r2(contraTotalEf(cc)); if(t.auto) t.concepto=txt; if(libreOn() && t.man) Object.assign(t,t.man); return; }
       t=prevTot.get(cc.id) || Object.assign(emptyLine(),{concepto:txt,pvp:0,cant:1,dto:'',dias:1,link:'ctotal',cid:cc.id,auto:true});
       if(t.auto || t.concepto===LINK_TXT || String(t.concepto).startsWith(LINK_TXT+' · ')){ t.concepto=txt; t.auto=true; }
-      t.pvp=r2(contraTotalOf(cc.lineas)); if(libreOn() && t.man) Object.assign(t,t.man); gen.push(t);
+      t.pvp=r2(contraTotalEf(cc)); if(libreOn() && t.man) Object.assign(t,t.man); gen.push(t);
     }
   });
   outside.forEach((l,cid)=>{ const c=DOC.contras.find(x=>x.id===cid); if(!c||c.pp!=='total') DOC.secciones.forEach(s=>{ s.lineas=s.lineas.map(x=>x===l?emptyLine():x); }); });
@@ -4024,18 +4079,34 @@ function linkSync(){
     while(extra>0 && k<others.length && isBlank(others[k])){ others.splice(k,1); extra--; }
     sec.lineas=others; padSec(sec);
   }
+  /* un importe escrito a mano en el contrarider llega al presupuesto escrito a mano: se pone la edición libre para que quede anotado */
+  if(aMano && !libreOn()){ DOC.libre={on:true, por:(typeof CLOUD!=='undefined'&&CLOUD.usuario)||'', en:today()}; if(typeof toast==='function') toast('Hay importes escritos a mano en el contrarider: el presupuesto pasa a edición libre para que quede anotado','#b54708'); }
   const its=DOC.contras.filter(c=>c.pp==='items').length, tots=DOC.contras.filter(c=>c.pp==='total').length;
   DOC.link={mode: its&&tots?'mix':its?'items':tots?'total':'off'};
 }
 function linkClearItems(){ DOC.secciones.forEach(s=>{ s.lineas=s.lineas.filter(l=>l.src!=='contra'); padSec(s); }); }
 function linkClearTotal(){ DOC.secciones.forEach(s=>{ s.lineas=s.lineas.map(l=>l.link==='ctotal'?emptyLine():l); }); }
 function setPP(c,m){ c.pp=m; }
+/* líneas del presupuesto que vienen de estos contrariders (línea a línea) y tienen algo escrito a mano en el presupuesto */
+function contraManLines(cs){
+  const src={}; cs.forEach(cc=>cc.lineas.forEach(l=>{ src['cr'+l.id]=l; }));
+  const out=[]; DOC.secciones.forEach(s=>s.lineas.forEach(l=>{ if(l.src!=='contra' || !(l.id in src)) return;
+    const o=src[l.id], im=manV(l.impMan) && !(manNum(o.impMan) && manNum(l.impMan) && Math.abs(N0(o.impMan)-N0(l.impMan))<0.005);
+    if(im || (l.man && Object.keys(l.man).length)) out.push(l); }));
+  return out; }
+/* volver a dar a «Línea a línea»: las líneas se copian otra vez del contrarider y se quita lo escrito a mano en ellas */
+async function contraRehaz(cs){
+  const L=contraManLines(cs); if(!L.length){ toast('Las líneas ya están como en el contrarider'); return false; }
+  if(!await confirmDlg('Volver a copiar del contrarider', `Se pierden ${L.length===1?'los cambios a mano de 1 línea':'los cambios a mano de '+L.length+' líneas'} del contrarider en el presupuesto: vuelven a ser como en el contrarider. Lo demás escrito a mano (otras líneas, subtotales, IVA y total) se queda.`, {ok:'Volver a copiar', danger:true})) return false;
+  snap(); L.forEach(l=>{ delete l.impMan; delete l.man; }); linkSync();
+  if(DOC.libre && !DOC.libre.on && typeof impManN==='function' && !impManN()) delete DOC.libre;
+  save(); if(typeof syncFactura==='function') syncFactura(); renderPpto(); toast('Líneas copiadas otra vez del contrarider','#067647'); return true; }
 async function setLinkMode(m){            /* clic en el botón: con un solo contrarider cambia directamente; con varios abre la lista */
   if(m==='off'){
     if(!DOC.contras.some(c=>c.pp!=='off')) return;
     if(!await confirmDlg('Desenlazar del presupuesto', 'Se quitarán del presupuesto todas las líneas que vienen de los contrariders.', {ok:'Quitar líneas', danger:true})) return;
     snap(); DOC.contras.forEach(c=>c.pp='off'); linkSync(); save(); renderPpto(); toast('Presupuesto desenlazado de los contrariders'); return; }
-  if(DOC.contras.length===1){ const c=DOC.contras[0]; if(c.pp===m) return; snap(); c.pp=m; linkSync(); save(); renderPpto();
+  if(DOC.contras.length===1){ const c=DOC.contras[0]; if(c.pp===m){ if(m==='items') await contraRehaz([c]); return; } snap(); c.pp=m; linkSync(); save(); renderPpto();
     toast(m==='items'?'Contrarider copiado línea a línea en BACKLINE':'Línea «'+LINK_TXT+'» con el total del contrarider'); return; }
   ppPanel(m);
 }
@@ -4046,7 +4117,7 @@ function ppPanel(m){
   const other=m==='items'?'total':'items', oName=m==='items'?'una línea con el total':'línea a línea';
   P.innerHTML=`<div class="cph">${m==='items'?'Contrariders que pasan <b>línea a línea</b>':'Contrariders que pasan como <b>una línea con su total</b>'}</div>
     ${DOC.contras.map((c,i)=>`<label class="cpr"><input type="checkbox" data-pp="${c.id}" ${c.pp===m?'checked':''}><span class="cpn"><b>${esc(contraName(c,i))}</b><small>${c.pp===other?'ahora va como '+oName:eur(contraTotalOf(c.lineas))+' €'}</small></span></label>`).join('')}
-    <div class="cph">Un contrarider solo puede ir de una forma: al marcarlo aquí se quita de la otra.</div>`;
+    <div class="cph">Un contrarider solo puede ir de una forma: al marcarlo aquí se quita de la otra.</div>${(()=>{ if(m!=='items') return ''; const n=contraManLines(DOC.contras.filter(c=>c.pp==='items')).length; return n?`<div class="cph"><button class="sec" data-crehaz="1" title="Quita lo escrito a mano en esas líneas del presupuesto">↺ Volver a copiar línea a línea (${n} línea${n===1?'':'s'} con cambios a mano)</button></div>`:''; })()}`;
   const r=btn.getBoundingClientRect(); P.style.left='0px'; P.style.top=(r.bottom+4)+'px'; P.style.display='block';
   P.style.left=Math.max(8,Math.min(r.left,innerWidth-P.offsetWidth-12))+'px';   /* crece hacia el centro sin salirse */
 }
@@ -6667,7 +6738,7 @@ async function exportAllXlsx(opt){
       return null; });
     Object.values(P.cells).forEach(x=>{ if(!x.f) return;
       if(x.f.startsWith('@SUB')){ const [,si,R]=/@SUB(\d+)@(\d+)/.exec(x.f); const rs=rowsOf[si]||[]; x.f=rs.length?`SUM(G${Math.min(...rs)}:G${Math.max(...rs)})`:'0'; }
-      if(x.f==='@T1@') x.f=secs.length?`SUM(${secs.map(r=>'G'+r).join(',')})`:'0'; });
+      if(x.f==='@T1@'){ x.f=secs.length?`SUM(${secs.map(r=>'G'+r).join(',')})`:'0'; if(CFG.redondeo) x.f=`ROUND(${x.f},0)`; } });   /* redondeo del TOTAL (Configuración): ,50 o más sube al euro; menos, ,00 */
     xlHeader(P,5,6,DOC.meta); if(logo) P.img={png:logo.png,w:logo.w,h:logo.h,c:0,r:0,dx:4,dy:4};
     /* EMAIL (texto libre, tal cual) */
     if(DOC.mail && GRIDS.mail && GRIDS.mail.def){ const E=B.sheet('EMAIL'); xlFromGrid(B,E,'mail',HR,null); xlHeader(E,5,6,DOC.mail.head||{}); if(logo) E.img=Object.assign({},P.img); }
@@ -6681,12 +6752,14 @@ async function exportAllXlsx(opt){
       const Cs=B.sheet(nm); let cr=[]; Cs.fitH=0;
       const ccol=k=>xlCol(GRIDS.contra.def.cols.findIndex(c=>c.k===k)), cU=ccol('U'), cE=ccol('E'), cF=ccol('F'), cG=ccol('G'), cH=ccol('H');
       xlFromGrid(B,Cs,'contra',2,(row,ri,ci2,k2,rowOf)=>{ const R=rowOf(ri)+1;
-        if(row.ref && (row.kind||'item')==='item' && k2==='H'){ cr.push(R); const L=DOC.contra[row.ref.i]; return {f:`IF(COUNT(${cU}${R},${cE}${R})=0,"",IF(${cF}${R}=100,"S/C",${cU}${R}*${cE}${R}*${cG}${R}*(1-${cF}${R}/100)))`, v:contraBlank(L)?'':contraImp(L)}; }
-        if(row.id==='tot' && k2==='H') return {f:'@CT@', v:contraTotal()};
+        if(row.ref && (row.kind||'item')==='item' && k2==='H'){ cr.push(R); const L=DOC.contra[row.ref.i];
+          if(manNum(L.impMan)) return {v:N0(L.impMan)};   /* escrito a mano: va el valor, no la fórmula */
+          return {f:`IF(COUNT(${cU}${R},${cE}${R})=0,"",IF(${cF}${R}=100,"S/C",${cU}${R}*${cE}${R}*${cG}${R}*(1-${cF}${R}/100)))`, v:contraBlank(L)?'':contraImp(L)}; }
+        if(row.id==='tot' && k2==='H') return manNum(cc.totMan) ? {v:N0(cc.totMan)} : {f:'@CT@', v:contraTotal()};
         return null; });
       Object.values(Cs.cells).forEach(x=>{ if(x.f==='@CT@') x.f=cr.length?`SUM(${cH}${Math.min(...cr)}:${cH}${Math.max(...cr)})`:'0'; });
-      Cs.set(0,0,'EVENTO:',{b:true,sz:14}); Cs.set(0,3,DOC.concepto.evento||'',{b:true,sz:12}); Cs.set(1,0,'FECHA:',{b:true}); Cs.set(1,3,DOC.concepto.fechas||'',{b:true});
-      if(DOC.contras.length>1){ Cs.set(1,5,'ARTISTA:',{b:true,ha:'right'}); Cs.set(1,6,contraName(cc,ci),{b:true}); }
+      Cs.set(0,0,cCab('evL','EVENTO:'),{b:true,sz:14}); Cs.set(0,3,cCab('evento',DOC.concepto.evento||''),{b:true,sz:12}); Cs.set(1,0,cCab('feL','FECHA:'),{b:true}); Cs.set(1,3,cCab('fechas',DOC.concepto.fechas||''),{b:true});
+      if(DOC.contras.length>1) Cs.set(1,5,contraName(cc,ci),{b:true});
     });
     DOC.cAct=act; RENDER.contra();
     /* BOLO */
@@ -6777,6 +6850,7 @@ function xlBolo(B,t1){
 async function pdfFillable(tab,opt){
   opt=opt||{};
   if(typeof PDFLib==='undefined'){ toast('Falta el generador de PDF','#c00'); return; }
+  if((tab==='ppto'||tab==='mail'||tab==='contra') && typeof verNoPrint==='function' && verNoPrint()) throw new Error('versión anulada');
   const {PDFDocument,StandardFonts,rgb,degrees,pushGraphicsState,popGraphicsState,rectangle,clip,endPath}=PDFLib;
   acClose(); gMenuClose(); Object.values(GRIDS).forEach(G=>{ if(G.editing) gCommit(G,null); });
   PRINT.on=true; document.body.classList.add('pdfgen'); RENDER[tab]();   /* pdfgen: lo que no se imprime deja de ocupar sitio (columna de botones de la factura) */
@@ -6863,7 +6937,7 @@ async function pdfFillable(tab,opt){
         const right=Math.max(...rs.map(z=>z.right));
         const L=lines.find(x=>Math.abs(x.top-q.top)<q.height*.5);
         if(L){ L.t+=L.sp+m[0].slice(0,wl); L.r=Math.max(L.r,right); L.sp=m[0].slice(wl); } else lines.push({t:m[0].slice(0,wl),sp:m[0].slice(wl),l:q.left,r:right,top:q.top,bot:q.bottom}); }
-      lines.forEach(L=>{ if(clip) L.r=Math.min(L.r,tdR.right); drawLineText(L.t,L.l,L.r,L.top,L.bot,cs, td?align:'left', td?tdR.right-(parseFloat(getComputedStyle(td).paddingRight)||1.5):null); });
+      lines.forEach(L=>{ if(clip) L.r=Math.min(L.r,tdR.right); drawLineText(L.t,L.l,L.r,L.top,L.bot,cs, td?align:'left', (td&&clip)?tdR.right-(parseFloat(getComputedStyle(td).paddingRight)||1.5):null); });   /* casillas que se salen a propósito (2. VALIDEZ, 3. FORMA DE PAGO): el texto no se encoge para caber en su columna */
     }
     /* textos en vertical (nº de factura): se leen de abajo arriba */
     root.querySelectorAll('.pdfrot > span').forEach(sp=>{ if(!vis(sp)) return; const t=sp.textContent.trim(); if(!t) return; const cs=getComputedStyle(sp), r=sp.getBoundingClientRect(), font=fontOf(cs), tx=safe(font,t);
@@ -7652,7 +7726,7 @@ function renderDevSueltas(){
       <td><input data-dv="origen" list="devCliList" value="${esc(e.origen||'')}" placeholder="Dónde / quién"></td>
       <td><input data-dvimp="1" list="devPptoList" value="${esc(e.imp&&e.imp.t==='ppto'?(e.imp.num||'')+(e.imp.evento?' · '+e.imp.evento:''):'')}" placeholder="Empresa" title="Escribe el Nº o el evento del presupuesto; vacío = la empresa"></td>
       <td><select data-dv="estado" class="dvest dv-${e.estado}">${opt(DEV_EST,e.estado)}</select>${e.restado?`<span class="dvlk">−${e.restado} inv.</span>`:''}</td>
-      <td class="n"><input class="n" data-dv="valor" data-eur inputmode="decimal" value="${e.valor!==''&&e.valor!=null?esc(eurV(e.valor)):''}" placeholder="${p==null?'€':esc(eur(p*stNum(e.cant)))}" title="Lo que cuesta reponerlo (€). Si lo dejas vacío y está en el inventario, se usa como referencia el precio de alquiler"></td>
+      <td class="n"><input class="n" data-dv="valor" data-eur inputmode="decimal" value="${e.valor!==''&&e.valor!=null?esc(eurV(e.valor)):''}" placeholder="${p==null?'€':esc(eurS(p*stNum(e.cant)))}" title="Lo que cuesta reponerlo (€). Si lo dejas vacío y está en el inventario, se usa como referencia el precio de alquiler"></td>
       <td><input data-dv="notas" value="${esc(e.notas||'')}" placeholder="Notas"></td>
       <td><button class="x" data-dvdel="${e.id}" title="Borrar apunte">&times;</button></td></tr>`;
   }).join('') || `<tr><td colspan="10" class="dvempty">Sin pérdidas sueltas apuntadas</td></tr>`;
@@ -7831,6 +7905,7 @@ function drvSubiendo(on, txt, k){ let el=$('#drvUp'); if(!el){ el=document.creat
 async function driveExport(){
   if(DRV_BUSY){ if($('#drvUp.on')) toast('Espera a que termine la subida a Drive que está en marcha','#c60'); return; }
   if(!CLOUD.token){ toast('Para exportar a Drive tienes que entrar en el almacén común (☁ Entrar)','#c60'); return; }
+  if(typeof verNoPrint==='function' && verNoPrint()) return;
   commitEdits();
   if(!(DOC.meta.num||'').trim()){ toast('Pon antes el nº del presupuesto (Ref. Presupuesto)','#c60'); return; }
   if(!drvQuienDoc()){ toast('Pon antes el cliente o el evento: son el nombre de la carpeta','#c60'); return; }
@@ -8077,6 +8152,26 @@ async function drvOrdenar(){
 const VER_KEYS=['libre','meta','cliente','contacto','concepto','secciones','validez','fp','datosFact','fdo','df','envio','contras','cAct','link','fmt','mail','mailBak','extras','clienteId','conAuto','cliAuto'];
 function verSt(D){ D=D||DOC; if(!D.vers || typeof D.vers!=='object') D.vers={cur:1, ok:1, max:1, s:{}}; if(!D.vers.s) D.vers.s={}; return D.vers; }
 const verMulti = () => verSt().max>1;
+/* versiones anuladas (V.an): la versión se ve con «ANULADO», sale «anulada» en el desplegable y no se imprime ni se saca en PDF */
+const verAnul = n => (verSt().an||[]).includes(+n);
+const verCurAnul = () => verMulti() && verAnul(verSt().cur);
+const verVivas = () => { const V=verSt(); return [...Array(V.max)].map((_,i)=>i+1).filter(n=>(n===V.cur||V.s[n]) && !verAnul(n)); };
+function verNoPrint(){ if(!verCurAnul()) return false; toast(`La versión ${verSt().cur} está anulada: no se imprime ni se saca en PDF. Cambia a otra versión en el desplegable.`,'#c62828'); return true; }
+async function verAnular(n){
+  const V=verSt(); n=+n; if(verAnul(n)) return;
+  const vivas=verVivas().filter(x=>x!==n);
+  if(!vivas.length){ toast('Es la única versión que queda sin anular: anula el presupuesto entero','#c60'); return false; }
+  if(!await confirmDlg(`¿Anular la versión ${n}?`, `Saldrá «ANULADO» en grande sobre la V${n}, en el desplegable aparecerá como anulada y no se podrá imprimir ni sacar en PDF. El presupuesto sigue con las demás versiones.`+(V.ok===n?` Como era la que contaba, pasa a contar la V${Math.max(...vivas)}.`:''), {ok:`Anular la V${n}`, danger:true})) return false;
+  snap(); V.an=[...(V.an||[]), n].sort((a,b)=>a-b);
+  const j=docJob(); if(V.ok===n){ V.ok=Math.max(...vivas); if(j) planFromDoc(); }
+  save(); renderTab(); toast(`Versión ${n} ANULADA`+(V.ok!==n?` · cuenta la V${V.ok}`:''),'#c62828'); return true;
+}
+async function verDesanular(n){
+  const V=verSt(); n=+n; if(!verAnul(n)) return true;
+  if(!await confirmDlg('Quitar la anulación', `¿Quitar la anulación de la versión ${n}?`, {ok:'Quitar la anulación'})) return false;
+  snap(); V.an=(V.an||[]).filter(x=>x!==n); if(!V.an.length) delete V.an;
+  save(); renderTab(); toast(`La versión ${n} ya no está anulada`,'#067647'); return true;
+}
 function verSnap(){ const o={}; VER_KEYS.forEach(k=>{ if(DOC[k]!==undefined) o[k]=clone(DOC[k]); }); return o; }
 /* el documento de la versión que cuenta (para Planning, stock, nombre de la carpeta…) */
 function verOkDoc(){
@@ -8114,7 +8209,7 @@ async function verSetOk(n){
 }
 /* casilla en la cabecera del presupuesto (no se imprime) */
 function verOpts(){ const V=verSt(), L=verOkLbl();
-  return [...Array(V.max)].map((_,i)=>i+1).filter(n=>n===V.cur||V.s[n]).map(n=>`<option value="${n}"${n===V.cur?' selected':''}>V${n}${n===V.ok&&V.max>1?' ✓ '+L:''}</option>`).join('')+'<option value="new">＋ Nueva versión…</option>'; }
+  return [...Array(V.max)].map((_,i)=>i+1).filter(n=>n===V.cur||V.s[n]).map(n=>`<option value="${n}"${n===V.cur?' selected':''}>V${n}${verAnul(n)?' · anulada':''}${n===V.ok&&V.max>1?' ✓ '+L:''}</option>`).join('')+'<option value="new">＋ Nueva versión…</option>'; }
 function verHeadHtml(){
   const opts=verOpts();
   return `<div class="lab noprint">Versión</div><div class="bx noprint verbx"><select id="pVer" title="Versiones de este presupuesto. La marcada con ✓ es la que cuenta para el Planning, el stock y las devoluciones.">${opts}</select></div>`;
@@ -8123,7 +8218,7 @@ function verPaint(){
   const V=verSt(), s=$('#pVer'); if(s){ s.innerHTML=verOpts(); s.value=String(V.cur); }
   const h=$('#pVerHint'); if(!h) return;
   if(V.max<2){ h.innerHTML=''; return; }
-  h.innerHTML = V.cur===V.ok ? `<span class="verok">V${V.cur} ✓ ${verOkLbl()}</span>`
+  h.innerHTML = verAnul(V.cur) ? `<span class="verno" style="color:#c62828">V${V.cur} anulada · cuenta la V${V.ok}</span>` : V.cur===V.ok ? `<span class="verok">V${V.cur} ✓ ${verOkLbl()}</span>`
     : `<span class="verno">Viendo V${V.cur} · el stock usa la V${V.ok}</span><button class="mini sec" id="pVerOk">✓ Que cuente la V${V.cur}</button>`;
 }
 /* menú «¿cuál es la confirmada?» al pulsar Confirmado */
@@ -8133,7 +8228,7 @@ function ctxAsk(x,y,items){ return new Promise(res=>{ let done=false; const fin=
 async function verAskConf(btn){
   const V=verSt(), r=btn.getBoundingClientRect();
   const k=await askDlg({title:'¿Qué versión ha confirmado el cliente?', text:'Esa será la que cuente para el Planning, el stock y las devoluciones.',
-    options:[...Array(V.max)].map((_,i)=>i+1).filter(n=>n===V.cur||V.s[n]).reverse().map(n=>({k:String(n), icon:'v'+n, label:'Versión '+n, desc:n===V.ok?'La que cuenta ahora':(n===V.cur?'La que estás viendo':''), primary:n===V.ok}))});
+    options:verVivas().reverse().map(n=>({k:String(n), icon:'v'+n, label:'Versión '+n, desc:n===V.ok?'La que cuenta ahora':(n===V.cur?'La que estás viendo':''), primary:n===V.ok}))});
   return k ? +k : null;
 }
 function initVers(){
@@ -8675,7 +8770,8 @@ function calcEval(line, ctx){
   catch(e){ v=CALC_ERR(e && e.calc || '#ERR'); }
   ctx.stack.delete(line.id); ctx.memo[line.id]=v; return v;
 }
-const calcFmt = v => isErr(v) ? v.err : (v===''||v==null) ? '' : Number(v).toLocaleString('es-ES',{minimumFractionDigits:0,maximumFractionDigits:2});
+/* resultados: enteros tal cual (unidades); con decimales, siempre 2 y formato de importe (miles con punto, coma decimal) */
+const calcFmt = v => { if(isErr(v)) return v.err; if(v===''||v==null) return ''; const x=Math.round(Number(v)*100)/100; return Number.isInteger(x) ? (x<0?'-':'')+milesP(Math.abs(x)) : eur(x); };
 
 /* ---------- panel ---------- */
 function calcToggle(on){ CALC.open = on==null ? !CALC.open : !!on; $('#calcPanel').classList.toggle('hidden',!CALC.open); $('#btnCalc').classList.toggle('on',CALC.open); document.body.classList.toggle('calc-on',CALC.open); if(CALC.open) calcRender(); else calcMarks(null); }
@@ -9710,8 +9806,9 @@ function endPrint(){
   $$('.tab').forEach(s=>s.classList.remove('printme')); $$('.sheet').forEach(sh=>{ sh.style.zoom=''; sh.style.height=''; sh.classList.remove('fit1'); const f=sh.querySelector('.frame'); if(f) f.style.zoom=''; }); document.body.classList.remove('cfoot');
   renderTab();
 }
-function printTabs(list){ preparePrint(list); setTimeout(()=>{ window.print(); },60); }
-window.addEventListener('beforeprint',()=>{ if(!PRINT.on && TAB!=='inv' && TAB!=='cli' && TAB!=='dev') preparePrint([TAB]); });
+function printTabs(list){ if(list.some(t=>t==='ppto'||t==='mail'||t==='contra') && typeof verNoPrint==='function' && verNoPrint()){ if(list.length===1) return; list=list.filter(t=>t!=='ppto'&&t!=='mail'&&t!=='contra'); if(!list.length) return; } preparePrint(list); setTimeout(()=>{ window.print(); },60); }
+window.addEventListener('beforeprint',()=>{ const va=['ppto','mail','contra'].includes(TAB) && typeof verCurAnul==='function' && verCurAnul(); document.body.classList.toggle('vanulprint', !!(va && !PRINT.on)); if(va && !PRINT.on){ verNoPrint(); return; } if(!PRINT.on && TAB!=='inv' && TAB!=='cli' && TAB!=='dev') preparePrint([TAB]); });
+window.addEventListener('afterprint',()=>document.body.classList.remove('vanulprint'));
 window.addEventListener('afterprint',()=>setTimeout(endPrint,50));
 
 function win2Init(){
@@ -9732,7 +9829,7 @@ function init(){
   initTips();
   initPpto(); initMail(); initFactura(); initContra(); initImporter(); initBolo(); initAdj(); initCalc(); initSat(); initCompras(); initInv(); initCpUpd(); initClients();
   $('#pSaveCli').onclick=saveClientFromPpto;
-  $('#pPdf').onclick=()=>pdfFillable('ppto'); $('#mPdf').onclick=()=>pdfFillable('mail');
+  $('#pPdf').onclick=()=>pdfFillable('ppto').catch(()=>{}); $('#mPdf').onclick=()=>pdfFillable('mail').catch(()=>{});
   if(CFG.cfit1Def!==1){ CFG.cfit1=true; CFG.cfit1Def=1; lsSet(LS_CFG,CFG); }   /* contrarider en 1 hoja: marcado por defecto */
   { const c=$('#cFit1'); if(c){ c.checked=!!CFG.cfit1; c.onchange=e=>{ CFG.cfit1=e.target.checked; lsSet(LS_CFG,CFG); toast(CFG.cfit1?'El PDF del contrarider saldrá en 1 hoja':'El PDF del contrarider saldrá en las hojas que necesite','#026'); }; } }
   $$('.fit1chk').forEach(c=>{ c.checked=CFG.fit1!==false; c.onchange=e=>{ CFG.fit1=e.target.checked; lsSet(LS_CFG,CFG); $$('.fit1chk').forEach(x=>x.checked=CFG.fit1); }; });
@@ -9862,7 +9959,7 @@ function mvUI(){
   });
   top.addEventListener('click', e => {
     const v = e.target.closest('[data-v]'); if(v){ mvCierraEd(); switchTab(v.dataset.v); return; }
-    if(e.target.closest('#mvLibre')){ mvCierraEd(); if(TAB !== 'ppto') switchTab('ppto'); pptoLibre(!libreOn()).then(mvPinta); return; }
+    if(e.target.closest('#mvLibre')){ mvCierraEd(); if(TAB !== 'ppto') switchTab('ppto'); pptoLibre(!libreEd()).then(mvPinta); return; }
     if(e.target.closest('#mvCerrar')) mvCerrar();
   });
   bot.addEventListener('click', e => {
@@ -9881,7 +9978,7 @@ function mvPinta(){
       sub.innerHTML = `<select id="mvCsel" aria-label="Contrarider">${DOC.contras.map((x, i) => `<option value="${esc(x.id)}" ${x.id === DOC.cAct ? 'selected' : ''}>${esc(contraName(x, i))}</option>`).join('')}</select>
         <label for="mvCpp">Al presupuesto:</label><select id="mvCpp">${[['off','No pasa'],['items','Línea a línea'],['total','Una línea con el total']].map(([v, t]) => `<option value="${v}" ${c.pp === v ? 'selected' : ''}>${t}</option>`).join('')}</select>
         <button id="mvCnew">＋ Nuevo</button>`; } }
-  const l = $('#mvLibre'); if(l){ l.classList.toggle('on', libreOn()); l.style.visibility = TAB === 'ppto' ? '' : 'hidden'; }
+  const l = $('#mvLibre'); if(l){ l.classList.toggle('on', libreEd()); l.style.visibility = TAB === 'ppto' ? '' : 'hidden'; }
   const g = $('#mvGuardar'); if(g){ g.textContent = MV.dirty ? 'Guardar' : 'Guardado ✓'; g.disabled = !MV.dirty; }
 }
 
@@ -10028,6 +10125,7 @@ async function mvDrive(){
 }
 async function mvMandar(){
   const b = $('#mvMandar'); if(b.disabled) return;
+  if(typeof verNoPrint === 'function' && verNoPrint()) return;
   if(MV.dirty && !await mvGuardar()) return;
   b.disabled = true; const t0 = b.textContent; b.textContent = 'Haciendo el PDF…';
   try{
