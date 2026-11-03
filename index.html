@@ -828,17 +828,17 @@ async function abreHojaPresu(vista){
 }
 async function abreHojaCon(doc, cloud, vista){
   $('#prAviso').textContent = '';
-  const pm = hojaFrame(); const capa0 = $('#hojaCapa'); if(capa0){ capa0.hidden = false; $('#hojaCarga').hidden = false; }
+  const pm = hojaFrame(); const capa0 = $('#hojaCapa'); if(capa0){ capa0.hidden = false; $('#hojaCarga').hidden = false; } navAbre();
   try{
     const m = await pm;
-    const capa = $('#hojaCapa'); capa.hidden = false; $('#hojaCarga').hidden = false;
+    const capa = $('#hojaCapa'); capa.hidden = false; $('#hojaCarga').hidden = false; navAbre();
     const cfg = DATOS.ajustes.items.find(x => x.id === 'cfg') || {}, logo = (DATOS.ajustes.items.find(x => x.id === 'logo') || {}).img || '';
     const C = copia(cfg); delete C.id; delete C._v;
     m.cargar({doc:copia(doc), cloud, cfg:C, logo,
       inv:copia(DATOS.inventario.items), plan:copia(DATOS.planning.items), cli:copia(DATOS.clientes.items), usuario:USUARIO, vista:vista || 'mail',
       contra: lee('tablet') === '1'});
     $('#hojaCarga').hidden = true;
-  }catch(e){ const c = $('#hojaCapa'); if(c) c.hidden = true; $('#prAviso').textContent = 'No se pudo abrir la hoja: ' + e.message; }
+  }catch(e){ const c = $('#hojaCapa'); if(c) c.hidden = true; navRevisa(); $('#prAviso').textContent = 'No se pudo abrir la hoja: ' + e.message; }
 }
 /* ---------- abrir uno que ya existe ---------- */
 const AB = {lista:null, cargando:false, lock:null, id:''};
@@ -931,7 +931,7 @@ window.bkMovil = {
     }
     descarga();
   },
-  cerrarHoja(){ const c = $('#hojaCapa'); if(c) c.hidden = true; abSuelta();
+  cerrarHoja(){ const c = $('#hojaCapa'); if(c) c.hidden = true; abSuelta(); navRevisa();
     if(HOJA.guardado){ const n = HOJA.guardado; HOJA.guardado = ''; HOJA.origen = 'nuevo'; pintaPresu(); toast('Guardado en el almacén como ' + n); return; }
     if(HOJA.origen === 'abierto') pintaAbrir(); else pintaPresu(); }
 };
@@ -1060,8 +1060,27 @@ async function guardaFila(r, boton){
 }
 
 /* ---------- panel de abajo ---------- */
-function abreHoja(html, alta){ const h = $('#hoja'); h.className = 'hoja' + (alta ? ' alta' : ''); h.innerHTML = html; $('#velo').hidden = false; }
-function cierraHoja(){ $('#velo').hidden = true; $('#hoja').innerHTML = ''; }
+function abreHoja(html, alta){ const h = $('#hoja'); h.className = 'hoja' + (alta ? ' alta' : ''); h.innerHTML = html; $('#velo').hidden = false; navAbre(); }
+function cierraHoja(){ $('#velo').hidden = true; $('#hoja').innerHTML = ''; navRevisa(); }
+
+/* ---------- botón «atrás» del móvil ----------
+   Mientras hay algo abierto encima (un panel o la hoja), hay una entrada de más en el historial:
+   «atrás» cierra lo de arriba en vez de salir de la app. */
+const NAV = {on:false, ignora:false};
+const hojaAbierta = () => { const c = $('#hojaCapa'); return !!(c && !c.hidden); };
+const hayCapa = () => !$('#velo').hidden || hojaAbierta();
+function navAbre(){ if(!NAV.on){ NAV.on = true; try{ history.pushState({bkm:1}, ''); }catch(e){} } }
+function navRevisa(){ setTimeout(() => { if(NAV.on && !hayCapa()){ NAV.on = false; NAV.ignora = true; try{ history.back(); }catch(e){ NAV.ignora = false; } } }, 0); }
+window.addEventListener('popstate', async () => {
+  if(NAV.ignora){ NAV.ignora = false; return; }
+  NAV.on = false;
+  if(!$('#velo').hidden){ cierraHoja(); if(hayCapa()) navAbre(); return; }
+  if(hojaAbierta() && HOJA.frame){
+    navAbre();   /* ya, antes de esperar: si sale un aviso, otro «atrás» lo cierra en vez de salir de la app */
+    try{ await HOJA.frame.contentWindow.motor.atras(); }catch(e){}
+    navRevisa();
+  }
+});
 $('#velo').addEventListener('click', e => { if(e.target === $('#velo')) cierraHoja(); });
 
 /* ---------- entrar y salir ---------- */

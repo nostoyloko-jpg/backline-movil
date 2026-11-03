@@ -9842,7 +9842,7 @@ addEventListener('resize', () => { if(MV.cargado) mvEscala(); });
 /* ---------- barras ---------- */
 function mvUI(){
   const top = document.createElement('div'); top.id = 'mvTop';
-  top.innerHTML = `<button id="mvCerrar" aria-label="Cerrar la hoja">✕</button>
+  top.innerHTML = `<button id="mvCerrar" aria-label="Volver a la vista del móvil">‹ Volver</button>
     <div class="seg"><button data-v="ppto">Presupuesto</button><button data-v="mail">Email</button><button data-v="contra" id="mvSegC" hidden>Contrarider</button></div>
     <span class="sp"></span><button id="mvLibre" title="Edición libre del presupuesto">✎ Libre</button>`;
   const bot = document.createElement('div'); bot.id = 'mvBot';
@@ -10074,7 +10074,14 @@ window.motor = {
   },
   doc(){ return DOC; },
   sucio(){ return MV.dirty; },
-  async pdf(tab){ return await pdfFillable(tab, {bytes:true}); }
+  async pdf(tab){ return await pdfFillable(tab, {bytes:true}); },
+  /* botón «atrás» del móvil: primero cierra el aviso o el panel abierto; si no hay, sale de la hoja */
+  async atras(){
+    if(!$('#mvDlg').hidden){ $('#mvVelo').click(); return 'panel'; }
+    if(MV.ed){ mvCierraEd(); return 'panel'; }
+    const ac = $('#ac'); if(ac && ac.style.display === 'block' && typeof acClose === 'function'){ acClose(); return 'panel'; }
+    await mvCerrar(); return 'hoja';
+  }
 };
 
 </script>
