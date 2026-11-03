@@ -174,6 +174,9 @@ nav button{flex:1;background:none;border:0;padding:9px 2px 10px;color:var(--suav
 nav button.on{color:var(--azul)}
 nav svg{width:23px;height:23px;stroke:currentColor;fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
 nav[hidden],header .sesion[hidden]{display:none}
+label.opt{display:flex;gap:12px;align-items:flex-start;border:1px solid var(--linea);border-radius:12px;padding:12px;font-size:15.5px;color:var(--texto);font-weight:400}
+label.opt input{width:22px;height:22px;margin:1px 0 0;flex:0 0 auto;accent-color:var(--azul)}
+label.opt small{display:block;color:var(--suave);font-size:13.5px;margin-top:3px;line-height:1.35}
 #hojaCapa{position:fixed;inset:0;z-index:60;background:#e9ecf2}
 #hojaCapa[hidden]{display:none}
 #hojaCapa iframe{position:absolute;inset:0;width:100%;height:100%;border:0;background:#e9ecf2}
@@ -191,6 +194,7 @@ nav[hidden],header .sesion[hidden]{display:none}
   <span class="sp"></span>
   <span class="quien sesion" id="hQuien" hidden></span>
   <button class="sesion" id="bRecargar" hidden aria-label="Volver a leer del almacén">↻</button>
+  <button class="sesion" id="bAjustes" hidden aria-label="Ajustes de este aparato">⚙</button>
   <button class="sesion" id="bSalir" hidden>Salir</button>
 </header>
 
@@ -214,8 +218,13 @@ nav[hidden],header .sesion[hidden]{display:none}
 
   <!-- PRESUPUESTO RÁPIDO -->
   <section class="vista" id="vPresu">
+    <div class="filtros" id="prModo"><button data-m="nuevo" class="on">Nuevo</button><button data-m="abrir">Abrir</button></div>
     <div class="aviso" id="prAviso"></div>
     <div id="prCuerpo"><p class="cargando">Leyendo inventario y clientes…</p></div>
+    <div id="abCuerpo" hidden>
+      <input type="search" id="abBusca" placeholder="Número, evento, cliente o fechas" autocomplete="off" autocapitalize="none" spellcheck="false" enterkeyhint="search">
+      <div id="abLista"><p class="cargando">Leyendo los presupuestos del almacén…</p></div>
+    </div>
   </section>
 
   <!-- ¿ESTÁ LIBRE? -->
@@ -808,6 +817,10 @@ function hojaFrame(){
 const copia = o => JSON.parse(JSON.stringify(o));
 async function abreHojaPresu(vista){
   if(!P || !P.docOk){ return; }
+  HOJA.origen = 'nuevo';
+  return abreHojaCon(P.doc, {id:P.docId, version:P.docVer || 1}, vista || 'mail');
+}
+async function abreHojaCon(doc, cloud, vista){
   $('#prAviso').textContent = '';
   const pm = hojaFrame(); const capa0 = $('#hojaCapa'); if(capa0){ capa0.hidden = false; $('#hojaCarga').hidden = false; }
   try{
@@ -815,11 +828,70 @@ async function abreHojaPresu(vista){
     const capa = $('#hojaCapa'); capa.hidden = false; $('#hojaCarga').hidden = false;
     const cfg = DATOS.ajustes.items.find(x => x.id === 'cfg') || {}, logo = (DATOS.ajustes.items.find(x => x.id === 'logo') || {}).img || '';
     const C = copia(cfg); delete C.id; delete C._v;
-    m.cargar({doc:copia(P.doc), cloud:{id:P.docId, version:P.docVer || 1}, cfg:C, logo,
-      inv:copia(DATOS.inventario.items), plan:copia(DATOS.planning.items), cli:copia(DATOS.clientes.items), usuario:USUARIO, vista:vista || 'mail'});
+    m.cargar({doc:copia(doc), cloud, cfg:C, logo,
+      inv:copia(DATOS.inventario.items), plan:copia(DATOS.planning.items), cli:copia(DATOS.clientes.items), usuario:USUARIO, vista:vista || 'mail',
+      contra: lee('tablet') === '1'});
     $('#hojaCarga').hidden = true;
   }catch(e){ const c = $('#hojaCapa'); if(c) c.hidden = true; $('#prAviso').textContent = 'No se pudo abrir la hoja: ' + e.message; }
 }
+/* ---------- abrir uno que ya existe ---------- */
+const AB = {lista:null, cargando:false, lock:null, id:''};
+const EST_DOC = {conf:'conf', pend:'pend', anul:'anul'};
+function modoPresu(m){
+  $$('#prModo button').forEach(b => b.classList.toggle('on', b.dataset.m === m));
+  $('#prCuerpo').hidden = m !== 'nuevo'; $('#abCuerpo').hidden = m !== 'abrir';
+  $('#prAviso').textContent = '';
+  if(m === 'abrir') pintaAbrir();
+}
+async function pintaAbrir(){
+  const host = $('#abLista');
+  if(!AB.lista){
+    if(AB.cargando) return; AB.cargando = true;
+    host.innerHTML = '<p class="cargando">Leyendo los presupuestos del almacén…</p>';
+    try{ const j = await api('lista', {tipo:'presupuesto'}, 60000); AB.lista = (j.docs || []).slice().sort((a, b) => String(b.modificado || '').localeCompare(String(a.modificado || ''))); }
+    catch(e){ host.innerHTML = '<p class="vacio">No he podido leer la lista: ' + esc(e.message) + '</p>'; AB.cargando = false; return; }
+    AB.cargando = false;
+  }
+  const q = norm($('#abBusca').value);
+  const L = AB.lista.filter(d => !q || norm([d.numero, d.evento, d.nombre, d.cliente, d.fechas].join(' ')).includes(q)).slice(0, 60);
+  if(!L.length){ host.innerHTML = '<p class="vacio">' + (q ? 'No encuentro «' + esc($('#abBusca').value) + '».' : 'No hay presupuestos en el almacén.') + '</p>'; return; }
+  host.innerHTML = L.map(d => {
+    const mod = d.modificado ? new Date(d.modificado) : null;
+    const meta = [d.cliente, d.fechas].filter(Boolean).map(esc);
+    if(mod && !isNaN(mod)) meta.push('guardado ' + mod.getDate() + '/' + (mod.getMonth() + 1) + (d.autor ? ' · ' + esc(d.autor) : ''));
+    if(d.bloqueo && d.bloqueo !== USUARIO) meta.push('<b>🔒 lo tiene abierto ' + esc(d.bloqueo) + '</b>');
+    return '<button class="card" data-abre="' + esc(d.id) + '"><div class="t">' + esc(d.numero || '(sin número)') + ' · ' + esc(d.evento || d.nombre || '(sin evento)') + ' ' + estPill(d.estado) + '</div>' +
+      '<div class="m">' + meta.map(x => '<span>' + x + '</span>').join('') + '</div></button>';
+  }).join('') + (AB.lista.length > L.length && !q ? '<p class="hint" style="text-align:center">Se ven los 60 últimos. Busca para encontrar los demás.</p>' : '');
+}
+async function abreDelAlmacen(id, boton){
+  if(boton){ boton.disabled = true; boton.style.opacity = '.6'; }
+  try{
+    const j = await api('leer', {id}, 60000);
+    let doc; try{ doc = JSON.parse(j.datos || 'null'); }catch(e){ doc = null; }
+    if(!doc) throw new Error('el archivo del presupuesto no se puede leer');
+    if(j.bloqueo){
+      abreHoja('<h2>Lo tiene abierto ' + esc(j.bloqueo) + '</h2><div class="sub">Puedes mirarlo. Si los dos guardáis cambios, el almacén no dejará que uno pise al otro: el segundo tendrá que volver a abrirlo.</div>' +
+        '<div class="acciones"><button class="btn" data-act="abreIgual">Abrirlo igualmente</button><button class="btn sec" data-cerrar>Ahora no</button></div>');
+      AB.pend = {id, doc, version:j.doc && j.doc.version}; return;
+    }
+    await abreAbierto(id, doc, j.doc && j.doc.version);
+  }catch(e){ $('#prAviso').textContent = 'No se pudo abrir: ' + e.message; }
+  finally{ if(boton){ boton.disabled = false; boton.style.opacity = ''; } }
+}
+async function abreAbierto(id, doc, version){
+  HOJA.origen = 'abierto'; AB.id = id;
+  /* que el ordenador vea que lo está editando alguien (se renueva cada 4 minutos mientras esté abierto) */
+  const marca = () => api('bloquear', {id}, 20000).catch(() => {});
+  marca(); clearInterval(AB.lock); AB.lock = setInterval(marca, 240000);
+  await abreHojaCon(doc, {id, version:version || 1}, 'ppto');
+}
+function abSuelta(){
+  if(AB.lock){ clearInterval(AB.lock); AB.lock = null; }
+  if(AB.id){ api('liberar', {id:AB.id}, 20000).catch(() => {}); AB.id = ''; }
+}
+window.addEventListener('pagehide', () => { if(AB.id && navigator.sendBeacon){ try{ navigator.sendBeacon(URL_ALMACEN, new Blob([JSON.stringify({accion:'liberar', token:TOKEN, id:AB.id})], {type:'text/plain'})); }catch(e){} } });
+
 /* lo que el motor le pide a esta página (que es la que tiene la sesión del almacén) */
 window.bkMovil = {
   api: (accion, extra, ms) => api(accion, extra, ms),
@@ -834,6 +906,7 @@ window.bkMovil = {
   },
   docGuardado(doc){
     const d = copia(doc); const c = d.cloud || {}; delete d.cloud;
+    if(HOJA.origen === 'abierto'){ AB.lista = null; return; }   /* la lista se vuelve a leer al volver */
     P.doc = d; P.docVer = c.version || P.docVer; presuGuarda();
   },
   async compartir(bytes, nombre){
@@ -849,7 +922,8 @@ window.bkMovil = {
     }
     descarga();
   },
-  cerrarHoja(){ const c = $('#hojaCapa'); if(c) c.hidden = true; pintaPresu(); }
+  cerrarHoja(){ const c = $('#hojaCapa'); if(c) c.hidden = true; abSuelta();
+    if(HOJA.origen === 'abierto') pintaAbrir(); else pintaPresu(); }
 };
 function listoParaMandar(file, descarga){
   abreHoja('<h2>El PDF está listo</h2><div class="sub">' + esc(file.name) + '</div>' +
@@ -1018,10 +1092,18 @@ $('#bSalir').addEventListener('click', () => {
     '<div class="acciones"><button class="btn" data-act="salirSi">Salir</button><button class="btn sec" data-cerrar>Quedarme</button></div>');
 });
 $('#bRecargar').addEventListener('click', () => recarga());
+$('#bAjustes').addEventListener('click', () => {
+  const on = lee('tablet') === '1';
+  abreHoja('<h2>Ajustes de este aparato</h2><div class="sub">Solo cambian en este móvil o tablet; en los demás no.</div>' +
+    '<label class="opt"><input type="checkbox" id="ajTablet"' + (on ? ' checked' : '') + '><span><b>Contrarider en la hoja</b>' +
+    '<small>Añade la pestaña Contrarider junto a Presupuesto y Email. En una tablet se trabaja bien; en el móvil queda muy pequeño.</small></span></label>' +
+    '<p class="hint" style="margin:14px 0">Usuario: ' + esc(USUARIO) + '</p>' +
+    '<div class="acciones"><button class="btn sec" data-cerrar>Cerrar</button></div>');
+});
 
 /* ---------- cargar todo ---------- */
 let cargando = false;
-function pintaTodo(){ INV_CACHE = null; pintaSemana(); pintaPresu(); pintaLibre(); pintaCobros(); }
+function pintaTodo(){ INV_CACHE = null; pintaSemana(); pintaPresu(); pintaLibre(); pintaCobros(); if(!$('#abCuerpo').hidden){ AB.lista = null; pintaAbrir(); } }
 /* lo que ya había en el móvil se enseña al momento; luego se pregunta al almacén qué ha cambiado */
 function cargaCache(){
   let algo = false;
@@ -1060,6 +1142,8 @@ async function recarga(){
 document.addEventListener('input', e => {
   const t = e.target;
   if(t.id === 'liBusca' || t.id === 'liDesde' || t.id === 'liHasta'){ pintaLibre(); return; }
+  if(t.id === 'abBusca'){ pintaAbrir(); return; }
+  if(t.id === 'ajTablet'){ guarda('tablet', t.checked ? '1' : null); toast(t.checked ? 'Contrarider activado en la hoja' : 'Contrarider quitado de la hoja'); return; }
   if(t.id === 'maBusca'){ pintaMaterial(); return; }
   if(t.id === 'prCli'){ P.cliTxt = t.value; presuGuarda(); pintaSugCli(); return; }
   if(t.dataset.p){
@@ -1092,6 +1176,8 @@ document.addEventListener('change', e => {
 document.addEventListener('click', e => {
   const t = e.target;
   const nav = t.closest('#tabs button'); if(nav){ muestra(nav.dataset.v); return; }
+  const pm = t.closest('#prModo button'); if(pm){ modoPresu(pm.dataset.m); return; }
+  const ab = t.closest('[data-abre]'); if(ab){ abreDelAlmacen(ab.dataset.abre, ab); return; }
   const fil = t.closest('#cobFiltros button'); if(fil){ FILTRO = fil.dataset.f; $$('#cobFiltros button').forEach(x => x.classList.toggle('on', x === fil)); pintaCobros(); return; }
   if(t.closest('[data-cerrar]')){ cierraHoja(); return; }
   const g = t.closest('[data-gk]'); if(g){ fichaGrupo(g.dataset.gk); return; }
@@ -1119,6 +1205,7 @@ document.addEventListener('click', e => {
   }
   else if(act === 'nuevo'){ cierraHoja(); P = presuNuevo(); presuGuarda(); $('#prAviso').textContent = ''; pintaPresu(); $('main').scrollTop = 0; }
   else if(act === 'hoja') abreHojaPresu('mail');
+  else if(act === 'abreIgual'){ const x = AB.pend; cierraHoja(); if(x) abreAbierto(x.id, x.doc, x.version); }
   else if(act === 'mandaYa'){ const p = HOJA.pend; cierraHoja(); if(p) navigator.share({files:[p.file], title:p.file.name}).catch(e => { if(e.name !== 'AbortError') p.descarga(); }); }
   else if(act === 'bajaYa'){ const p = HOJA.pend; cierraHoja(); if(p) p.descarga(); }
 });
