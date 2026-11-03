@@ -9992,6 +9992,14 @@ async function mvGuardar(){
   const b = $('#mvGuardar'); b.disabled = true; b.textContent = 'Guardando…';
   try{
     commitEdits();
+    /* presupuesto nuevo hecho en la hoja: sin fechas se pregunta (PRE), y se pide número al almacén, como en el ordenador */
+    if(!(DOC.cloud && DOC.cloud.id)){
+      if(!await sinFechaOk()) return false;
+      if(!DOC.jobId) DOC.jobId = uid();
+      if(!(DOC.meta.num || '').trim()){ b.textContent = 'Pidiendo número…'; DOC.meta.num = await cloudNumber(); DOC.meta.numOk = DOC.meta.num; }
+      DOC.cloud = {id:'d' + uid() + uid(), version:null}; renderTab();
+      b.textContent = 'Guardando…';
+    }
     const c = DOC.cloud || {};
     const nb = drvBaseAhora(), renombrar = !!(DOC.drvCarpeta && DOC.drvBase && nb && nb !== DOC.drvBase);
     const payload = Object.assign({id:c.id, tipo:'presupuesto', meta:cloudMeta(), datos:'', version:c.version ?? null}, drvDest(), {renombrar, renArch:'', mover:false, estado:docEstado() || 'pend'});
@@ -10058,9 +10066,9 @@ window.motor = {
     if(o.cli) CLI = o.cli;
     CLOUD.usuario = o.usuario || ''; CLOUD.token = 'movil';
     MV.contra = !!o.contra;
-    DOC = normDoc(o.doc); DOC.cloud = o.cloud || DOC.cloud;
+    DOC = normDoc(o.doc); DOC.cloud = o.cloud || null;
     try{ setLogoTop(); }catch(e){}
-    MV.dirty = false; mvCierraEd();
+    MV.dirty = !(DOC.cloud && DOC.cloud.id); mvCierraEd();   /* uno nuevo, sin guardar todavía */
     switchTab(o.vista === 'contra' && !MV.contra ? 'mail' : (o.vista || 'mail'));
     MV.cargado = true; mvPinta(); setTimeout(mvEscala, 30);
   },
