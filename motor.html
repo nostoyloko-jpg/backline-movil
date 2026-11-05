@@ -427,6 +427,18 @@ b.dr{color:#b42318}b.da{color:#b54708}#invDispBtn.on{background:var(--navy);colo
 .djp{display:inline-block;padding:2px 9px;border-radius:999px;font-size:11px;font-weight:700;white-space:nowrap}
 .djp.dj-fuera{background:#e0eaff;color:#2f4a9e}.djp.dj-rev{background:#fef0c7;color:#93370d}.djp.dj-falta{background:#fee4e2;color:#b42318}.djp.dj-ok{background:#dcfae6;color:#067647}.djp.dj-sin{background:#f2f4f7;color:#667085}
 .djf{display:block;font-size:11.5px;color:#b42318;margin-top:2px}
+.djs{display:block;font-size:11.5px;color:#b54708;margin-top:2px}
+.djp.dj-sal{background:#e3f5ea;color:#0a5c38}
+#tab-dev .djt tr.dvv td{background:#e3f5ea!important}
+.djt input.ckvue{width:17px;height:17px;margin:0;accent-color:#067647;cursor:pointer}
+.djt input.ckvue:disabled{opacity:.5;cursor:default}
+#tab-dev .djt tr.dvs td{background:#fff8e6!important}
+.djt input.cksal{width:17px;height:17px;margin:0;accent-color:#b54708;cursor:pointer}
+.djt input.cksal:disabled{opacity:.5;cursor:default}
+.djsellos{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0 0}
+.djsel{font-size:12px;padding:3px 9px;border-radius:999px;background:#f1f3f6;color:#52607a;border:1px solid #e2e6ee}
+.djsel small{opacity:.8}
+.djsel.ok{background:#e3f5ea;color:#0a5c38;border-color:#bfe6d0}
 #tab-dev tr.djd td{background:#f8faff!important;padding:4px 14px 14px!important}
 .djbox{background:#fff;border:1px solid #e4e7ec;border-radius:10px;padding:8px 10px}
 .djt{width:100%;border-collapse:collapse;font-size:12.5px}
@@ -1033,6 +1045,16 @@ body.pdfgen #contra td.gd.man{background:transparent!important;color:inherit;fon
 #contra .chx input.cev.man{background:#fff6d6;color:#7a4b00}
 body.pdfgen #contra .chx input.cev{border:0;background:transparent;color:#000}
 @media print{#contra .chx input.cev{border:0!important;background:transparent!important;color:#000!important}}
+/* «Salió»: marca interna de que el material se ha cargado. Solo en pantalla. */
+#contra td.gd.salio{background:#e3f5ea}
+#contra td.gd.salio .cv{color:#0a5c38}
+#contra td.gd.volvio{background:#f2f7f4}
+#contra td.gd.volvio .cv{color:#4a6b59}
+#contra input.cksal{width:16px;height:16px;margin:0;accent-color:#067647;cursor:pointer;vertical-align:-2px}
+#contra .addline .salsep{flex:1}
+#contra .addline button.salbt{border-color:#067647;color:#0a5c38;font-weight:600}
+@media print{ #contra td.gd.salio,#contra td.gd.volvio{background:transparent!important} #contra td.gd.salio .cv,#contra td.gd.volvio .cv{color:inherit!important} }
+body.pdfgen #contra td.gd.salio,body.pdfgen #contra td.gd.volvio{background:transparent!important}
 body.pdfgen #ppto td.gd.man{background:transparent!important;color:inherit;font-weight:inherit;box-shadow:none}
 @media print{#ppto td.gd.man{background:transparent!important;color:inherit;font-weight:inherit;box-shadow:none}}
 #bolo .pnote{font-weight:400;font-size:11px;opacity:.8}#bolo select.pimp{width:100%;font:inherit;font-size:11px;border:1px solid #f0b46a;background:#fff8ec;border-radius:4px;padding:1px 2px;color:#7a4b00}#bolo button.pmove{margin-left:8px;font-size:11px;padding:1px 8px;border-radius:4px;background:#fff;color:var(--navy);border:1px solid #98a2b3;font-weight:600;vertical-align:middle}
@@ -1509,7 +1531,7 @@ body.mvsub .tab .wrap{padding-top:108px!important}
     <div class="inv"><table class="invtbl djtbl"><thead><tr>
       <th style="width:96px">Devolución</th><th style="width:100px">Nº</th><th>Presupuesto / trabajo</th><th style="width:150px">Fechas</th><th style="width:210px">Material</th><th style="width:130px">Estado</th><th style="width:90px"></th>
     </tr></thead><tbody id="devJobs"></tbody></table></div>
-    <p class="hint dvhint">Entran solos todos los trabajos <b>confirmados</b>. Mientras no pasa la fecha de devolución, el material está fuera. Pasada esa fecha y <b>sin revisar</b>, se cuenta en la nave (en Inventario sale en ámbar «sin revisar»). Al revisar, solo lo que marques que <b>falta</b> deja de contar como libre.</p>
+    <p class="hint dvhint">Entran solos todos los trabajos <b>confirmados</b>. Cada bolo tiene su <b>hoja de nave</b>: se marca lo que <b>sale</b> (aquí, en el contrarider o en el móvil) y lo que <b>vuelve</b>, y queda apuntado quién y cuándo. Pueden marcar varias personas a la vez: las marcas se juntan, nunca se pisan. Al terminar la carga, <b>OK, preparado</b>; al terminar la vuelta, <b>OK, revisado</b>. Lo que sale y no vuelve cuenta como fuera; si no se marca nada, se va por fechas, como siempre.</p>
     <div class="dvsh"><b>Pérdidas sueltas</b><span class="hint">Cables y cosas que se pierden sin presupuesto.</span><span style="flex:1"></span><button id="devNew" class="ivprim">＋ Apuntar pérdida</button></div>
     <div class="inv"><table class="invtbl devtbl"><thead><tr>
       <th style="width:128px">Fecha</th><th style="width:300px">Material</th><th style="width:56px;text-align:right">Cant.</th><th style="width:150px">Tipo</th><th style="width:150px">Dónde / quién</th><th style="width:160px" title="Presupuesto al que se carga la pérdida (vacío: la empresa)">Imputar a</th><th style="width:180px">Estado</th><th style="width:84px;text-align:right" title="Lo que cuesta reponerlo (€). Vacío: se muestra como referencia el precio de alquiler del inventario">Valor (€)</th><th style="width:220px">Notas</th><th style="width:30px"></th>
@@ -2599,6 +2621,7 @@ addEventListener('mousemove',e=>{ GDRAG.x=e.clientX; GDRAG.y=e.clientY; if(!GDRA
 function gBind(id){
   const G=GRIDS[id], host=G.el;
   host.addEventListener('mousedown',e=>{
+    if(e.target.closest('input.cksal')) return;        /* casillas de la propia hoja («Salió»): se marcan solas */
     if(e.target.id==='ged'){ gMenuClose(); return; }   /* dentro de lo que se está escribiendo: solo mueve el cursor o selecciona (como en Excel) */
     if(e.button===2){ const thr=e.target.closest('th[data-gr]'); if(thr){ const r=+thr.dataset.gr, S=G.sel; if(G.editing) gCommit(G,null); if(!(r>=S.r0&&r<=S.r1&&S.c0===0&&S.c1===G.def.cols.length-1)){ G.act={r,c:0}; G.sel=gExpand(G,{r0:r,c0:0,r1:r,c1:G.def.cols.length-1}); gPaint(G); } GACT=id; return; }
       const thc=e.target.closest('th[data-ch]'); if(thc){ const c=+thc.dataset.ch, S=G.sel; if(G.editing) gCommit(G,null); if(!(c>=S.c0&&c<=S.c1&&S.r0===0&&S.r1===G.def.rows.length-1)){ G.act={r:0,c}; G.sel=gExpand(G,{r0:0,c0:c,r1:G.def.rows.length-1,c1:c}); gPaint(G); } GACT=id; return; }
@@ -3815,27 +3838,33 @@ function contraDef(){
   const band=S_(ST.band,{bg:cc,bd:BD(2,2,2,2)});
   const pb=S_(ST.band,{bg:cc,fs:11,bd:BDALL});
   const HC=(k,def,base)=>({t:'txt',v:cCab(k,def),set:cCabSet(k,def),base,cls:cCabMan(k)?'man':''});
-  rows.push({id:'hdr',cells:{A:HC('A','MATERIAL REQUERIDO',band),C:HC('C','MATERIAL PROPUESTO',band),E:HC('E','pvp unidad',pb),U:HC('U','Uds.',pb),F:HC('F','Dto. %',pb),G:HC('G','Días',pb),H:HC('H','Importe €',pb),I:HC('I','Anotaciones',{fc:'#8a6d1d',b:true,bg:'#fff8e1',bd:BDALL})},h:24});
+  rows.push({id:'hdr',cells:{S:L('Salió',S_(band,{fs:9})),A:HC('A','MATERIAL REQUERIDO',band),C:HC('C','MATERIAL PROPUESTO',band),E:HC('E','pvp unidad',pb),U:HC('U','Uds.',pb),F:HC('F','Dto. %',pb),G:HC('G','Días',pb),H:HC('H','Importe €',pb),I:HC('I','Anotaciones',{fc:'#8a6d1d',b:true,bg:'#fff8e1',bd:BDALL})},h:24});
   auto.push({r:'hdr',c:'A',rs:1,cs:2},{r:'hdr',c:'C',rs:1,cs:2});
   let lastUsed=-1; DOC.contra.forEach((l,i)=>{ if(!contraBlank(l)) lastUsed=i; });
+  const SAL = PRINT.on ? {} : (()=>{ try{ return salMapa(); }catch(e){ return {}; } })();   /* las marcas, de la hoja de nave del bolo */
   DOC.contra.forEach((l,i)=>{
     if(PRINT.on && i>Math.max(lastUsed,CONTRA_PRINT_ROWS-1)) return;   /* al imprimir: 39 filas como la hoja tipo, o las que haya */
     const id='r:'+l.id; const k=l.kind||'item';
     const o={kind:k,ref:{i},ins:true,mov:true,del:true};
     const txt=(f,base,extra)=>Object.assign({t:'txt',v:l[f]??'',set:v=>{ l[f]=v; if(f==='prop') propUnlink(l); },base:S_(B1,{wr:true},base||{})},extra||{});
     const nota={t:'txt',v:l.nota||'',set:v=>l.nota=v,base:{bd:BDALL,i:true,fc:'#7a5b00',wr:true},cls:'nt'};
-    if(k==='sep'){ const sp=S_(ST.sep,B1); rows.push(Object.assign({id,cells:{A:L('',sp),B:L('',sp),C:L('',sp),D:L('',sp),E:L('',sp),U:L('',sp),F:L('',sp),G:L('',sp),H:L('',sp),I:L('',{bd:BDALL})}},o)); return; }
+    if(k==='sep'){ const sp=S_(ST.sep,B1); rows.push(Object.assign({id,cells:{S:L('',sp),A:L('',sp),B:L('',sp),C:L('',sp),D:L('',sp),E:L('',sp),U:L('',sp),F:L('',sp),G:L('',sp),H:L('',sp),I:L('',{bd:BDALL})}},o)); return; }
     if(k==='title'||k==='sub'){
       const tb = k==='title'?{b:true,ha:'center'}:{};
-      rows.push(Object.assign({id,cells:{A:L('',B1),
+      rows.push(Object.assign({id,cells:{S:L('',B1),A:L('',B1),
         B:txt('req',tb,{set:v=>{ if(!l.prop || l.prop===l.req) l.prop=v; l.req=v; },pre:l.noPpto?'<span class="nopp" title="Esta fila no se pasa al presupuesto (clic derecho para volver a incluirla)">⊘</span>':''}),
         C:L('',B1), D:txt('prop',tb), E:L('',B1),U:L('',B1),F:L('',B1),G:L('',B1),H:L('',B1), I:nota}},o)); return;
     }
     const it=String(l.prop||"").trim() ? invById(l.inv) : null;
+    /* «Salió»: vale para cualquier línea con material escrito, esté o no en el inventario */
+    const sk=salKey(l), sm=sk&&SAL[sk], sal=!!(sm&&sm.salio), vue=!!(sm&&sm.vuelto);
+    const salCel=L('',S_(B1,{ha:'center'}));
+    if(sk) salCel.pre=`<input type="checkbox" class="cksal" data-csal="${esc(l.id)}"${sal?' checked':''} title="${sal?esc((vue?'Salió y ha vuelto':'Salió')+(naveSelloTxt(sm.salPor,sm.salEn)?' · '+naveSelloTxt(sm.salPor,sm.salEn):'')+(vue&&naveSelloTxt(sm.vuePor,sm.vueEn)?'. Devuelto · '+naveSelloTxt(sm.vuePor,sm.vueEn):'')+'. Quita la marca si no llegó a salir.'):'Marca cuando este material salga de la nave: pasa a Devoluciones de este presupuesto'}">`;
     const stk=(it && !PRINT.on && typeof stockLvl==='function') ? stockLvl(l.inv) : {lvl:''};   /* sin stock: el texto en rojo (solo en pantalla) */   /* enlace colgado sin texto: no se muestra */
     const imp=contraImp(l);
     const blank=contraBlank(l);
-    rows.push(Object.assign({id,cells:{
+    const C={
+      S:salCel,
       A:{t:'num',v:l.cantR,d:qx(l.cantR),set:v=>{ if(l.cant===''||l.cant==null||l.cant===l.cantR) l.cant=v; l.cantR=v; },base:S_(B1,{ha:'right'})},
       B:txt('req',{},{ph:blank?'Lo que pide el rider…':'',pre:l.noPpto?'<span class="nopp" title="Esta fila no se pasa al presupuesto (clic derecho para volver a incluirla)">⊘</span>':''}),
       C:{t:'num',v:l.cant,d:qx(l.cant),set:v=>l.cant=v,base:S_(B1,{ha:'right'})},
@@ -3851,14 +3880,16 @@ function contraDef(){
         return {t:'num', v, calc, d:man?eurS(N0(l.impMan)):((blank || !(hasNum(l.pvp)||hasNum(l.cant)))?'':eurS(imp)), sum:man?N0(l.impMan):(calc||0), base:S_(B1,{b:true}), cls:man?'man':(imp==='S/C'?'sc':''),
           set:x=>{ if(x===''||x==null || (calc!=null && Math.abs(N0(x)-calc)<0.005)) delete l.impMan; else l.impMan=Math.round(N0(x)*100)/100; }}; })(),
       I:nota
-    }},o));
+    };
+    if(sal) Object.keys(C).forEach(k=>{ C[k].cls=(C[k].cls?C[k].cls+' ':'')+(vue?'volvio':'salio'); });   /* la fila, en verde; más apagado si ya ha vuelto */
+    rows.push(Object.assign({id,cells:C},o));
   });
   const ac=contraAct(), ttc=contraTotalOf(DOC.contra), tman=manNum(ac.totMan), tt=tman?N0(ac.totMan):ttc;
   if(!PRINT.on || (CFG.cPrintCols||{}).H) rows.push({id:'tot',cells:{G:HC('tot','TOTAL',{b:true,ha:'right'}),
     H:{t:'num',v:tt,calc:ttc,d:eurS(tt),base:{b:true,fs:14,fc:'#002060',bd:BD(2,0,0,0)},cls:tman?'man':'',
       set:x=>{ if(x===''||x==null || Math.abs(N0(x)-ttc)<0.005) delete ac.totMan; else ac.totMan=Math.round(N0(x)*100)/100; }}},h:28});
   return {
-    cols:[{k:'A',w:33},{k:'B',w:355},{k:'C',w:33},{k:'D',w:355},{k:'E',w:82,pcol:true},{k:'U',w:52,pcol:true},{k:'F',w:82,pcol:true},{k:'G',w:82,pcol:true},{k:'H',w:82,pcol:true},{k:'I',w:180,pcol:true}],
+    cols:[{k:'S',w:38,noprint:true},{k:'A',w:33},{k:'B',w:355},{k:'C',w:33},{k:'D',w:355},{k:'E',w:82,pcol:true},{k:'U',w:52,pcol:true},{k:'F',w:82,pcol:true},{k:'G',w:82,pcol:true},{k:'H',w:82,pcol:true},{k:'I',w:180,pcol:true}],
     rows, auto, ops:CONTRA_OPS, lastData:rows.length-2, grow:n=>{ for(let k=0;k<n;k++) DOC.contra.push(emptyC()); },
     menu:(G,row)=>{ const r=row.ref; if(!r) return []; const l=DOC.contra[r.i]; if(!l) return []; if((l.kind||'item')!=='item') return (l.kind==='sep')?[]:[null, l.noPpto?['Volver a pasar esta fila al presupuesto','ppin']:['No pasar esta fila al presupuesto','ppout']];
       const pp=[null, l.noPpto?['Volver a pasar esta fila al presupuesto','ppin']:['No pasar esta fila al presupuesto','ppout']];
@@ -3925,7 +3956,7 @@ function renderContra(){
   if(!host.dataset.built){
     host.dataset.built='1';
     host.innerHTML=`<div id="cHead"></div><div class="gwrap" id="cGrid"></div>
-      <div class="addline noprint"><button id="cAdd">+ Añadir línea</button><button id="cAdd5">+ 5 líneas</button><button id="cAddT">+ Título de sección</button><button id="cAddS">+ Separador</button></div>
+      <div class="addline noprint"><button id="cAdd">+ Añadir línea</button><button id="cAdd5">+ 5 líneas</button><button id="cAddT">+ Título de sección</button><button id="cAddS">+ Separador</button><span class="salsep"></span><button id="cSalAll" class="salbt"></button></div>
       <div class="foot cpf">Importe = pvp × cant. propuesta × días × (1 − dto.) · Dto. 100 % = S/C · Importes sin IVA.</div>`;
     gInit('contra',$('#cGrid'),contraDef,()=>{ renderContra(); linkSync(); }); gBind('contra');
     bindInputs($('#cHead'));          /* Ref., fechas y realizado: los mismos datos que la cabecera del presupuesto */
@@ -3952,7 +3983,7 @@ function renderContra(){
     x.onchange=()=>{ if(!cCabMan(k)) x.value=def(); }; });
   renderCSel();
   $$('#tab-contra [data-pc]').forEach(c=>c.checked=!!CFG.cPrintCols[c.dataset.pc]);
-  gRender('contra');
+  gRender('contra'); salPinta();
 }
 function contraExportXlsx(){
   const rows=DOC.contra.filter(l=>!contraBlank(l));
@@ -4023,8 +4054,68 @@ function initCSel(){
     linkSync(); save(); renderCSel(); if(TAB==='ppto'){ renderPpto(); if(t.dataset.pp) ppPanel(P.dataset.for), ppPanel(P.dataset.for); } });
   document.addEventListener('mousedown',e=>{ if(!e.target.closest('#cPanel,#cSelBtn,#linkMode')) P.style.display='none'; });
 }
+/* ---------- «Salió»: el material que ya se ha cargado ----------
+   Las marcas NO viven en el presupuesto: viven en la hoja de nave del bolo
+   (ver p12b_nave.js), para que puedan marcar varias personas a la vez sin
+   abrir —ni bloquear— el presupuesto. Aquí solo se ven y se tocan. */
+const salQuien = () => (typeof CLOUD!=='undefined' && CLOUD.usuario) || '';
+/* clave de nave de una línea del contrarider. Si está en el inventario, el material: dos líneas
+   del mismo aparato son las mismas unidades y se marcan juntas. Si va suelto, la propia línea. */
+const salKey = l => !l ? '' : (l.inv && String(l.prop||'').trim() ? l.inv : (String(l.prop||l.req||'').trim() ? 'x:'+l.id : ''));
+function salLineas(){ return DOC.contra.filter(l=>(l.kind||'item')==='item' && salKey(l)); }
+/* el bolo del presupuesto abierto, que es donde vive la hoja */
+function salJob(){ const id=typeof docJobId==='function' && docJobId(); return id ? PLAN.jobs.find(j=>j.id===id) : null; }
+/* mapa clave → marca, para pintar el contrarider */
+function salMapa(){
+  const j=salJob(); if(!j) return {};
+  const m={}; naveLineas(j).forEach(l=>{ if(l.nk) m[l.nk]=l; }); return m;
+}
+/* si el material sale, el bolo es real: se ofrece confirmarlo, porque la hoja de nave solo lleva los confirmados */
+async function salPregunta(){
+  const k=await askDlg({title:'Este presupuesto no está confirmado', text:'La hoja de nave solo lleva la cuenta de los bolos confirmados. Si el material está saliendo, lo normal es que el bolo esté confirmado.',
+    options:[{k:'conf', icon:'✓', label:'Confirmarlo y marcar la salida', desc:'Pasa a Confirmado, aquí y en el Planning', primary:true},
+             {k:'solo', icon:'✎', label:'Solo guardar', desc:'Se queda sin confirmar; no entrará en Devoluciones todavía'}]});
+  if(!k) return false;
+  if(k==='conf' && typeof setDocEstado==='function') await setDocEstado('conf');
+  return k;
+}
+/* el bolo tiene que existir y tener el material apuntado antes de poder marcar nada */
+async function salPrepara(){
+  let j=salJob();
+  if(!j || !(j.mat&&j.mat.length)){ save(); if(typeof planFromDoc==='function') planFromDoc(); j=salJob(); }
+  if(!j){ toast('Guarda el presupuesto antes de marcar la salida','#c60'); return null; }
+  if(docEstado()!=='conf'){ const k=await salPregunta(); if(!k) return null; if(k==='conf') j=salJob()||j; }
+  if(!(j.mat&&j.mat.length)){ toast('Este contrarider no tiene material que marcar','#c60'); return null; }
+  return j;
+}
+function salRefresca(){ if(typeof stockBuild==='function') stockBuild(); renderContra(); if(typeof renderDev==='function' && TAB==='dev') renderDev(); }
+async function salToggle(id){
+  const l=DOC.contra.find(x=>x.id===id); if(!l) return;
+  const k=salKey(l); if(!k) return;
+  const j=await salPrepara(); if(!j) return;
+  const m=salMapa()[k];
+  naveSal(j, k, !(m&&m.salio)); salRefresca();
+}
+async function salTodas(){
+  const L=salLineas(); if(!L.length){ toast('Este contrarider no tiene material que marcar','#c60'); return; }
+  const j=await salPrepara(); if(!j) return;
+  const m=salMapa(), ks=[...new Set(L.map(salKey))], faltan=ks.filter(k=>!(m[k]&&m[k].salio));
+  if(!faltan.length && !await confirmDlg('Quitar todas las marcas', `¿Quito la marca de salida de ${ks.length} línea${ks.length===1?'':'s'}? El material deja de contar como fuera.`, {ok:'Quitar las marcas', danger:true})) return;
+  naveTodo(j, 'salio', faltan.length>0); salRefresca();
+  toast(faltan.length?`${faltan.length} línea${faltan.length===1?'':'s'} marcada${faltan.length===1?'':'s'} como salida`:'Marcas de salida quitadas', faltan.length?'#067647':'#b54708');
+}
+function salPinta(){
+  const b=$('#cSalAll'); if(!b) return;
+  const L=salLineas(), m=salMapa(), ks=[...new Set(L.map(salKey))], n=ks.filter(k=>m[k]&&m[k].salio).length;
+  b.style.display=L.length?'':'none';
+  b.textContent = n===ks.length && ks.length ? '↩ Quitar las marcas de salida' : `✓ Marcar todo como salido${n?` (${n}/${ks.length})`:''}`;
+  b.title = n===ks.length && ks.length ? 'Todo el material está marcado como salido' : 'Marca todas las líneas de material como salidas de la nave';
+}
+
 function initContra(){
   initCSel();
+  document.addEventListener('change', e=>{ const c=e.target.closest('[data-csal]'); if(c) salToggle(c.dataset.csal); });
+  document.addEventListener('click', e=>{ if(e.target.closest('#cSalAll')) salTodas(); });
   gToolbar('contra',$('#fx-contra'));
   $('#cImport').onclick=impOpen;
   $$('#tab-contra [data-pc]').forEach(c=>c.onchange=()=>{ CFG.cPrintCols[c.dataset.pc]=c.checked; saveCfg(); });
@@ -6348,7 +6439,8 @@ const SY_COLS={
     get:()=>DEV, set:a=>{ DEV=a; lsSet(LS_DEV,DEV); },
     name:e=>e.kind==='job'?('Devolución · '+(e.concepto||'')+(e.num?' · '+e.num:'')):((e.material||'(sin material)')+(e.origen?' · '+e.origen:'')),
     key:()=>'',
-    rows:e=>e.kind==='job'?[['Presupuesto',e.num||''],['Concepto',e.concepto||''],['Revisado',e.rev||'(sin revisar)'],['Faltas',(e.lineas||[]).filter(l=>stNum(l.falta)>0).map(l=>l.falta+' '+l.nombre+' ('+((DEV_FALTA.find(t=>t[0]===l.estado)||['',''])[1])+')').join(' · ')||'ninguna']]:[['Fecha',e.fecha],['Material',e.material],['Cantidad',shortV(e.cant)],['Tipo',(DEV_TIPO.find(t=>t[0]===e.tipo)||['',''])[1]],['Origen',e.origen],['Estado',(DEV_EST.find(t=>t[0]===e.estado)||['',''])[1]],['Notas',e.notas]].map(([a,b])=>[a,b==null?'':String(b)]),
+    merge:(a,b)=>(typeof naveMerge==='function'?naveMerge(a,b):null),
+    rows:e=>e.kind==='job'?[['Presupuesto',e.num||''],['Concepto',e.concepto||''],['Salido',(e.lineas||[]).filter(l=>l.salio).length+' de '+(e.lineas||[]).length],['Devuelto',(e.lineas||[]).filter(l=>l.vuelto).length+' de '+(e.lineas||[]).filter(l=>l.salio).length],['Preparado por',(e.prep&&e.prep.por)||'(sin OK)'],['Revisado',e.rev?e.rev+((e.revPor||e.autor)?' · '+(e.revPor||e.autor):''):'(sin revisar)'],['Faltas',(e.lineas||[]).filter(l=>stNum(l.falta)>0).map(l=>l.falta+' '+l.nombre+' ('+((DEV_FALTA.find(t=>t[0]===l.estado)||['',''])[1])+')').join(' · ')||'ninguna']]:[['Fecha',e.fecha],['Material',e.material],['Cantidad',shortV(e.cant)],['Tipo',(DEV_TIPO.find(t=>t[0]===e.tipo)||['',''])[1]],['Origen',e.origen],['Estado',(DEV_EST.find(t=>t[0]===e.estado)||['',''])[1]],['Notas',e.notas]].map(([a,b])=>[a,b==null?'':String(b)]),
     after:()=>{ devTabCnt(); if(TAB==='dev' && !typing('#tab-dev')) renderDev(); }
   },
   facturas:{
@@ -6418,7 +6510,7 @@ async function syncColRun(col, o){
     if(!j.ok){ if(j.error==='accion'){ syncOldServer(); return; } throw new Error((j.error||'error')+(j.detalle?': '+j.detalle:'')); }
     if(j.igual){   /* en la nube no ha cambiado nada desde la última vez: solo subo lo mío */
       const L=A.get(), seen=new Set(), push=[], diffs=[];
-      L.forEach(x=>{ seen.add(x.id); const b=base[x.id], h=canon(x); if(!b) push.push({obj:x, base:null}); else if(b.h!==h) push.push({obj:x, base:b.v}); });
+      L.forEach(x=>{ seen.add(x.id); const b=base[x.id], h=canon(x); if(!b) push.push({obj:x, base:A.merge?0:null}); else if(b.h!==h) push.push({obj:x, base:b.v}); });
       Object.keys(base).forEach(id=>{ if(!seen.has(id)) push.push({obj:{id}, base:base[id].v, borrado:true}); });
       if(push.length) await syncPush(col, push, diffs);
       st.last=new Date().toISOString(); syncStore(); A.after(); SY.diff[col]=diffs.length;
@@ -6447,7 +6539,8 @@ async function syncColRun(col, o){
           if(r.borrado || !r.obj){ if(locCh) diffs.push({t:'delr', l:x, r}); else drop.push(x.id); return; }
           if(!locCh && remCh){ take.push(r); pulled++; }
           else if(locCh && !remCh) push.push({obj:x, base:r.version});
-          else if(locCh && remCh){ if(canon(r.obj)===h || (A.same && A.same(r.obj,x))) base[x.id]={v:r.version,h}; else diffs.push({t:'both', l:x, r}); }
+          else if(locCh && remCh){ if(canon(r.obj)===h || (A.same && A.same(r.obj,x))) base[x.id]={v:r.version,h};
+            else { const m=syncMerge(A, x, r.obj); if(m) push.push({obj:x, base:r.version}); else diffs.push({t:'both', l:x, r}); } }
           return;
         }
         let rr = r && !r.borrado && r.obj ? r : null;
@@ -6455,8 +6548,9 @@ async function syncColRun(col, o){
         if(rr){ used.add(rr.id);
           const xx=Object.assign({},x,{id:rr.id});
           if(canon(xx)===canon(rr.obj) || (A.same && A.same(xx,rr.obj)) || (A.pristine && A.pristine(x))) take.push(Object.assign(rr,{from:x.id}));   /* igual, o aquí no se había tocado: manda la nube */
+          else if(A.merge && x.id===rr.id && syncMerge(A, x, rr.obj)) push.push({obj:x, base:rr.version});   /* hojas de nave: se juntan sin preguntar */
           else diffs.push({t:'new', l:x, r:rr}); }
-        else if(b && !r) push.push({obj:x, base:null});
+        else if(b && !r) push.push({obj:x, base:A.merge?0:null});   /* 0: si otro lo crea a la vez, el almacén avisa y se juntan */
         else if(A.pristine && A.pristine(x) && alive.length) drop.push(x.id);   /* de fábrica y la nube ya no lo tiene: fuera */
         else diffs.push({t:'local', l:x});
       });
@@ -6487,8 +6581,19 @@ async function syncColRun(col, o){
   }catch(e){ if(e.code!=='sin_conexion' && e.code!=='sesion'){ console.error(e); SY.err[col]=String(e.message||e); toast(`No se pudo sincronizar ${A.label}: ${SY.err[col]}`,'#c00'); } }
   finally{ SY.busy[col]=false; renderSyncState(); if(SY.again[col]){ SY.again[col]=false; syncSoon(col); } }
 }
-async function syncPush(col, push, diffs){
-  const A=SY_COLS[col], base=SYNC[col].base;
+/* fusión automática, para lo que se puede juntar sin preguntar (las marcas de la hoja de nave):
+   deja el objeto local ya fusionado y dice si se ha podido */
+function syncMerge(A, mio, suyo){
+  if(!A.merge) return false;
+  let m=null; try{ m=A.merge(mio, suyo); }catch(e){ console.error('sync:merge', e); return false; }
+  if(!m) return false;
+  Object.keys(mio).forEach(k=>{ if(!(k in m)) delete mio[k]; });
+  Object.assign(mio, m); mio.id=m.id||mio.id;
+  try{ A.set(A.get().slice()); }catch(e){}
+  return true;
+}
+async function syncPush(col, push, diffs, vuelta){
+  const A=SY_COLS[col], base=SYNC[col].base, re=[];
   const N=col==='inventario'?100:150;
   for(let i=0;i<push.length;i+=N){
     const part=push.slice(i,i+N);
@@ -6500,10 +6605,13 @@ async function syncPush(col, push, diffs){
       if(x.ok){ if(p.borrado) delete base[x.id]; else base[x.id]={v:x.version,h:canon(p.obj)}; }
       else if(x.conflicto){ const r=x.actual; try{ r.obj=JSON.parse(r.datos); r.obj.id=r.id; }catch(e){ r.obj=null; }
         if(p.borrado) return;
+        if(r.obj && !r.borrado && syncMerge(A, p.obj, r.obj)){ re.push({obj:p.obj, base:r.version}); return; }   /* marcas que se juntan: se vuelve a subir ya fusionado */
         diffs.push({t:r.borrado||!r.obj?'delr':'both', l:p.obj, r}); }
       else if(x.error==='grande') toast(`«${A.name(p.obj)}» es demasiado grande para subirlo`,'#c00'); });
     syncStore();
   }
+  if(re.length){ if((vuelta||0)<4) await syncPush(col, re, diffs, (vuelta||0)+1);
+    else toast(`${re.length} ${re.length===1?A.uno:A.label} se están tocando a la vez: se reintenta en un momento`,'#c60'); }
 }
 let SY_OLD=false;
 function syncOldServer(){ if(SY_OLD) return; SY_OLD=true; toast('El almacén aún no tiene la versión con datos compartidos: falta actualizar el script','#c60'); }
@@ -6674,7 +6782,10 @@ function xlLogo(maxH){
 function xlFromGrid(B,S,id,r0,fx){
   const G=GRIDS[id]; if(!G||!G.def) return {};
   const def=G.def, F=gF(id), rowOf=ri=>r0+ri;
-  def.cols.forEach((col,ci)=>{ const px=F.cols[col.k]||col.w; S.cols[ci]=Math.max(1.5,(px-5)/7); });
+  /* las columnas que no se imprimen (p. ej. «Salió» del contrarider) tampoco van al Excel:
+     se saltan y las de después corren un sitio a la izquierda */
+  const xc = ci => ci - def.cols.slice(0,ci).filter(c=>c.noprint).length;
+  def.cols.forEach((col,ci)=>{ if(col.noprint) return; const px=F.cols[col.k]||col.w; S.cols[xc(ci)]=Math.max(1.5,(px-5)/7); });
   const st=(ri,ci)=>{ const s=gStyle(G,ri,ci), cell=gCell(G,ri,ci);
     const o={b:s.b,i:s.i,u:s.u,u2:s.u2,s:s.s,fc:s.fc,bg:s.bg,ha:s.ha||((cell.t==='num'||cell.t==='out')?'right':''),va:s.va||'middle',wr:!!s.wr&&!s.ov,bd:s.bd,ind:s.pl?Math.round(s.pl/9):0};
     o.sz=s.fs?Math.round(s.fs*0.75*2)/2:10; return o; };
@@ -6682,21 +6793,23 @@ function xlFromGrid(B,S,id,r0,fx){
   def.rows.forEach((row,ri)=>{
     const R=rowOf(ri), h=F.rows[row.id]||row.h; if(h) S.rows[R]=Math.round(h*0.75*4)/4;
     def.cols.forEach((col,ci)=>{
-      if(G.cover[ri+'_'+ci]) return;
+      if(col.noprint || G.cover[ri+'_'+ci]) return;
       const cell=row.cells[col.k]||{t:'lbl',v:''}; const o=st(ri,ci); let v=gText(G,cell,G.anchor[ri+'_'+ci]);
       if(cell.t==='num' && typeof cell.v==='number'){ v=cell.v; if(cell.cur) o.nf=XL_CUR; if(cell.d!=null && /x$/.test(cell.d)) o.nf=XL_X; if(cell.d==='') v=''; }
       else if(cell.t==='out' && typeof cell.sum==='number' && v!=='' && v!=='S/C'){ v=cell.sum; o.nf=XL_CUR; }
       vals[ri+'_'+ci]=v; sty[ri+'_'+ci]=o;
       const f=fx && fx(row,ri,ci,col.k,rowOf);
-      if(f){ o.nf=f.nf||o.nf||XL_CUR; sty[ri+'_'+ci]=o; S.set(R,ci,f.v!==undefined?f.v:v,o,f.f); } else S.set(R,ci,v,o);
+      if(f){ o.nf=f.nf||o.nf||XL_CUR; sty[ri+'_'+ci]=o; S.set(R,xc(ci),f.v!==undefined?f.v:v,o,f.f); } else S.set(R,xc(ci),v,o);
     });
   });
   /* celdas combinadas: en Excel cada celda del borde lleva su trozo de línea */
-  G.merges.forEach(M=>{ S.merge(rowOf(M.r0),M.c0,rowOf(M.r1),M.c1); const a=st(M.r0,M.c0);
+  G.merges.forEach(M=>{ if(def.cols[M.c0] && def.cols[M.c0].noprint) return;
+    S.merge(rowOf(M.r0),xc(M.c0),rowOf(M.r1),xc(M.c1)); const a=st(M.r0,M.c0);
     for(let r=M.r0;r<=M.r1;r++) for(let c=M.c0;c<=M.c1;c++){
+      if(def.cols[c] && def.cols[c].noprint) continue;
       const bd={t:r===M.r0?a.bd.t:0,b:r===M.r1?a.bd.b:0,l:c===M.c0?a.bd.l:0,r:c===M.c1?a.bd.r:0};
-      if(r===M.r0&&c===M.c0){ const x=S.cells[rowOf(r)+','+c]; if(x) x.s=B.xf(Object.assign({},sty[r+'_'+c]||a,{bd})); continue; }
-      S.style(rowOf(r),c,{bg:a.bg,bd}); } });
+      if(r===M.r0&&c===M.c0){ const x=S.cells[rowOf(r)+','+xc(c)]; if(x) x.s=B.xf(Object.assign({},sty[r+'_'+c]||a,{bd})); continue; }
+      S.style(rowOf(r),xc(c),{bg:a.bg,bd}); } });
   return {rowOf, vals};
 }
 const xlDMY = v => { const m=/^(\d{4})-(\d\d)-(\d\d)$/.exec(v||''); return m?`${m[3]}/${m[2]}/${m[1]}`:(v||''); };
@@ -6750,7 +6863,9 @@ async function exportAllXlsx(opt){
       DOC.cAct=cc.id; RENDER.contra();
       let nm=DOC.contras.length>1?('CONTRARIDER - '+contraName(cc,ci)):'CONTRARIDER'; nm=nm.replace(/[\[\]:*?\/\\]/g,' ').slice(0,31).trim(); let k=2, base=nm; while(names.has(nm)) nm=(base.slice(0,28)+' '+(k++)); names.add(nm);
       const Cs=B.sheet(nm); let cr=[]; Cs.fitH=0;
-      const ccol=k=>xlCol(GRIDS.contra.def.cols.findIndex(c=>c.k===k)), cU=ccol('U'), cE=ccol('E'), cF=ccol('F'), cG=ccol('G'), cH=ccol('H');
+      /* la letra en Excel: sin contar las columnas que no se imprimen (p. ej. «Salió») */
+      const ccol=k=>{ const cs=GRIDS.contra.def.cols, i=cs.findIndex(c=>c.k===k); return xlCol(i - cs.slice(0,i).filter(c=>c.noprint).length); };
+      const cU=ccol('U'), cE=ccol('E'), cF=ccol('F'), cG=ccol('G'), cH=ccol('H');
       xlFromGrid(B,Cs,'contra',2,(row,ri,ci2,k2,rowOf)=>{ const R=rowOf(ri)+1;
         if(row.ref && (row.kind||'item')==='item' && k2==='H'){ cr.push(R); const L=DOC.contra[row.ref.i];
           if(manNum(L.impMan)) return {v:N0(L.impMan)};   /* escrito a mano: va el valor, no la fórmula */
@@ -7430,7 +7545,17 @@ const stDays = (a,b) => { const out=[]; const d=dOf(a), e=dOf(b); if(!d||!e) ret
 /* material del presupuesto abierto: contrarider enlazado + líneas del presupuesto enlazadas */
 function docMat(D){
   D=D||DOC; const mat=[]; const add=(inv,nombre,n,ext)=>{ if(!inv||!n) return; const x=mat.find(m=>m.inv===inv); if(x){ x.cant+=n; if(ext) x.ext=(x.ext||0)+n; } else mat.push(Object.assign({inv,nombre:nombre||'',cant:n},ext?{ext:n}:{})); };
-  (D.contras||[]).forEach(c=>(c.lineas||[]).forEach(l=>{ if((l.kind||'item')==='item' && l.inv && String(l.prop||'').trim()) add(l.inv, l.prop, stNum(l.cant===''||l.cant==null?1:l.cant)); }));   /* sin material propuesto escrito no cuenta (enlaces que se quedaron colgados) */
+  /* material del contrarider que NO está en el inventario (soportes, cables…): hay que cargarlo
+     y se marca en la hoja de nave, pero no cuenta para el stock. Cada línea va suelta, por su
+     id: dos líneas del rider que se llamen igual son dos cosas distintas que cargar. */
+  const addX=(id,nombre,n)=>{ nombre=String(nombre||'').trim(); if(!nombre||!n||!id) return; const k='x:'+id;
+    const x=mat.find(m=>m.xk===k); if(x) x.cant+=n; else mat.push({inv:'', xk:k, nombre, cant:n}); };
+  (D.contras||[]).forEach(c=>(c.lineas||[]).forEach(l=>{
+    if((l.kind||'item')!=='item') return;
+    const n=stNum(l.cant===''||l.cant==null?1:l.cant);
+    if(l.inv && String(l.prop||'').trim()) add(l.inv, l.prop, n, 0);
+    else addX(l.id, l.prop||l.req, n);
+  }));   /* sin material propuesto escrito no cuenta para el stock (enlaces que se quedaron colgados) */
   (D.secciones||[]).forEach(s=>(s.lineas||[]).forEach(l=>{ if((l.kind||'item')==='item' && l.inv && l.src!=='contra') add(l.inv, l.concepto, stNum(l.cant===''||l.cant==null?1:l.cant)*Math.max(1,stNum(s.cant)||1)); }));
   (D.extras||[]).forEach(x=>{ if(x.inv) add(x.inv, x.nombre, stNum(x.cant===''||x.cant==null?1:x.cant), true); });   /* material extra / spares: interno */
   return mat;
@@ -7469,7 +7594,10 @@ function stockBuild(){
   const by={}; ST_G=null;
   PLAN.jobs.forEach(j=>{ if(j.estado==='anul' || !(j.mat&&j.mat.length)) return; const [a,b]=jobSpan(j); if(!a) return;
     const per={}; j.mat.forEach(m=>{ if(!m.inv) return; const k=stGk(m.inv); per[k]=(per[k]||0)+stNum(m.cant); });
-    Object.entries(per).forEach(([k,c])=>(by[k]=by[k]||[]).push({j, cant:c, a, b:b||a, firm:j.estado==='conf'})); });
+    /* lo que ya se ha marcado como devuelto en Devoluciones deja de ocupar, aunque el bolo siga en fechas */
+    const r=(typeof devRec==='function') && devRec(j.id);
+    if(r && !r.rev && r.lineas) r.lineas.forEach(l=>{ if(l.inv && l.vuelto){ const k=stGk(l.inv); if(per[k]!=null) per[k]=Math.max(0, per[k]-stNum(l.sal)); } });
+    Object.entries(per).forEach(([k,c])=>{ if(c>0) (by[k]=by[k]||[]).push({j, cant:c, a, b:b||a, firm:j.estado==='conf'}); }); });
   ST_X.jobs=by; ST_X.ver++; ST_X.memo={}; return by;
 }
 /* disponibilidad de un material (su grupo) entre dos fechas (el peor día), sin contar un trabajo si se indica */
@@ -7605,7 +7733,7 @@ const LS_DEV='bk_dev_v1';
 let DEV=lsGet(LS_DEV,[]); if(!Array.isArray(DEV)) DEV=[];
 const DV={q:'', est:'revisar', open:null};
 const DEV_EST=[['pend','Pendiente de devolver'],['dev','Devuelto'],['perd','Perdido'],['cobr','Cobrado al cliente']];
-const DEV_FALTA=[['pend','Pendiente de devolver'],['perd','Perdido'],['cobr','Cobrado al cliente'],['dev','Ya ha vuelto']];
+const DEV_FALTA=[['pend','Pendiente de devolver'],['perd','Perdido'],['cobr','Cobrado al cliente'],['dev','Devuelto']];
 const DEV_TIPO=[['alq','Alquiler sin devolver'],['perd','Pérdida / rotura']];
 const DJ_EST={fuera:['Fuera','dj-fuera'],revisar:['Por revisar','dj-rev'],faltas:['Con faltas','dj-falta'],ok:['Devuelto','dj-ok'],sinmat:['Sin material registrado','dj-sin']};
 const devBaja = st => st==='perd' || st==='cobr';
@@ -7617,13 +7745,22 @@ const devPrecio = inv => { const it=inv && invById(inv); const p=it?invPrice(it)
 /* ---------- trabajos confirmados y su estado de devolución ---------- */
 function devJobs(){ return PLAN.jobs.filter(j=>j.estado==='conf'); }
 function devJobEst(j){
-  if(!(j.mat&&j.mat.length)) return 'sinmat';
-  const b=jobSpan(j)[1]; if(!b || ymd(new Date())<=b) return 'fuera';
-  const r=devRec(j.id); if(!r || !r.rev) return 'revisar';
-  return r.lineas.some(l=>stNum(l.falta)>0 && l.estado==='pend') ? 'faltas' : 'ok';
+  if(!(j.mat&&j.mat.length) && !(devRec(j.id)||{}).lineas) return 'sinmat';
+  const r=devRec(j.id);
+  if(!r || !r.rev){
+    if(devHaySal(j)) return 'revisar';          /* algo marcado como salido: ya se puede revisar, sin esperar a la fecha */
+    const b=jobSpan(j)[1]; if(!b || ymd(new Date())<=b) return 'fuera';
+    return 'revisar';
+  }
+  return naveLineas(j).some(l=>stNum(l.falta)>0 && l.estado==='pend') ? 'faltas' : 'ok';
 }
-const devLineas = j => { const r=devRec(j.id); if(r && r.lineas && r.lineas.length) return r.lineas;
-  return (j.mat||[]).map(m=>({inv:m.inv, nombre:m.nombre||itemLabel(invById(m.inv)||{}), sal:stNum(m.cant), ext:m.ext||0, falta:0, estado:'pend', nota:'', restado:0})); };
+/* lo que alguien ha marcado como salido en la hoja de nave */
+const devSalQty = j => naveSalQty(j);
+const devHaySal = j => naveHaySal(j);
+/* ¿la entrega ya pasó y nadie ha marcado nada? */
+const devSinMarcar = j => { const a=jobSpan(j)[0]; return !!(a && ymd(new Date())>=a && !devHaySal(j) && (j.mat||[]).length); };
+/* las líneas de la hoja: las manda la hoja de nave */
+const devLineas = j => naveLineas(j);
 
 /* ---------- para el stock ---------- */
 /* unidades que faltan (revisadas como pendientes) o apuntadas como pendientes de devolver: no están en la nave */
@@ -7633,12 +7770,21 @@ function devPendQty(gk){
     if(devSuelta(e)){ if(e.estado==='pend' && e.inv && stGk(e.inv)===gk) n+=stNum(e.cant); }
     else if(e.rev) (e.lineas||[]).forEach(l=>{ if(l.estado==='pend' && l.inv && stGk(l.inv)===gk) n+=stNum(l.falta); });
   });
+  /* marcado como salido y sin devolver: no está en la nave.
+     Entre la entrega y la recogida no se suma aquí, porque eso ya lo cuenta el mapa de días del stock;
+     fuera de esas fechas (cargado antes, o devuelto con retraso) sí. */
+  const hoy=ymd(new Date());
+  devJobs().forEach(j=>{
+    const r=devRec(j.id); if(r && r.rev) return;
+    const [a,b]=jobSpan(j); if(a && b && hoy>=a && hoy<=b) return;
+    naveLineas(j).forEach(l=>{ if(l.inv && l.salio && !l.vuelto && !(stNum(l.falta)>0) && stGk(l.inv)===gk) n+=stNum(l.sal); });
+  });
   return n;
 }
 /* unidades de trabajos ya recogidos pero sin revisar: se cuentan en la nave, avisando */
 function devRevQty(gk){
   let n=0, quien=[];
-  devJobs().forEach(j=>{ if(devJobEst(j)!=='revisar') return; let c=0; (j.mat||[]).forEach(m=>{ if(m.inv && stGk(m.inv)===gk) c+=stNum(m.cant); }); if(c){ n+=c; quien.push(`${j.concepto||'(sin concepto)'} (${c})`); } });
+  devJobs().forEach(j=>{ if(devJobEst(j)!=='revisar') return; let c=0; (j.mat||[]).forEach(m=>{ if(m.inv && stGk(m.inv)===gk) c+=Math.max(0, stNum(m.cant)-stNum(m.sal)); }); if(c){ n+=c; quien.push(`${j.concepto||'(sin concepto)'} (${c})`); } });
   return {n, quien};
 }
 
@@ -7667,14 +7813,15 @@ function renderDev(){
   const sel=$('#devEst'); [...sel.options].forEach(o=>{ const base=o.dataset.l||(o.dataset.l=o.textContent); o.textContent= o.value==='*'?base:`${base} (${cnt(o.value)})`; });
   const sueltas=DEV.filter(devSuelta), pendS=sueltas.filter(e=>e.estado==='pend');
   const faltaU=all.filter(x=>x.st==='faltas').reduce((s,x)=>s+devRec(x.j.id).lineas.reduce((t,l)=>t+(l.estado==='pend'?stNum(l.falta):0),0),0);
-  $('#devSum').innerHTML=`<span class="dvk"><b>${cnt('revisar')}</b> por revisar</span><span class="dvk"><b>${cnt('faltas')}</b> con faltas <small>(${faltaU} uds.)</small></span><span class="dvk"><b>${cnt('fuera')}</b> fuera ahora</span><span class="dvk"><b>${pendS.reduce((s,e)=>s+stNum(e.cant),0)}</b> uds. sueltas pendientes</span>`;
+  $('#devSum').innerHTML=`<span class="dvk"><b>${cnt('revisar')}</b> por revisar</span><span class="dvk"><b>${cnt('faltas')}</b> con faltas <small>(${faltaU} uds.)</small></span><span class="dvk"><b>${all.filter(x=>x.st==='fuera' || (x.st==='revisar' && devHaySal(x.j))).length}</b> fuera ahora</span><span class="dvk"><b>${pendS.reduce((s,e)=>s+stNum(e.cant),0)}</b> uds. sueltas pendientes</span>`;
   $('#devCnt').textContent=`${list.length} presupuesto${list.length===1?'':'s'}`;
   $('#devJobs').innerHTML = list.map(({j,st,b})=>{
-    const L=devLineas(j), uds=L.reduce((s,l)=>s+stNum(l.sal),0), ext=L.reduce((s,l)=>s+stNum(l.ext),0), [et,ec]=DJ_EST[st];
+    const L=devLineas(j), uds=L.reduce((s,l)=>s+stNum(l.sal),0), ext=L.reduce((s,l)=>s+stNum(l.ext),0);
+    let [et,ec]=DJ_EST[st]; if(st==='revisar' && devHaySal(j)) [et,ec]=['Salió · por revisar','dj-sal'];
     const falt=st==='faltas'?L.filter(l=>l.estado==='pend'&&stNum(l.falta)>0).map(l=>`${stNum(l.falta)} ${l.nombre}`).join(' · '):'';
     const open=DV.open===j.id;
     return `<tr class="djr ${open?'open':''}" data-dj="${j.id}"><td>${b?fNum(b):'—'}</td><td><span class="pnum">${esc(j.num||'—')}</span></td>
-      <td><b>${esc(j.concepto||'(sin concepto)')}</b>${falt?`<span class="djf">Falta: ${esc(falt)}</span>`:''}</td><td class="pmut">${esc(jobFechas(j))}</td>
+      <td><b>${esc(j.concepto||'(sin concepto)')}</b>${falt?`<span class="djf">Falta: ${esc(falt)}</span>`:''}${devSinMarcar(j)?'<span class="djs">La entrega ya pasó y nadie ha marcado la salida en el contrarider</span>':''}</td><td class="pmut">${esc(jobFechas(j))}</td>
       <td>${st==='sinmat'?'<span class="pmut">abre y guarda el presupuesto</span>':`${uds} uds. · ${L.length} material${L.length===1?'':'es'}${ext?` <span class="pmut">(${ext} extra)</span>`:''}`}</td>
       <td><span class="djp ${ec}">${et}</span></td><td class="djgo">${st==='sinmat'?'':open?'▴':'Revisar ▸'}</td></tr>`
       + (open&&st!=='sinmat' ? `<tr class="djd"><td colspan="7">${devDetalle(j,st)}</td></tr>` : '');
@@ -7682,35 +7829,60 @@ function renderDev(){
   renderDevSueltas(); devTabCnt();
 }
 function devDetalle(j,st){
-  const L=devLineas(j), r=devRec(j.id), opt=(v)=>DEV_FALTA.map(([k,t])=>`<option value="${k}" ${k===v?'selected':''}>${t}</option>`).join('');
+  const L=devLineas(j), r=devRec(j.id)||{}, cerr=!!r.rev;
+  const opt=(v)=>DEV_FALTA.map(([k,t])=>`<option value="${k}" ${k===v?'selected':''}>${t}</option>`).join('');
+  const nSal=L.filter(l=>l.salio).length, nVue=L.filter(l=>l.vuelto).length;
+  const sello=(t,por,en,cls)=>`<span class="djsel ${cls}">${t} <b>${esc(por||'—')}</b>${en?' · '+fNum(String(en).slice(0,10)):''}</span>`;
   return `<div class="djbox">
-    <table class="djt"><thead><tr><th>Material</th><th class="n">Salió</th><th class="n">Faltan</th><th>Qué pasa con lo que falta</th><th>Nota</th></tr></thead><tbody>
-    ${L.map((l,i)=>{ const it=invById(l.inv); return `<tr data-dl="${i}"><td>${esc(l.nombre)}${l.ext?` <span class="djx">${l.ext===l.sal?'extra':l.ext+' extra'}</span>`:''}${it&&it.serie?` <span class="pmut">· nº ${esc(it.serie)}</span>`:''}</td>
-      <td class="n">${stNum(l.sal)}</td><td class="n"><input class="n djfal" data-df="falta" type="number" min="0" max="${stNum(l.sal)}" value="${stNum(l.falta)||''}" placeholder="0"></td>
-      <td><select data-df="estado">${opt(l.estado||'pend')}</select>${l.restado?` <span class="dvlk">−${l.restado} inv.</span>`:''}</td><td><input data-df="nota" value="${esc(l.nota||'')}" placeholder="Nota"></td></tr>`; }).join('')}
+    <table class="djt"><thead><tr><th class="n" title="Marca cada material cuando sale de la nave">Salió</th><th class="n" title="Marca cada material según vuelve">Devuelto</th><th>Material</th><th class="n">Uds.</th><th class="n">Faltan</th><th>Qué pasa con lo que falta</th><th>Nota</th></tr></thead><tbody>
+    ${L.map((l,i)=>{ const it=invById(l.inv); return `<tr data-dl="${i}" data-nk="${esc(l.nk)}" class="${l.vuelto?'dvv':l.salio?'dvs':''}">
+      <td class="n"><input type="checkbox" class="cksal" data-dsal="${i}"${l.salio?' checked':''}${cerr?' disabled':''} title="${l.salio?esc('Salió · '+(naveSelloTxt(l.salPor,l.salEn)||'sin firma')):'Marcar como salido de la nave'}"></td>
+      <td class="n"><input type="checkbox" class="ckvue" data-dvue="${i}"${l.vuelto?' checked':''}${cerr||!l.salio?' disabled':''} title="${l.vuelto?esc('Devuelto · '+(naveSelloTxt(l.vuePor,l.vueEn)||'sin firma')):l.salio?'Marcar como devuelto':'Primero hay que marcar que salió'}"></td>
+      <td>${esc(l.nombre)}${l.ext?` <span class="djx">${l.ext===l.sal?'extra':l.ext+' extra'}</span>`:''}${it&&it.serie?` <span class="pmut">· nº ${esc(it.serie)}</span>`:''}${l.inv?'':' <span class="dvlk off" title="No está en el inventario: se marca igual, pero no cambia las unidades">sin enlazar</span>'}${l.fuera?' <span class="dvlk off" title="Se marcó y después se quitó del presupuesto">ya no está en el presupuesto</span>':''}</td>
+      <td class="n">${stNum(l.sal)}</td><td class="n"><input class="n djfal" data-df="falta" type="number" min="0" max="${stNum(l.sal)}" value="${stNum(l.falta)||''}" placeholder="0"${cerr?' disabled':''}></td>
+      <td><select data-df="estado"${cerr?' disabled':''}>${opt(l.estado||'pend')}</select>${l.restado?` <span class="dvlk">−${l.restado} inv.</span>`:''}</td><td><input data-df="nota" value="${esc(l.nota||'')}" placeholder="Nota"${cerr?' disabled':''}></td></tr>`; }).join('')}
     </tbody></table>
-    <div class="djacts">${r&&r.rev?`<span class="pmut">Revisado el ${fNum(r.rev)}${r.autor?' · '+esc(r.autor):''}</span>`:'<span class="pmut">Pon solo lo que falta. Lo demás se da por devuelto.</span>'}<span style="flex:1"></span>
-      ${st==='fuera'?'<span class="pmut">Aún no ha llegado la fecha de devolución.</span>':''}
-      ${r&&r.rev?'<button class="sec" data-djact="reabrir">Reabrir</button>':''}
-      <button class="sec" data-djact="guardar">Guardar revisión</button><button data-djact="todo">✓ Todo devuelto</button></div></div>`;
+    <div class="djsellos">${r.prep&&r.prep.en?sello('Preparado por',r.prep.por,r.prep.en,'ok'):`<span class="djsel">Sin el OK de preparado <small>(${nSal} de ${L.length} marcados)</small></span>`}
+      ${r.rev?sello('Revisado por',r.revPor||r.autor,r.rev,'ok'):`<span class="djsel">Sin revisar <small>(${nVue} de ${nSal||L.length} devueltos)</small></span>`}</div>
+    <div class="djacts"><span class="pmut">${cerr?'Revisión cerrada. Reábrela para tocar algo.':'Marca cada material al salir y al volver. Pon solo lo que falte.'}</span><span style="flex:1"></span>
+      ${st==='fuera'&&!nSal?'<span class="pmut">Aún no ha llegado la fecha de devolución.</span>':''}
+      <button class="sec" data-djact="salall" ${cerr?'disabled':''}>${nSal===L.length&&L.length?'↩ Quitar las salidas':'✓ Todo salido'}</button>
+      <button class="sec" data-djact="prep" ${cerr?'disabled':''}>${r.prep&&r.prep.en?'↩ Quitar el OK de preparado':'✓ OK, preparado'}</button>
+      <button data-djact="rev">${cerr?'↩ Reabrir la revisión':'✓ OK, revisado'}</button></div></div>`;
 }
+/* una casilla de la tabla: se guarda sola, sin perder lo escrito a mano */
+async function devVuelta(j, i, on){
+  const L=devLeeTabla(j), l=L[i]; if(!l) return;
+  naveGuarda(j, L);                                   /* primero lo escrito, para no perderlo */
+  await naveVue(j, l.nk, on);
+  renderDev(); if(TAB==='inv') renderInvRows();
+}
+function devSalida(j, i, on){
+  const L=devLeeTabla(j), l=L[i]; if(!l) return;
+  naveGuarda(j, L);
+  naveSal(j, l.nk, on);
+  renderDev();
+}
+/* lo que hay ahora mismo en la tabla, para no perder lo escrito al marcar una casilla */
+function devLeeTabla(j){
+  const base=devLineas(j).map(l=>Object.assign({},l));
+  const tr=$(`tr.djr[data-dj="${j.id}"]`), det=tr && tr.nextElementSibling;
+  if(det) det.querySelectorAll('tr[data-dl]').forEach(row=>{ const l=base[+row.dataset.dl]; if(!l) return;
+    const f=row.querySelector('[data-df="falta"]'), e=row.querySelector('[data-df="estado"]'), n=row.querySelector('[data-df="nota"]');
+    if(f) l.falta=Math.min(stNum(l.sal), Math.max(0, stNum(f.value)));
+    if(e) l.estado=e.value; if(n) l.nota=n.value;
+    if(stNum(l.falta)>0){ l.vuelto=false; l.vueEn=''; l.vuePor=''; } });
+  return base;
+}
+/* el OK general de la vuelta: guarda lo escrito y sella */
 async function devGuardar(j, todo){
-  const tr=$(`tr.djr[data-dj="${j.id}"]`); const det=tr && tr.nextElementSibling;
-  let r=devRec(j.id); const base=devLineas(j).map(l=>Object.assign({},l));
-  if(!todo && det) det.querySelectorAll('tr[data-dl]').forEach(row=>{ const l=base[+row.dataset.dl]; if(!l) return;
-    l.falta=Math.min(stNum(l.sal), Math.max(0, stNum(row.querySelector('[data-df="falta"]').value)));
-    l.estado=row.querySelector('[data-df="estado"]').value; l.nota=row.querySelector('[data-df="nota"]').value; if(!l.falta && l.estado!=='dev') l.estado='pend'; });
-  if(todo) base.forEach(l=>{ l.falta=0; l.estado='pend'; });
-  /* inventario: bajas nuevas o deshechas */
-  for(const l of base) await devStock(l, stNum(l.falta), stNum(l.falta)>0 ? l.estado : 'dev');
-  if(!r){ r={id:'dj_'+j.id, kind:'job', job:j.id, num:j.num||'', concepto:j.concepto||''}; DEV.push(r); }
-  r.lineas=base; r.rev=today(); r.autor=(typeof CLOUD!=='undefined'&&CLOUD.user)||''; r.num=j.num||''; r.concepto=j.concepto||'';
-  devSave(); DV.open=null; renderDev(); if(TAB==='inv') renderInvRows();
-  const f=base.filter(l=>stNum(l.falta)>0); toast(f.length?`Revisado con ${f.length} falta${f.length===1?'':'s'}`:'✓ Todo devuelto');
+  const L=devLeeTabla(j);
+  if(todo){ const ahora=naveAhora(), quien=naveQuien();
+    L.forEach(l=>{ if(!l.salio){ l.salio=true; l.salEn=ahora; l.salPor=quien; } l.falta=0; l.estado='dev'; l.vuelto=true; l.vueEn=l.vueEn||ahora; l.vuePor=l.vuePor||quien; }); }
+  naveGuarda(j, L);
+  await naveRev(j);
 }
-async function devReabrir(j){ const r=devRec(j.id); if(!r) return;
-  for(const l of r.lineas) if(l.restado) await devStock(l, stNum(l.falta), 'dev');
-  r.rev=''; devSave(); DV.open=j.id; renderDev(); }
+async function devReabrir(j){ await naveRev(j); }
 
 /* ---------- pérdidas sueltas (sin presupuesto) ---------- */
 function renderDevSueltas(){
@@ -7742,10 +7914,14 @@ function devAdd(){
 }
 function devExport(){
   const wb=XLSX.utils.book_new();
-  const h1=['Devolución','Nº presupuesto','Concepto','Estado','Material','Nº serie','Salió','Extra','Faltan','Qué pasa','Restado del inventario','Revisado','Nota'];
-  const r1=[]; devJobs().forEach(j=>{ const st=devJobEst(j); if(st==='sinmat') return; devLineas(j).forEach(l=>{ const it=invById(l.inv);
-    r1.push([jobSpan(j)[1]||'',j.num||'',j.concepto||'',DJ_EST[st][0],l.nombre,it&&it.serie||'',stNum(l.sal),stNum(l.ext)||'',stNum(l.falta)||'',stNum(l.falta)?(DEV_FALTA.find(t=>t[0]===l.estado)||['',''])[1]:'',l.restado||'',(devRec(j.id)||{}).rev||'',l.nota||'']); }); });
-  const w1=XLSX.utils.aoa_to_sheet([h1,...r1]); w1['!cols']=[{wch:11},{wch:12},{wch:30},{wch:14},{wch:40},{wch:14},{wch:6},{wch:6},{wch:7},{wch:20},{wch:10},{wch:11},{wch:30}];
+  const h1=['Devolución','Nº presupuesto','Concepto','Estado','Material','Nº serie','Uds.','Extra','Salió','Quién lo sacó','Devuelto','Quién lo recibió','Faltan','Qué pasa','Restado del inventario','Preparado por','Revisado por','Revisado','Nota'];
+  const r1=[]; devJobs().forEach(j=>{ const st=devJobEst(j); if(st==='sinmat') return; const r=devRec(j.id)||{}; devLineas(j).forEach(l=>{ const it=invById(l.inv);
+    r1.push([jobSpan(j)[1]||'',j.num||'',j.concepto||'',DJ_EST[st][0],l.nombre,it&&it.serie||'',stNum(l.sal),stNum(l.ext)||'',
+      l.salio?xlDMY(String(l.salEn||'').slice(0,10)):'',l.salio?(l.salPor||''):'',
+      l.vuelto?xlDMY(String(l.vueEn||'').slice(0,10)):'',l.vuelto?(l.vuePor||''):'',
+      stNum(l.falta)||'',stNum(l.falta)?(DEV_FALTA.find(t=>t[0]===l.estado)||['',''])[1]:'',l.restado||'',
+      (r.prep||{}).por||'',r.revPor||r.autor||'',r.rev||'',l.nota||'']); }); });
+  const w1=XLSX.utils.aoa_to_sheet([h1,...r1]); w1['!cols']=[{wch:11},{wch:12},{wch:30},{wch:14},{wch:40},{wch:14},{wch:6},{wch:6},{wch:10},{wch:14},{wch:10},{wch:14},{wch:7},{wch:20},{wch:10},{wch:14},{wch:14},{wch:11},{wch:30}];
   XLSX.utils.book_append_sheet(wb,w1,'Por presupuesto');
   const h2=['Fecha','Material','Nº serie','Cantidad','Tipo','Dónde / quién','Estado','Fecha de cierre','Restado del inventario','Notas'];
   const r2=DEV.filter(devSuelta).map(e=>{ const it=e.inv&&invById(e.inv); return [e.fecha||'',e.material||'',it&&it.serie||'',stNum(e.cant),(DEV_TIPO.find(t=>t[0]===e.tipo)||['',''])[1],e.origen||'',(DEV_EST.find(t=>t[0]===e.estado)||['',''])[1],e.cierre||'',e.restado||'',e.notas||'']; });
@@ -7756,13 +7932,24 @@ function devExport(){
 function initDev(){
   /* los apuntes de prueba de la primera versión (lista suelta) se quitan */
   if(!lsGet('bk_dev_v2',false)){ DEV=DEV.filter(e=>e.kind==='job'||e.kind==='suelta'); lsSet(LS_DEV,DEV); lsSet('bk_dev_v2',true); }
+  try{ naveMigra(); }catch(e){ console.error('nave:migra', e); }
   devTabCnt();
   $('#devQ').oninput=e=>{ DV.q=e.target.value; renderDev(); };
   $('#devEst').onchange=e=>{ DV.est=e.target.value; DV.open=null; renderDev(); };
   $('#devNew').onclick=devAdd; $('#devExp').onclick=devExport;
+  $('#devJobs').addEventListener('change',ev=>{
+    const j=PLAN.jobs.find(x=>x.id===DV.open); if(!j) return;
+    const v=ev.target.closest('[data-dvue]'); if(v){ devVuelta(j, +v.dataset.dvue, v.checked); return; }
+    const s=ev.target.closest('[data-dsal]'); if(s) devSalida(j, +s.dataset.dsal, s.checked);
+  });
   $('#devJobs').addEventListener('click',ev=>{
+    if(ev.target.closest('[data-dvue],[data-dsal]')) return;        /* las casillas se marcan solas */
     const a=ev.target.closest('[data-djact]');
-    if(a){ const j=PLAN.jobs.find(x=>x.id===DV.open); if(!j) return; if(a.dataset.djact==='todo') devGuardar(j,true); else if(a.dataset.djact==='guardar') devGuardar(j,false); else devReabrir(j); return; }
+    if(a){ const j=PLAN.jobs.find(x=>x.id===DV.open); if(!j) return; const k=a.dataset.djact;
+      if(k==='salall'){ const L=devLineas(j); naveGuarda(j, devLeeTabla(j)); naveTodo(j,'salio', L.filter(l=>l.salio).length!==L.length); renderDev(); }
+      else if(k==='prep') navePrep(j).then(ok=>{ if(ok) renderDev(); });
+      else if(k==='rev') naveRev(j);
+      return; }
     if(ev.target.closest('tr.djd')) return;
     const tr=ev.target.closest('tr.djr'); if(!tr) return; const j=PLAN.jobs.find(x=>x.id===tr.dataset.dj); if(!j || devJobEst(j)==='sinmat') return;
     DV.open = DV.open===j.id ? null : j.id; renderDev();
@@ -7789,6 +7976,234 @@ function initDev(){
     if(!await confirmDlg('Borrar apunte', `¿Borrar el apunte «${e.material||'(sin material)'}»?`, {ok:'Borrar', danger:true})) return;
     if(e.restado) await devStock(e, stNum(e.cant), 'dev');
     DEV=DEV.filter(x=>x!==e); devSave(); renderDev(); });
+}
+
+/* =====================================================================
+   HOJA DE NAVE  ·  una por bolo, guardada con los apuntes de Devoluciones
+   · Las marcas de salida y de vuelta viven AQUÍ, no dentro del presupuesto:
+     así pueden marcar varias personas a la vez, desde el ordenador o desde
+     el móvil, sin que nadie tenga que abrir —y bloquear— el presupuesto.
+   · Si dos marcan a la vez, las marcas se juntan: una línea marcada por
+     cualquiera se queda marcada, y nunca se desmarca lo que marcó otro.
+   · Dos sellos: «Preparado por» al cargar y «Revisado por» al volver.
+   · El material lo manda siempre el presupuesto (j.mat). Aquí solo las marcas.
+   ===================================================================== */
+
+/* clave de la línea: el material del inventario; si va suelto, su nombre */
+const naveK = m => !m ? '' : (m.nk || m.inv || m.xk || (String(m.nombre||'').trim() ? 'n:'+norm(m.nombre) : ''));
+const naveQuien = () => (typeof CLOUD!=='undefined' && CLOUD.usuario) || '';
+const naveAhora = () => new Date().toISOString();
+const naveFecha = s => !s ? '' : (String(s).length>10 ? xlDMY(String(s).slice(0,10)) : xlDMY(String(s)));
+/* quién y cuándo, para los títulos */
+const naveSelloTxt = (por,en) => [por||'', en?'el '+naveFecha(en):''].filter(Boolean).join(' · ');
+
+function naveRec(jid, crear){
+  let r=DEV.find(e=>e.kind==='job' && e.job===jid);
+  if(!r && crear){ r={id:'dj_'+jid, kind:'job', job:jid, lineas:[], mod:naveAhora()}; DEV.push(r); }
+  return r;
+}
+
+/* ---------- leer la hoja ---------- */
+/* el material del bolo con las marcas que ya tenga. Lo que se marcó y después se
+   quitó del presupuesto se conserva, para que no desaparezca de la vista. */
+function naveLineas(j){
+  if(!j) return [];
+  const r=naveRec(j.id), G={}; ((r&&r.lineas)||[]).forEach(l=>{ const k=naveK(l); if(k && !G[k]) G[k]=l; });
+  /* el material suelto se marcaba antes por su nombre y ahora por su línea: se rescata por el nombre */
+  const porNombre={}; Object.keys(G).forEach(k=>{ if(!G[k].inv){ const n=norm(G[k].nombre||''); if(n && !porNombre[n]) porNombre[n]=k; } });
+  const out=[], visto=new Set();
+  (j.mat||[]).forEach(m=>{
+    const k=naveK(m); if(!k || visto.has(k)) return; visto.add(k);
+    let g=G[k];
+    if(!g && !m.inv){ const vk=porNombre[norm(m.nombre||'')]; if(vk && !visto.has(vk)){ g=G[vk]; visto.add(vk); } }
+    g=g||{};
+    out.push({ nk:k, inv:m.inv||'', xk:m.xk||'',
+      nombre: m.nombre || g.nombre || itemLabel(invById(m.inv)||{}) || '',
+      sal: stNum(m.cant), ext: stNum(m.ext),
+      salio:!!g.salio, salPor:g.salPor||'', salEn:g.salEn||'',
+      vuelto:!!g.vuelto, vuePor:g.vuePor||'', vueEn:g.vueEn||'',
+      falta:stNum(g.falta), estado:g.estado||'pend', nota:g.nota||'', restado:g.restado||0 });
+  });
+  Object.keys(G).forEach(k=>{ if(visto.has(k)) return; const l=G[k];
+    if(l.salio || l.vuelto || stNum(l.falta)>0) out.push(Object.assign({}, l, {nk:k, fuera:true, sal:stNum(l.sal), ext:stNum(l.ext)})); });
+  return out;
+}
+const naveSalio   = j => naveLineas(j).filter(l=>l.salio);
+const naveSalQty  = j => naveSalio(j).reduce((t,l)=>t+stNum(l.sal),0);
+const naveHaySal  = j => naveSalio(j).some(l=>true);
+/* lo que salió y todavía no ha vuelto ni tiene su falta declarada */
+const navePorVolver = j => naveLineas(j).filter(l=>l.salio && !l.vuelto && !(stNum(l.falta)>0));
+const navePrepOK = j => { const r=naveRec(j.id); return !!(r && r.prep && r.prep.en); };
+const naveRevOK  = j => { const r=naveRec(j.id); return !!(r && r.rev); };
+
+/* ---------- guardar la hoja ---------- */
+function naveGuarda(j, lineas, extra){
+  const r=naveRec(j.id, true);
+  r.lineas=(lineas||[]).map(l=>{ const o={nk:naveK(l), inv:l.inv||'', xk:l.xk||'', nombre:l.nombre||'', sal:stNum(l.sal)};
+    if(stNum(l.ext)) o.ext=stNum(l.ext);
+    if(l.salio){ o.salio=true; o.salPor=l.salPor||''; o.salEn=l.salEn||''; }
+    if(l.vuelto){ o.vuelto=true; o.vuePor=l.vuePor||''; o.vueEn=l.vueEn||''; }
+    if(stNum(l.falta)) o.falta=stNum(l.falta);
+    if(l.estado && l.estado!=='pend') o.estado=l.estado;
+    if(l.nota) o.nota=l.nota;
+    if(l.restado) o.restado=l.restado;
+    return o; });
+  r.num=j.num||''; r.concepto=j.concepto||''; r.mod=naveAhora();
+  if(extra) Object.keys(extra).forEach(k=>{ if(extra[k]==null) delete r[k]; else r[k]=extra[k]; });
+  /* la revisión se cierra sola cuando todo lo que salió está devuelto o tiene su falta declarada */
+  const sal=r.lineas.filter(l=>l.salio);
+  const fin = sal.length>0 && sal.every(l=>l.vuelto || stNum(l.falta)>0);
+  if(fin && !r.rev){ r.rev=today(); if(!r.revPor){ r.revPor=naveQuien(); r.autor=r.revPor; } }
+  if(!fin && r.rev && !(extra&&extra.rev)){ r.rev=''; delete r.revPor; }
+  devSave(); if(typeof stockBuild==='function') stockBuild();
+  return r;
+}
+
+/* ---------- marcar ---------- */
+/* salida: al marcar se sella quién y cuándo; al quitarla se borra también la vuelta */
+function naveSal(j, nk, on){
+  const L=naveLineas(j), l=L.find(x=>x.nk===nk); if(!l) return null;
+  if(on===!!l.salio) return null;
+  if(on){ l.salio=true; l.salEn=naveAhora(); l.salPor=naveQuien(); }
+  else { l.salio=false; l.salEn=''; l.salPor=''; l.vuelto=false; l.vueEn=''; l.vuePor=''; }
+  return naveGuarda(j, L, on?null:{prep:null});
+}
+async function naveVue(j, nk, on){
+  const L=naveLineas(j), l=L.find(x=>x.nk===nk); if(!l) return null;
+  if(on){ l.vuelto=true; l.vueEn=naveAhora(); l.vuePor=naveQuien(); l.falta=0; l.estado='dev'; }
+  else { l.vuelto=false; l.vueEn=''; l.vuePor=''; if(!stNum(l.falta)) l.estado='pend'; }
+  await devStock(l, stNum(l.falta), stNum(l.falta)>0 ? l.estado : 'dev');
+  return naveGuarda(j, L, on?null:{rev:'', revPor:null});
+}
+/* marcar o desmarcar de golpe lo que queda */
+function naveTodo(j, campo, on){
+  const L=naveLineas(j), ahora=naveAhora(), quien=naveQuien();
+  L.forEach(l=>{
+    if(campo==='salio'){ if(on===!!l.salio) return;
+      if(on){ l.salio=true; l.salEn=ahora; l.salPor=quien; } else { l.salio=false; l.salEn=''; l.salPor=''; l.vuelto=false; l.vueEn=''; l.vuePor=''; } }
+    else { if(!l.salio || on===!!l.vuelto) return;
+      if(on){ l.vuelto=true; l.vueEn=ahora; l.vuePor=quien; l.falta=0; l.estado='dev'; } else { l.vuelto=false; l.vueEn=''; l.vuePor=''; if(!stNum(l.falta)) l.estado='pend'; } }
+  });
+  const ex = campo==='salio' ? (on?null:{prep:null}) : (on?null:{rev:'', revPor:null});
+  return naveGuarda(j, L, ex);
+}
+
+/* ---------- los dos OK ---------- */
+async function navePrep(j){
+  const L=naveLineas(j); if(!L.length){ toast('Este bolo no tiene material registrado','#c60'); return false; }
+  const r=naveRec(j.id);
+  if(r && r.prep && r.prep.en){
+    if(!await confirmDlg('Quitar el OK de preparado', `Lo dio ${naveSelloTxt(r.prep.por,r.prep.en)||'alguien'}. ¿Lo quito? Las marcas de cada material se quedan como están.`, {ok:'Quitar el OK', danger:true})) return false;
+    naveGuarda(j, L, {prep:null}); toast('OK de preparado quitado','#b54708'); return true;
+  }
+  const faltan=L.filter(l=>!l.salio);
+  if(faltan.length){
+    const k=await askDlg({title:`Quedan ${faltan.length} sin marcar`, text:'Lo que no esté marcado no cuenta como salido de la nave: '+faltan.slice(0,4).map(l=>l.nombre).join(', ')+(faltan.length>4?'…':''),
+      options:[{k:'todo', icon:'✓', label:'Marcarlo todo y dar el OK', desc:'Las '+faltan.length+' líneas pasan a salidas', primary:true},
+               {k:'ok', icon:'✎', label:'Dar el OK solo con lo marcado', desc:'El resto se queda sin salir'}]});
+    if(!k) return false;
+    if(k==='todo'){ const ahora=naveAhora(), quien=naveQuien(); faltan.forEach(l=>{ l.salio=true; l.salEn=ahora; l.salPor=quien; }); }
+  }
+  if(!L.some(l=>l.salio)){ toast('No hay nada marcado como salido','#c60'); return false; }
+  naveGuarda(j, L, {prep:{por:naveQuien(), en:naveAhora()}});
+  toast('✓ Preparado'+(naveQuien()?' · '+naveQuien():''),'#067647'); return true;
+}
+async function naveRev(j){
+  const L=naveLineas(j); const r=naveRec(j.id);
+  if(r && r.rev){
+    if(!await confirmDlg('Reabrir la revisión', `La cerró ${naveSelloTxt(r.revPor||r.autor,r.rev)||'alguien'}. ¿La reabro para seguir tocando?`, {ok:'Reabrir'})) return false;
+    for(const l of L) if(l.restado) await devStock(l, stNum(l.falta), 'dev');
+    naveGuarda(j, L, {rev:'', revPor:null}); DV.open=j.id; renderDev(); return true;
+  }
+  const pend=L.filter(l=>l.salio && !l.vuelto && !(stNum(l.falta)>0));   /* sobre L, que es lo que se guarda */
+  if(pend.length){
+    const k=await askDlg({title:`Quedan ${pend.length} sin devolver`, text:'Sin marcar ni declarar falta: '+pend.slice(0,4).map(l=>l.nombre).join(', ')+(pend.length>4?'…':''),
+      options:[{k:'todo', icon:'✓', label:'Darlo todo por devuelto', desc:'Las '+pend.length+' líneas pasan a devueltas', primary:true},
+               {k:'ok', icon:'⚠', label:'Cerrar así', desc:'Lo que falte se queda pendiente de devolver'}]});
+    if(!k) return false;
+    if(k==='todo'){ const ahora=naveAhora(), quien=naveQuien(); pend.forEach(l=>{ l.vuelto=true; l.vueEn=ahora; l.vuePor=quien; l.falta=0; l.estado='dev'; }); }
+  }
+  for(const l of L) await devStock(l, stNum(l.falta), stNum(l.falta)>0 ? l.estado : 'dev');
+  naveGuarda(j, L, {rev:today(), revPor:naveQuien(), autor:naveQuien()});
+  const f=L.filter(l=>stNum(l.falta)>0);
+  toast(f.length?`Revisado con ${f.length} falta${f.length===1?'':'s'}`:'✓ Todo devuelto','#067647');
+  DV.open=null; renderDev(); if(TAB==='inv') renderInvRows(); return true;
+}
+
+/* ---------- juntar dos versiones de la misma hoja ---------- */
+/* lo llama el sincronizado cuando la hoja ha cambiado aquí y en el almacén a la vez:
+   gana lo marcado, con el sello de quien lo marcó primero. */
+function naveMerge(a, b){
+  if(!a || !b || a.kind!=='job' || b.kind!=='job' || a.job!==b.job) return null;   /* las pérdidas sueltas se siguen preguntando */
+  /* el resultado no puede depender de quién fusiona: los dos aparatos tienen que
+     llegar al mismo objeto, o se lo estarían subiendo el uno al otro sin parar */
+  const ma=String(a.mod||''), mb=String(b.mod||'');
+  const reciente = mb>ma ? 'b' : mb<ma ? 'a' : (String(a.id||'')<=String(b.id||'') ? 'a' : 'b');
+  const sello=(l,on,por,en)=>({on:!!(l&&l[on]), por:(l&&l[por])||'', en:(l&&l[en])||''});
+  const antes=(x,y)=>{ if(!x.on) return y; if(!y.on) return x;
+    if(x.en!==y.en) return (!y.en || (x.en && x.en<y.en)) ? x : y;
+    return x.por<=y.por ? x : y; };                                   /* misma hora: por orden de nombre, para que salga igual en los dos sitios */
+  const A={}, B={};
+  (a.lineas||[]).forEach(l=>{ const k=naveK(l); if(k && !A[k]) A[k]=l; });
+  (b.lineas||[]).forEach(l=>{ const k=naveK(l); if(k && !B[k]) B[k]=l; });
+  /* por orden de clave: el orden en que se ven lo pone el presupuesto, no la hoja */
+  const lineas=[...new Set([...Object.keys(A), ...Object.keys(B)])].sort().map(k=>{
+    const x=A[k], y=B[k], gana = reciente==='b' ? (y||x) : (x||y), otro = gana===x ? y : x;
+    const o=Object.assign({}, otro||{}, gana||{}, {nk:k});
+    const s=antes(sello(x,'salio','salPor','salEn'), sello(y,'salio','salPor','salEn'));
+    const v=antes(sello(x,'vuelto','vuePor','vueEn'), sello(y,'vuelto','vuePor','vueEn'));
+    if(s.on){ o.salio=true; o.salPor=s.por; o.salEn=s.en; } else { delete o.salio; delete o.salPor; delete o.salEn; }
+    if(v.on){ o.vuelto=true; o.vuePor=v.por; o.vueEn=v.en; } else { delete o.vuelto; delete o.vuePor; delete o.vueEn; }
+    /* lo que falta y lo escrito a mano: gana el apunte más reciente, pero nunca pierdo una falta declarada */
+    if(!stNum(o.falta)){ const f=Math.max(stNum(x&&x.falta), stNum(y&&y.falta)); if(f){ o.falta=f; const d=stNum(x&&x.falta)>=f?x:y; o.estado=(d&&d.estado)||'pend'; if(d&&d.nota) o.nota=d.nota; } }
+    if(!o.restado){ const rr=Math.max(stNum(x&&x.restado), stNum(y&&y.restado)); if(rr) o.restado=rr; }
+    if(stNum(o.falta)>0 && o.vuelto){ delete o.vuelto; delete o.vuePor; delete o.vueEn; }
+    return o;
+  });
+  const out=Object.assign({}, reciente==='b'?a:b, reciente==='b'?b:a, {lineas, mod:(ma>mb?ma:mb)||naveAhora()});
+  /* los dos sellos: gana el que exista, y si existen los dos, el primero que se puso */
+  const p=antes({on:!!(a.prep&&a.prep.en), por:(a.prep||{}).por||'', en:(a.prep||{}).en||''},
+                {on:!!(b.prep&&b.prep.en), por:(b.prep||{}).por||'', en:(b.prep||{}).en||''});
+  if(p.on) out.prep={por:p.por, en:p.en}; else delete out.prep;
+  const rv=antes({on:!!a.rev, por:a.revPor||a.autor||'', en:a.rev||''}, {on:!!b.rev, por:b.revPor||b.autor||'', en:b.rev||''});
+  if(rv.on){ out.rev=rv.en; out.revPor=rv.por; out.autor=rv.por; } else { out.rev=''; delete out.revPor; }
+  /* si alguien ha desmarcado material, la revisión no puede seguir cerrada */
+  const sal=lineas.filter(l=>l.salio);
+  if(out.rev && !(sal.length && sal.every(l=>l.vuelto || stNum(l.falta)>0))){ out.rev=''; delete out.revPor; }
+  return out;
+}
+
+/* ---------- traer las marcas del modelo anterior ---------- */
+/* hasta el 05-11-2026 la salida se marcaba en la línea del contrarider y llegaba
+   aquí como j.mat[].sal. Se pasa una sola vez a la hoja de nave. */
+function naveMigra(){
+  if(lsGet('bk_nave_v1',false)) return;
+  let n=0;
+  (PLAN.jobs||[]).forEach(j=>{
+    const r=DEV.find(e=>e.kind==='job' && e.job===j.id);
+    const viejas=(j.mat||[]).filter(m=>stNum(m.sal)>0);
+    if(!r && !viejas.length) return;
+    const G={}; ((r&&r.lineas)||[]).forEach(l=>{ const k=naveK(l); if(k && !G[k]) G[k]=l; });
+    const hoy=today()+'T12:00:00.000Z';
+    const lin=[];
+    (j.mat||[]).forEach(m=>{ const k=naveK(m); if(!k || lin.some(l=>l.nk===k)) return;
+      const g=G[k]||{}, saliaAntes = stNum(m.sal)>0 || !!g.vuelto || stNum(g.falta)>0 || (r && r.rev && G[k]);
+      lin.push({nk:k, inv:m.inv||'', xk:m.xk||'', nombre:m.nombre||g.nombre||'', sal:stNum(m.cant), ext:stNum(m.ext),
+        salio:!!saliaAntes, salPor:saliaAntes?(g.salPor||''):'', salEn:saliaAntes?(g.salEn||hoy):'',
+        vuelto:!!g.vuelto, vuePor:g.vuePor||'', vueEn:g.vueEn||(g.vuelto?hoy:''),
+        falta:stNum(g.falta), estado:g.estado||'pend', nota:g.nota||'', restado:g.restado||0}); });
+    /* lo que ya estaba revisado y no sigue en el presupuesto, se conserva */
+    Object.keys(G).forEach(k=>{ if(lin.some(l=>l.nk===k)) return; const l=G[k];
+      if(l.vuelto || stNum(l.falta)>0) lin.push(Object.assign({}, l, {nk:k, salio:true, salEn:l.salEn||hoy})); });
+    if(!lin.length) return;
+    const rr=r || {id:'dj_'+j.id, kind:'job', job:j.id};
+    if(!r) DEV.push(rr);
+    rr.lineas=lin; rr.num=j.num||''; rr.concepto=j.concepto||''; rr.mod=naveAhora();
+    if(rr.rev && !rr.revPor) rr.revPor=rr.autor||'';
+    n++;
+  });
+  lsSet('bk_nave_v1',true);
+  if(n){ lsSet(LS_DEV,DEV); if(typeof syncSoon==='function') syncSoon('devoluciones'); }
 }
 
 /* =====================================================================
@@ -9996,8 +10411,9 @@ function mvRotulo(G, r, c){
   return A + (col && c > 1 ? ' · ' + col : '');
 }
 document.addEventListener('dblclick', e => { if(e.target.closest('td.gd')){ e.preventDefault(); e.stopPropagation(); } }, true);
-document.addEventListener('mousedown', e => { if(e.target.closest('td.gd') && !e.target.closest('#mvEd')){ e.stopPropagation(); } }, true);
+document.addEventListener('mousedown', e => { if(e.target.closest('input.cksal')) return; if(e.target.closest('td.gd') && !e.target.closest('#mvEd')){ e.stopPropagation(); } }, true);
 document.addEventListener('click', e => {
+  if(e.target.closest('input.cksal')) return;        /* la casilla de «Salió» se marca sola: no abrir el editor */
   const td = e.target.closest('td.gd'); if(!td || !MV.cargado) return;
   const sh = td.closest('#ppto,#mail,#contra'); if(!sh) return;
   e.preventDefault(); e.stopPropagation();

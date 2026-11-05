@@ -162,6 +162,36 @@ button.card:active{background:var(--azulsuave)}
 .filtros button.on{background:var(--azul);border-color:var(--azul);color:#fff}
 .imp{font-variant-numeric:tabular-nums;font-weight:700}
 
+/* nave */
+.nvTop{display:flex;align-items:center;gap:10px;margin:0 0 12px}
+.nvTop .x{flex:none;font-size:26px;line-height:1}
+.nvTop h2{font-size:18px;margin:0;line-height:1.25;flex:1;min-width:0}
+.nvMeta{color:var(--suave);font-size:13.5px;margin:-4px 0 10px;display:flex;flex-wrap:wrap;gap:4px 10px}
+.nvMeta b{color:var(--texto);font-weight:600}
+.nvSellos{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 12px}
+.nvSel{font-size:12.5px;padding:4px 9px;border-radius:99px;background:var(--fondo);border:1px solid var(--linea);color:var(--suave)}
+.nvSel.ok{background:var(--verdesuave);border-color:transparent;color:var(--verde)}
+.nvSel b{font-weight:700}
+.nvl{display:flex;align-items:center;gap:12px;background:var(--tarjeta);border:1px solid var(--linea);border-radius:12px;
+  padding:10px 12px;margin-bottom:7px;width:100%;text-align:left;font:inherit;color:inherit;min-height:58px;cursor:pointer}
+.nvl:active{background:var(--azulsuave)}
+.nvl.on{background:var(--verdesuave);border-color:transparent}
+.nvl.falta{background:var(--ambarsuave);border-color:transparent}
+.nvl.off{opacity:.5;cursor:default}
+.nvl .ck{flex:none;width:30px;height:30px;border-radius:9px;border:2px solid var(--linea);display:grid;place-items:center;background:var(--tarjeta)}
+.nvl.on .ck{background:var(--verde);border-color:var(--verde)}
+.nvl.on .ck::after{content:"";width:12px;height:7px;border:3px solid #fff;border-top:0;border-right:0;transform:translateY(-2px) rotate(-45deg)}
+.nvl.falta .ck{background:var(--ambar);border-color:var(--ambar);color:#fff;font-weight:800;font-size:15px}
+.nvl.esp{opacity:.55}
+.nvl .nn{flex:1;min-width:0}
+.nvl .nn b{display:block;font-weight:600;font-size:15.5px;line-height:1.25}
+.nvl .nn small{display:block;color:var(--suave);font-size:12.5px;margin-top:2px}
+.nvl .ud{flex:none;font-weight:700;font-variant-numeric:tabular-nums;font-size:15px;color:var(--suave)}
+.nvl .fb{flex:none;padding:8px 10px;border-radius:9px;border:1.5px solid var(--linea);background:var(--tarjeta);color:var(--texto);font:600 13px/1 inherit;font-family:inherit}
+.nvGrupo{margin:16px 0 7px;font-size:12px;font-weight:700;letter-spacing:.4px;text-transform:uppercase;color:var(--suave)}
+.nvBar{height:6px;border-radius:9px;background:var(--linea);overflow:hidden;margin-top:8px}
+.nvBar i{display:block;height:100%;background:var(--verde)}
+
 /* ---------- panel de abajo ---------- */
 .velo{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:30;display:flex;align-items:flex-end}
 .velo[hidden]{display:none}
@@ -188,6 +218,8 @@ nav{flex:0 0 auto;display:flex;background:var(--tarjeta);border-top:1px solid va
 nav button{flex:1;background:none;border:0;padding:9px 2px 10px;color:var(--suave);font:600 11px/1.3 inherit;font-family:inherit;
   display:flex;flex-direction:column;align-items:center;gap:3px;min-width:0}
 nav button.on{color:var(--azul)}
+nav button{min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+@media (max-width:420px){ nav button{font-size:10px;letter-spacing:-.1px} }
 nav svg{width:23px;height:23px;stroke:currentColor;fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
 nav[hidden],header .sesion[hidden]{display:none}
 label.opt{display:flex;gap:12px;align-items:flex-start;border:1px solid var(--linea);border-radius:12px;padding:12px;font-size:15.5px;color:var(--texto);font-weight:400}
@@ -262,6 +294,12 @@ label.opt small{display:block;color:var(--suave);font-size:13.5px;margin-top:3px
     <div id="semLista"><p class="cargando">Leyendo el Planning…</p></div>
   </section>
 
+  <!-- NAVE -->
+  <section class="vista" id="vNave">
+    <div class="aviso" id="nvAviso"></div>
+    <div id="nvCuerpo"><p class="cargando">Leyendo el Planning…</p></div>
+  </section>
+
   <!-- COBROS -->
   <section class="vista" id="vCobros">
     <div class="aviso" id="cobAviso"></div>
@@ -290,6 +328,10 @@ label.opt small{display:block;color:var(--suave);font-size:13.5px;margin-top:3px
   <button data-v="Semana">
     <svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M8 3v4M16 3v4M3 11h18"/></svg>
     Semana
+  </button>
+  <button data-v="Nave">
+    <svg viewBox="0 0 24 24"><path d="M3 21V9l9-5 9 5v12"/><path d="M7 21v-7h10v7M7 17h10"/></svg>
+    Nave
   </button>
   <button data-v="Cobros">
     <svg viewBox="0 0 24 24"><path d="M3 7h18v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M3 7l2.5-3h13L21 7"/><path d="M9 13h6"/></svg>
@@ -479,6 +521,9 @@ function porGrupo(){
     if(j.estado === 'anul' || !(j.mat && j.mat.length)) return;
     const [a, b] = jobSpan(j); if(!a) return;
     const per = {}; j.mat.forEach(m => { if(!m.inv) return; const k = I.of[m.inv] || ('?' + m.inv); per[k] = (per[k] || 0) + stNum(m.cant); });
+    /* lo ya marcado como devuelto en la hoja de nave deja de ocupar, aunque el bolo siga en fechas */
+    const r = nvRec(j.id);
+    if(r && !r.rev) (r.lineas || []).forEach(l => { if(l.inv && l.vuelto){ const k = I.of[l.inv] || ('?' + l.inv); if(per[k] != null) per[k] = Math.max(0, per[k] - stNum(l.sal)); } });
     Object.entries(per).forEach(([k, c]) => (by[k] = by[k] || []).push({j, cant:c, a, b: b || a, firme: j.estado === 'conf'}));
   });
   I.jobs = by; return by;
@@ -488,6 +533,13 @@ function devPend(gk){
   DATOS.devoluciones.items.forEach(e => {
     if(e.kind !== 'job'){ if(e.estado === 'pend' && e.inv && I.of[e.inv] === gk) n += stNum(e.cant); }
     else if(e.rev) (e.lineas || []).forEach(l => { if(l.estado === 'pend' && l.inv && I.of[l.inv] === gk) n += stNum(l.falta); });
+  });
+  /* salido y sin devolver, fuera de las fechas del bolo (cargado antes o devuelto tarde): no está en la nave */
+  const h = hoyISO();
+  DATOS.planning.items.forEach(j => {
+    if(j.estado !== 'conf') return; const r = nvRec(j.id); if(r && r.rev) return;
+    const [a, b] = jobSpan(j); if(a && b && h >= a && h <= b) return;
+    nvLineas(j).forEach(l => { if(l.inv && l.salio && !l.vuelto && !(stNum(l.falta) > 0) && I.of[l.inv] === gk) n += stNum(l.sal); });
   });
   return n;
 }
@@ -1211,7 +1263,7 @@ $('#bAjustes').addEventListener('click', () => {
 
 /* ---------- cargar todo ---------- */
 let cargando = false;
-function pintaTodo(){ INV_CACHE = null; pintaSemana(); pintaPresu(); pintaLibre(); pintaCobros(); if(!$('#abCuerpo').hidden){ AB.lista = null; pintaAbrir(); } }
+function pintaTodo(){ INV_CACHE = null; pintaSemana(); pintaPresu(); pintaLibre(); pintaCobros(); pintaNave(); if(!$('#abCuerpo').hidden){ AB.lista = null; pintaAbrir(); } }
 /* lo que ya había en el móvil se enseña al momento; luego se pregunta al almacén qué ha cambiado */
 function cargaCache(){
   let algo = false;
@@ -1221,7 +1273,7 @@ function cargaCache(){
 async function recarga(){
   if(cargando) return; cargando = true;
   const b = $('#bRecargar'); b.textContent = '…';
-  ['semAviso','cobAviso','liAviso','prAviso'].forEach(id => $('#' + id).textContent = '');
+  ['semAviso','cobAviso','liAviso','prAviso','nvAviso'].forEach(id => $('#' + id).textContent = '');
   try{
     /* todo en una sola petición: el almacén lee su hoja una vez y solo manda lo que ha cambiado */
     const firmas = {}; COLS.forEach(c => { if(DATOS[c].listo && DATOS[c].firma) firmas[c] = DATOS[c].firma; });
@@ -1239,7 +1291,7 @@ async function recarga(){
     } else { for(const c of COLS) await traeCol(c); }   /* almacén antiguo: de una en una */
     pintaTodo();
   }catch(e){
-    ['semAviso','cobAviso','liAviso','prAviso'].forEach(id => $('#' + id).textContent = e.message);
+    ['semAviso','cobAviso','liAviso','prAviso','nvAviso'].forEach(id => $('#' + id).textContent = e.message);
     if(!DATOS.planning.listo) $('#semLista').innerHTML = '<p class="vacio">No he podido leer el Planning.</p>';
     if(!DATOS.libro.listo) $('#cobLista').innerHTML = '<p class="vacio">No he podido leer el libro.</p>';
   }
@@ -1320,6 +1372,301 @@ document.addEventListener('click', e => {
   else if(act === 'abreIgual'){ const x = AB.pend; cierraHoja(); if(x) abreAbierto(x.id, x.doc, x.version); }
   else if(act === 'mandaYa'){ const p = HOJA.pend; cierraHoja(); if(p) navigator.share({files:[p.file], title:p.file.name}).catch(e => { if(e.name !== 'AbortError') p.descarga(); }); }
   else if(act === 'bajaYa'){ const p = HOJA.pend; cierraHoja(); if(p) p.descarga(); }
+});
+
+
+/* ============================================================
+   NAVE: la hoja de cada bolo, para marcar lo que sale y lo que vuelve
+   · Es la misma hoja que Devoluciones en el ordenador (colección «devoluciones»).
+   · Cada marca se guarda al tocarla, con quién y cuándo.
+   · Si otra persona ha guardado a la vez, se vuelve a leer la hoja y se repite
+     SOLO la marca que acabas de hacer: nunca se pisa lo que marcó otro.
+   ============================================================ */
+const NV = {f:'cargar', open:null, modo:'sal', cola:Promise.resolve(), pend:null, pend2:null};
+const nvAhora = () => new Date().toISOString();
+const nvK = m => !m ? '' : (m.nk || m.inv || m.xk || (String(m.nombre || '').trim() ? 'n:' + norm(m.nombre) : ''));
+const nvRec = jid => DATOS.devoluciones.items.find(e => e.kind === 'job' && e.job === jid);
+const nvJob = jid => DATOS.planning.items.find(j => j.id === jid);
+function nvCuando(iso){
+  if(!iso) return ''; const d = new Date(iso); if(isNaN(d)) return fechaCorta(String(iso).slice(0,10));
+  const hm = String(d.getHours()).padStart(2,'0') + ':' + String(d.getMinutes()).padStart(2,'0');
+  return ymd(d) === hoyISO() ? 'hoy ' + hm : d.getDate() + '/' + (d.getMonth()+1) + ' ' + hm;
+}
+const nvSello = (por, en) => [por || '', nvCuando(en)].filter(Boolean).join(' · ');
+/* el material del bolo con sus marcas (igual que en el ordenador) */
+function nvLineas(j, r){
+  if(!j) return [];
+  r = r === undefined ? nvRec(j.id) : r;
+  const G = {}; ((r && r.lineas) || []).forEach(l => { const k = nvK(l); if(k && !G[k]) G[k] = l; });
+  const porNombre = {}; Object.keys(G).forEach(k => { if(!G[k].inv){ const n = norm(G[k].nombre || ''); if(n && !porNombre[n]) porNombre[n] = k; } });
+  const out = [], visto = new Set();
+  (j.mat || []).forEach(m => {
+    const k = nvK(m); if(!k || visto.has(k)) return; visto.add(k);
+    let g = G[k];
+    if(!g && !m.inv){ const vk = porNombre[norm(m.nombre || '')]; if(vk && !visto.has(vk)){ g = G[vk]; visto.add(vk); } }
+    g = g || {};
+    const it = m.inv && inv().byId[m.inv];
+    /* marcas del modelo anterior (antes del 05-11), hasta que el ordenador las pase a la hoja */
+    const viejo = !r && stNum(m.sal) > 0;
+    out.push({nk:k, inv:m.inv || '', xk:m.xk || '', nombre: m.nombre || g.nombre || (it ? itemLabel(it) : '') || '', sal:stNum(m.cant), ext:stNum(m.ext),
+      salio:!!g.salio || viejo, salPor:g.salPor || '', salEn:g.salEn || '', vuelto:!!g.vuelto, vuePor:g.vuePor || '', vueEn:g.vueEn || '',
+      falta:stNum(g.falta), estado:g.estado || 'pend', nota:g.nota || '', restado:g.restado || 0});
+  });
+  Object.keys(G).forEach(k => { if(visto.has(k)) return; const l = G[k];
+    if(l.salio || l.vuelto || stNum(l.falta) > 0) out.push(Object.assign({}, l, {nk:k, fuera:true, sal:stNum(l.sal)})); });
+  return out;
+}
+/* rehacer el registro a partir de las líneas (mismo formato que el ordenador) */
+function nvCompone(j, r, L, extra){
+  const o = Object.assign({}, r || {id:'dj_' + j.id, kind:'job', job:j.id});
+  o.lineas = L.map(l => { const x = {nk:nvK(l), inv:l.inv || '', xk:l.xk || '', nombre:l.nombre || '', sal:stNum(l.sal)};
+    if(stNum(l.ext)) x.ext = stNum(l.ext);
+    if(l.salio){ x.salio = true; x.salPor = l.salPor || ''; x.salEn = l.salEn || ''; }
+    if(l.vuelto){ x.vuelto = true; x.vuePor = l.vuePor || ''; x.vueEn = l.vueEn || ''; }
+    if(stNum(l.falta)) x.falta = stNum(l.falta);
+    if(l.estado && l.estado !== 'pend') x.estado = l.estado;
+    if(l.nota) x.nota = l.nota;
+    if(l.restado) x.restado = l.restado;
+    return x; });
+  o.num = j.num || ''; o.concepto = j.concepto || ''; o.mod = nvAhora();
+  if(extra) Object.keys(extra).forEach(k => { if(extra[k] == null) delete o[k]; else o[k] = extra[k]; });
+  const sal = o.lineas.filter(l => l.salio), fin = sal.length > 0 && sal.every(l => l.vuelto || stNum(l.falta) > 0);
+  if(fin && !o.rev){ o.rev = hoyISO(); if(!o.revPor){ o.revPor = USUARIO; o.autor = USUARIO; } }
+  if(!fin && o.rev && !(extra && extra.rev)){ o.rev = ''; delete o.revPor; }
+  return o;
+}
+/* guardar una operación. op(L, r) cambia las líneas y devuelve el «extra» del registro (o false si no hay nada que hacer).
+   Se ponen en fila, para que dos toques seguidos no choquen entre sí. */
+function nvOp(jid, op){
+  const p = NV.cola.then(async () => {
+    /* la hoja aún no existe: antes de crearla, miro si otro la acaba de crear (el almacén no avisa en ese caso) */
+    if(!nvRec(jid)){ try{ await traeCol('devoluciones'); }catch(e){} }
+    for(let i = 0; i < 4; i++){
+      const j = nvJob(jid); if(!j) throw new Error('Este bolo ya no está en el Planning.');
+      const r = nvRec(jid), L = nvLineas(j, r || null);
+      const ex = op(L, r);
+      if(ex === false) return;
+      const o = nvCompone(j, r, L, ex); o._v = r ? r._v : 0;   /* 0 = «créala solo si no existe»: si otro la acaba de crear, el almacén avisa de choque */
+      const res = await guardaCol('devoluciones', [o], x => 'Devolución · ' + (x.concepto || '') + (x.num ? ' · ' + x.num : ''));
+      if(res.ok){ const lst = DATOS.devoluciones.items, k = lst.indexOf(r); if(k >= 0) lst[k] = o; else lst.push(o); INV_CACHE = null; return; }
+      await traeCol('devoluciones');   /* alguien ha guardado a la vez: leo lo suyo y repito solo lo mío */
+    }
+    throw new Error('Hay varias personas marcando este bolo a la vez. Vuelve a tocar en un momento.');
+  });
+  NV.cola = p.catch(() => {});
+  return p;
+}
+async function nvHaz(jid, op, aviso){
+  $('#nvAviso').textContent = '';
+  try{ await nvOp(jid, op); if(aviso) toast(aviso); }
+  catch(e){ $('#nvAviso').textContent = e.message; }
+  pintaNave();
+}
+
+/* ---------- lista de bolos ---------- */
+function nvEstado(j){
+  const r = nvRec(j.id); if(r && r.rev) return 'hecho';
+  return nvLineas(j, r || null).some(l => l.salio) ? 'fuera' : 'cargar';
+}
+function nvBolos(){
+  const h = hoyISO(), desde = masDias(h, -45), hasta = masDias(h, 21);
+  return DATOS.planning.items.filter(j => j.estado === 'conf' && ((j.mat && j.mat.length) || nvRec(j.id))).map(j => {
+    const [a, b] = jobSpan(j); return {j, a, b, st:nvEstado(j)};
+  }).filter(x => x.st === 'fuera' || ((x.b || x.a || '') >= desde && (x.a || '') <= hasta));
+}
+function pintaNave(){
+  const host = $('#nvCuerpo'); if(!host || !DATOS.planning.listo || !DATOS.devoluciones.listo) return;
+  if(NV.open && nvJob(NV.open)) return pintaHojaNave(nvJob(NV.open));
+  NV.open = null;
+  const todos = nvBolos(), cnt = k => todos.filter(x => x.st === k).length;
+  let lst = todos.filter(x => x.st === NV.f);
+  lst.sort((x, y) => NV.f === 'hecho' ? (y.b || '').localeCompare(x.b || '') : NV.f === 'fuera' ? (x.b || '').localeCompare(y.b || '') : (x.a || '').localeCompare(y.a || ''));
+  if(NV.f === 'hecho') lst = lst.slice(0, 30);
+  let html = '<div class="filtros" id="nvFiltros">' +
+    [['cargar','Por cargar'],['fuera','Fuera'],['hecho','Revisados']].map(([k, t]) => '<button data-nvf="' + k + '"' + (NV.f === k ? ' class="on"' : '') + '>' + t + (k !== 'hecho' ? ' (' + cnt(k) + ')' : '') + '</button>').join('') + '</div>';
+  html += lst.map(({j, a, b}) => {
+    const r = nvRec(j.id), L = nvLineas(j, r || null), s = L.filter(l => l.salio).length, v = L.filter(l => l.vuelto).length;
+    const meta = [];
+    const f = NV.f === 'cargar' ? a : b;
+    if(f) meta.push('<b>' + (NV.f === 'cargar' ? 'Sale' : 'Vuelve') + '</b> ' + esc(fechaCorta(f)));
+    if(j.num) meta.push(esc(j.num));
+    meta.push(NV.f === 'cargar' ? s + ' de ' + L.length + ' cargados' : v + ' de ' + s + ' devueltos');
+    if(r && r.prep && r.prep.en) meta.push('preparado · ' + esc(r.prep.por || ''));
+    if(NV.f === 'hecho' && r) meta.push('revisado · ' + esc(r.revPor || r.autor || ''));
+    const pc = L.length ? Math.round(100 * (NV.f === 'cargar' ? s / L.length : (s ? v / s : 0))) : 0;
+    return '<button class="card" data-nvopen="' + esc(j.id) + '"><div class="t">' + esc(j.concepto || '(sin concepto)') + '</div>' +
+      '<div class="m">' + meta.map(x => '<span>' + x + '</span>').join('') + '</div>' + (NV.f !== 'hecho' ? '<div class="nvBar"><i style="width:' + pc + '%"></i></div>' : '') + '</button>';
+  }).join('') || '<p class="vacio">' + (NV.f === 'cargar' ? 'Nada que cargar estos días.' : NV.f === 'fuera' ? 'No hay material fuera.' : 'Nada revisado todavía.') + '</p>';
+  html += '<p class="hint" style="text-align:center;padding:14px 0 0">Bolos confirmados con material, de hace mes y medio a tres semanas vista.</p>';
+  host.innerHTML = html;
+}
+
+/* ---------- la hoja de un bolo ---------- */
+function pintaHojaNave(j){
+  const r = nvRec(j.id), L = nvLineas(j, r || null), cerr = !!(r && r.rev);
+  const s = L.filter(l => l.salio).length, v = L.filter(l => l.vuelto).length, f = L.filter(l => stNum(l.falta) > 0).length;
+  const [a, b] = jobSpan(j);
+  const vuelta = NV.modo === 'vue';
+  let h = '<div class="nvTop"><button class="x" data-nvback aria-label="Volver a la lista">‹</button><h2>' + esc(j.concepto || '(sin concepto)') + '</h2></div>';
+  h += '<div class="nvMeta">' + [j.num ? esc(j.num) : '', a ? '<b>Sale</b> ' + esc(fechaCorta(a)) : '', b ? '<b>Vuelve</b> ' + esc(fechaCorta(b)) : ''].filter(Boolean).map(x => '<span>' + x + '</span>').join('') + '</div>';
+  h += '<div class="nvSellos">' +
+    (r && r.prep && r.prep.en ? '<span class="nvSel ok">Preparado por <b>' + esc(r.prep.por || '—') + '</b> · ' + esc(nvCuando(r.prep.en)) + '</span>' : '<span class="nvSel">Sin el OK de preparado</span>') +
+    (cerr ? '<span class="nvSel ok">Revisado por <b>' + esc(r.revPor || r.autor || '—') + '</b> · ' + esc(fechaCorta(r.rev)) + '</span>' : '') + '</div>';
+  h += '<div class="filtros" id="nvModo"><button data-nvm="sal"' + (!vuelta ? ' class="on"' : '') + '>Salida ' + s + '/' + L.length + '</button>' +
+       '<button data-nvm="vue"' + (vuelta ? ' class="on"' : '') + '>Vuelta ' + v + '/' + s + '</button></div>';
+  if(cerr) h += '<div class="info">Revisión cerrada. Para tocar algo, reábrela abajo.</div>';
+  const fila = (l) => {
+    const it = l.inv && inv().byId[l.inv];
+    if(!vuelta){
+      const sub = l.salio ? 'Salió · ' + nvSello(l.salPor, l.salEn) : (l.inv ? '' : 'no está en el inventario');
+      return '<button class="nvl' + (l.salio ? ' on' : '') + (cerr ? ' off' : '') + '" data-nvsal="' + esc(l.nk) + '"' + (cerr ? ' disabled' : '') + '><span class="ck"></span>' +
+        '<span class="nn"><b>' + esc(l.nombre) + '</b>' + (sub ? '<small>' + esc(sub) + '</small>' : '') + (it && it.serie ? '<small>nº ' + esc(it.serie) + '</small>' : '') + '</span><span class="ud">' + stNum(l.sal) + '</span></button>';
+    }
+    const ft = stNum(l.falta) > 0;
+    const sub = !l.salio ? 'No consta que saliera' : ft ? 'Faltan ' + stNum(l.falta) + (l.nota ? ' · ' + l.nota : '') : l.vuelto ? 'Devuelto · ' + nvSello(l.vuePor, l.vueEn) : 'Salió · ' + nvSello(l.salPor, l.salEn);
+    return '<div class="nvl' + (l.vuelto ? ' on' : ft ? ' falta' : '') + (!l.salio ? ' esp' : '') + (cerr ? ' off' : '') + '" data-nvvue="' + esc(l.nk) + '" role="button">' +
+      '<span class="ck">' + (ft ? '!' : '') + '</span><span class="nn"><b>' + esc(l.nombre) + '</b><small>' + esc(sub) + '</small></span><span class="ud">' + stNum(l.sal) + '</span>' +
+      (l.salio && !cerr ? '<button class="fb" data-nvfalta="' + esc(l.nk) + '">Falta…</button>' : '') + '</div>';
+  };
+  if(!L.length) h += '<p class="vacio">Este bolo no tiene material apuntado.<br>Ábrelo y guárdalo en el ordenador.</p>';
+  else if(vuelta){
+    const sal = L.filter(l => l.salio), no = L.filter(l => !l.salio);
+    h += sal.map(fila).join('') || '<p class="vacio">Todavía no se ha marcado nada como salido.</p>';
+    if(no.length) h += '<div class="nvGrupo">No salieron</div>' + no.map(fila).join('');
+  } else h += L.map(fila).join('');
+  h += '<div class="acciones" style="margin-top:14px">';
+  if(!vuelta){
+    if(!cerr) h += (r && r.prep && r.prep.en ? '<button class="btn sec" data-nvprep>Quitar el OK de preparado</button>' : '<button class="btn ok" data-nvprep>OK, preparado</button>') +
+      (L.length ? '<button class="btn sec" data-nvtodo="sal">' + (s === L.length ? 'Quitar todas las salidas' : 'Marcar todo como salido') + '</button>' : '');
+  } else {
+    h += cerr ? '<button class="btn sec" data-nvrev>Reabrir la revisión</button>' : '<button class="btn ok" data-nvrev>OK, revisado</button>' +
+      (s ? '<button class="btn sec" data-nvtodo="vue">' + (v === s ? 'Quitar todas las vueltas' : 'Marcar todo como devuelto') + '</button>' : '');
+  }
+  h += '</div>';
+  if(f && vuelta) h += '<p class="hint" style="margin-top:10px">Lo que falta se queda «pendiente de devolver». Si se ha perdido o se cobra al cliente, se decide en el ordenador (Devoluciones), porque allí se resta del inventario.</p>';
+  $('#nvCuerpo').innerHTML = h;
+}
+
+/* ---------- marcar ---------- */
+function nvTocaSal(nk){
+  const j = nvJob(NV.open); if(!j) return;
+  const l0 = nvLineas(j).find(x => x.nk === nk); if(!l0) return;
+  const on = !l0.salio;
+  /* se ve marcado al momento; si no se puede guardar, se repinta como estaba */
+  const b = document.querySelector('[data-nvsal="' + CSS.escape(nk) + '"]'); if(b) b.classList.toggle('on', on);
+  nvHaz(j.id, (L) => { const l = L.find(x => x.nk === nk); if(!l || l.salio === on) return false;
+    if(on){ l.salio = true; l.salEn = nvAhora(); l.salPor = USUARIO; }
+    else { l.salio = false; l.salEn = ''; l.salPor = ''; l.vuelto = false; l.vueEn = ''; l.vuePor = ''; }
+    return on ? null : {prep:null}; });
+}
+function nvTocaVue(nk){
+  const j = nvJob(NV.open); if(!j) return;
+  const l0 = nvLineas(j).find(x => x.nk === nk); if(!l0 || !l0.salio) return;
+  if(stNum(l0.falta) > 0) return nvFalta(nk);
+  const on = !l0.vuelto;
+  const b = document.querySelector('[data-nvvue="' + CSS.escape(nk) + '"]'); if(b) b.classList.toggle('on', on);
+  nvHaz(j.id, (L) => { const l = L.find(x => x.nk === nk); if(!l || !l.salio || l.vuelto === on) return false;
+    if(on){ l.vuelto = true; l.vueEn = nvAhora(); l.vuePor = USUARIO; l.falta = 0; l.estado = 'dev'; }
+    else { l.vuelto = false; l.vueEn = ''; l.vuePor = ''; if(!stNum(l.falta)) l.estado = 'pend'; }
+    return on ? null : {rev:'', revPor:null}; });
+}
+function nvFalta(nk){
+  const j = nvJob(NV.open); const l = j && nvLineas(j).find(x => x.nk === nk); if(!l) return;
+  abreHoja('<h2>¿Cuántos faltan?</h2><div class="sub">' + esc(l.nombre) + ' · salieron ' + stNum(l.sal) + '</div>' +
+    '<label for="nvFn">Faltan</label><input type="number" id="nvFn" inputmode="numeric" min="0" max="' + stNum(l.sal) + '" value="' + (stNum(l.falta) || 1) + '">' +
+    '<label for="nvFt">Nota</label><input type="text" id="nvFt" value="' + esc(l.nota || '') + '" placeholder="Dónde se quedó, quién lo tiene…">' +
+    '<div class="acciones"><button class="btn" data-nvfaltaok="' + esc(nk) + '">Guardar</button>' +
+    (stNum(l.falta) > 0 ? '<button class="btn sec" data-nvfaltano="' + esc(nk) + '">No falta nada</button>' : '') +
+    '<button class="btn sec" data-cerrar>Cancelar</button></div>');
+}
+function nvFaltaGuarda(nk, quita){
+  const j = nvJob(NV.open); if(!j) return;
+  const n = quita ? 0 : Math.max(0, Math.round(stNum($('#nvFn').value))), nota = quita ? '' : $('#nvFt').value.trim();
+  cierraHoja();
+  nvHaz(j.id, (L) => { const l = L.find(x => x.nk === nk); if(!l) return false;
+    l.falta = Math.min(n, stNum(l.sal)); l.nota = nota; l.estado = 'pend';
+    if(l.falta > 0){ l.vuelto = false; l.vueEn = ''; l.vuePor = ''; }
+    return {rev:'', revPor:null}; }, quita ? 'Falta quitada' : (n ? 'Apuntado: faltan ' + n : ''));
+}
+function nvTodo(campo){
+  const j = nvJob(NV.open); if(!j) return;
+  const L0 = nvLineas(j), sal = campo === 'sal';
+  const on = sal ? L0.some(l => !l.salio) : L0.some(l => l.salio && !l.vuelto && !(stNum(l.falta) > 0));
+  const hazlo = () => nvHaz(j.id, (L) => { const ah = nvAhora(); let n = 0;
+    L.forEach(l => {
+      if(sal){ if(on && !l.salio){ l.salio = true; l.salEn = ah; l.salPor = USUARIO; n++; } else if(!on && l.salio){ l.salio = false; l.salEn = ''; l.salPor = ''; l.vuelto = false; l.vueEn = ''; l.vuePor = ''; n++; } }
+      else if(l.salio){ if(on && !l.vuelto && !(stNum(l.falta) > 0)){ l.vuelto = true; l.vueEn = ah; l.vuePor = USUARIO; l.estado = 'dev'; n++; } else if(!on && l.vuelto){ l.vuelto = false; l.vueEn = ''; l.vuePor = ''; l.estado = 'pend'; n++; } }
+    });
+    if(!n) return false;
+    return on ? null : (sal ? {prep:null} : {rev:'', revPor:null}); });
+  if(on) return hazlo();
+  NV.pend = hazlo;
+  abreHoja('<h2>' + (sal ? '¿Quitar todas las salidas?' : '¿Quitar todas las vueltas?') + '</h2><div class="sub">Se borran también las marcas que hayan puesto los demás.</div>' +
+    '<div class="acciones"><button class="btn" data-nvpend>Quitarlas</button><button class="btn sec" data-cerrar>Dejarlas</button></div>');
+}
+/* los dos OK */
+function nvPrep(){
+  const j = nvJob(NV.open); if(!j) return; const r = nvRec(j.id), L = nvLineas(j);
+  if(r && r.prep && r.prep.en){
+    NV.pend = () => nvHaz(j.id, () => ({prep:null}), 'OK de preparado quitado');
+    return abreHoja('<h2>¿Quitar el OK de preparado?</h2><div class="sub">Lo dio ' + esc(nvSello(r.prep.por, r.prep.en) || 'alguien') + '. Las marcas de cada material se quedan como están.</div>' +
+      '<div class="acciones"><button class="btn" data-nvpend>Quitar el OK</button><button class="btn sec" data-cerrar>Dejarlo</button></div>');
+  }
+  if(!L.length){ toast('Este bolo no tiene material apuntado'); return; }
+  const faltan = L.filter(l => !l.salio);
+  const ok = (todo) => nvHaz(j.id, (Lx) => { const ah = nvAhora();
+    if(todo) Lx.forEach(l => { if(!l.salio){ l.salio = true; l.salEn = ah; l.salPor = USUARIO; } });
+    if(!Lx.some(l => l.salio)) return false;
+    return {prep:{por:USUARIO, en:ah}}; }, '✓ Preparado · ' + USUARIO);
+  if(!faltan.length) return ok(false);
+  NV.pend = () => ok(true); NV.pend2 = () => ok(false);
+  abreHoja('<h2>Quedan ' + faltan.length + ' sin marcar</h2><div class="sub">' + esc(faltan.slice(0, 5).map(l => l.nombre).join(', ') + (faltan.length > 5 ? '…' : '')) + '</div>' +
+    '<div class="acciones"><button class="btn ok" data-nvpend>Marcarlo todo y dar el OK</button>' +
+    (L.some(l => l.salio) ? '<button class="btn sec" data-nvpend2>Dar el OK solo con lo marcado</button>' : '') +
+    '<button class="btn sec" data-cerrar>Seguir cargando</button></div>');
+}
+function nvRev(){
+  const j = nvJob(NV.open); if(!j) return; const r = nvRec(j.id), L = nvLineas(j);
+  if(r && r.rev){
+    NV.pend = () => nvHaz(j.id, () => ({rev:'', revPor:null}), 'Revisión reabierta');
+    return abreHoja('<h2>¿Reabrir la revisión?</h2><div class="sub">La cerró ' + esc(r.revPor || r.autor || 'alguien') + ' el ' + esc(fechaCorta(r.rev)) + '.</div>' +
+      '<div class="acciones"><button class="btn" data-nvpend>Reabrir</button><button class="btn sec" data-cerrar>Dejarla cerrada</button></div>');
+  }
+  if(!L.some(l => l.salio)){ toast('No hay nada marcado como salido'); return; }
+  const pend = L.filter(l => l.salio && !l.vuelto && !(stNum(l.falta) > 0));
+  const ok = (todo) => nvHaz(j.id, (Lx) => { const ah = nvAhora();
+    if(todo) Lx.forEach(l => { if(l.salio && !l.vuelto && !(stNum(l.falta) > 0)){ l.vuelto = true; l.vueEn = ah; l.vuePor = USUARIO; l.estado = 'dev'; } });
+    return {rev:hoyISO(), revPor:USUARIO, autor:USUARIO}; }, '✓ Revisado · ' + USUARIO);
+  if(!pend.length) return ok(false);
+  NV.pend = () => ok(true); NV.pend2 = () => ok(false);
+  abreHoja('<h2>Quedan ' + pend.length + ' sin devolver</h2><div class="sub">' + esc(pend.slice(0, 5).map(l => l.nombre).join(', ') + (pend.length > 5 ? '…' : '')) + '</div>' +
+    '<div class="acciones"><button class="btn ok" data-nvpend>Darlo todo por devuelto</button>' +
+    '<button class="btn sec" data-nvpend2>Cerrar así (lo que no ha vuelto sigue fuera)</button>' +
+    '<button class="btn sec" data-cerrar>Seguir revisando</button></div>');
+}
+/* mientras la hoja está abierta, se lee cada poco lo que marcan los demás */
+async function nvRefresca(){
+  if(VISTA !== 'Nave' || !NV.open || document.hidden || !$('#velo').hidden || !TOKEN) return;
+  try{ await NV.cola; await traeCol('devoluciones'); if($('#velo').hidden) pintaNave(); }catch(e){}
+}
+setInterval(nvRefresca, 15000);
+document.addEventListener('visibilitychange', () => { if(!document.hidden) nvRefresca(); });
+document.addEventListener('click', e => {
+  const t = e.target; let x;
+  if((x = t.closest('[data-nvf]'))){ NV.f = x.dataset.nvf; pintaNave(); return; }
+  if((x = t.closest('[data-nvopen]'))){ NV.open = x.dataset.nvopen; NV.modo = nvEstado(nvJob(NV.open)) === 'cargar' ? 'sal' : 'vue'; $('#nvAviso').textContent = ''; pintaNave(); $('main').scrollTop = 0; nvRefresca(); return; }
+  if(t.closest('[data-nvback]')){ NV.open = null; pintaNave(); $('main').scrollTop = 0; return; }
+  if((x = t.closest('[data-nvm]'))){ NV.modo = x.dataset.nvm; pintaNave(); return; }
+  if((x = t.closest('[data-nvfalta]'))){ nvFalta(x.dataset.nvfalta); return; }
+  if((x = t.closest('[data-nvfaltaok]'))){ nvFaltaGuarda(x.dataset.nvfaltaok, false); return; }
+  if((x = t.closest('[data-nvfaltano]'))){ nvFaltaGuarda(x.dataset.nvfaltano, true); return; }
+  if((x = t.closest('[data-nvsal]'))){ nvTocaSal(x.dataset.nvsal); return; }
+  if((x = t.closest('[data-nvvue]'))){ if(!x.classList.contains('off')) nvTocaVue(x.dataset.nvvue); return; }
+  if((x = t.closest('[data-nvtodo]'))){ nvTodo(x.dataset.nvtodo); return; }
+  if(t.closest('[data-nvprep]')){ nvPrep(); return; }
+  if(t.closest('[data-nvrev]')){ nvRev(); return; }
+  if(t.closest('[data-nvpend]')){ const f = NV.pend; NV.pend = NV.pend2 = null; cierraHoja(); if(f) f(); return; }
+  if(t.closest('[data-nvpend2]')){ const f = NV.pend2; NV.pend = NV.pend2 = null; cierraHoja(); if(f) f(); return; }
 });
 
 /* ---------- arranque ---------- */
