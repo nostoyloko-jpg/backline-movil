@@ -439,6 +439,8 @@ b.dr{color:#b42318}b.da{color:#b54708}#invDispBtn.on{background:var(--navy);colo
 .djsel{font-size:12px;padding:3px 9px;border-radius:999px;background:#f1f3f6;color:#52607a;border:1px solid #e2e6ee}
 .djsel small{opacity:.8}
 .djsel.ok{background:#e3f5ea;color:#0a5c38;border-color:#bfe6d0}
+.addline .cmismo{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;color:#475467;margin-left:10px;cursor:pointer;white-space:nowrap}
+.addline .cmismo input{width:15px;height:15px;margin:0;accent-color:#2E6FB5}
 #tab-dev tr.djd td{background:#f8faff!important;padding:4px 14px 14px!important}
 .djbox{background:#fff;border:1px solid #e4e7ec;border-radius:10px;padding:8px 10px}
 .djt{width:100%;border-collapse:collapse;font-size:12.5px}
@@ -3956,7 +3958,7 @@ function renderContra(){
   if(!host.dataset.built){
     host.dataset.built='1';
     host.innerHTML=`<div id="cHead"></div><div class="gwrap" id="cGrid"></div>
-      <div class="addline noprint"><button id="cAdd">+ Añadir línea</button><button id="cAdd5">+ 5 líneas</button><button id="cAddT">+ Título de sección</button><button id="cAddS">+ Separador</button><span class="salsep"></span><button id="cSalAll" class="salbt"></button></div>
+      <div class="addline noprint"><button id="cAdd">+ Añadir línea</button><button id="cAdd5">+ 5 líneas</button><button id="cAddT">+ Título de sección</button><button id="cAddS">+ Separador</button><label id="cMismoL" class="cmismo" title="Márcalo si este contrarider usa los mismos aparatos que los demás, pero otros días (p. ej. 2 días con todo y 2 con parte). Entonces no se suman: de cada material cuenta el que más pida."><input type="checkbox" id="cMismo"> Mismo material que los demás, otros días</label><span class="salsep"></span><button id="cSalAll" class="salbt"></button></div>
       <div class="foot cpf">Importe = pvp × cant. propuesta × días × (1 − dto.) · Dto. 100 % = S/C · Importes sin IVA.</div>`;
     gInit('contra',$('#cGrid'),contraDef,()=>{ renderContra(); linkSync(); }); gBind('contra');
     bindInputs($('#cHead'));          /* Ref., fechas y realizado: los mismos datos que la cabecera del presupuesto */
@@ -4061,7 +4063,10 @@ function initCSel(){
 const salQuien = () => (typeof CLOUD!=='undefined' && CLOUD.usuario) || '';
 /* clave de nave de una línea del contrarider. Si está en el inventario, el material: dos líneas
    del mismo aparato son las mismas unidades y se marcan juntas. Si va suelto, la propia línea. */
-const salKey = l => !l ? '' : (l.inv && String(l.prop||'').trim() ? l.inv : (String(l.prop||l.req||'').trim() ? 'x:'+l.id : ''));
+const salKey = l => { if(!l) return ''; if(l.inv && String(l.prop||'').trim()) return l.inv;
+  const nm=String(l.prop||l.req||'').trim(); if(!nm) return ''; const b=norm(nm); let k=0;
+  for(const x of DOC.contra){ if((x.kind||'item')!=='item' || (x.inv && String(x.prop||'').trim())) continue; if(norm(String(x.prop||x.req||'').trim())===b) k++; if(x===l) break; }
+  return 'x:'+b+'#'+k; };
 function salLineas(){ return DOC.contra.filter(l=>(l.kind||'item')==='item' && salKey(l)); }
 /* el bolo del presupuesto abierto, que es donde vive la hoja */
 function salJob(){ const id=typeof docJobId==='function' && docJobId(); return id ? PLAN.jobs.find(j=>j.id===id) : null; }
@@ -4105,6 +4110,7 @@ async function salTodas(){
   toast(faltan.length?`${faltan.length} línea${faltan.length===1?'':'s'} marcada${faltan.length===1?'':'s'} como salida`:'Marcas de salida quitadas', faltan.length?'#067647':'#b54708');
 }
 function salPinta(){
+  const ml=$('#cMismoL'); if(ml){ ml.style.display=DOC.contras.length>1?'':'none'; const c=contraAct(); $('#cMismo').checked=!!(c&&c.mismo); }
   const b=$('#cSalAll'); if(!b) return;
   const L=salLineas(), m=salMapa(), ks=[...new Set(L.map(salKey))], n=ks.filter(k=>m[k]&&m[k].salio).length;
   b.style.display=L.length?'':'none';
@@ -4116,6 +4122,10 @@ function initContra(){
   initCSel();
   document.addEventListener('change', e=>{ const c=e.target.closest('[data-csal]'); if(c) salToggle(c.dataset.csal); });
   document.addEventListener('click', e=>{ if(e.target.closest('#cSalAll')) salTodas(); });
+  document.addEventListener('change', e=>{ if(e.target.id!=='cMismo') return; const c=contraAct(); if(!c) return;
+    snap(); if(e.target.checked) c.mismo=true; else delete c.mismo; save();
+    if(typeof planFromDoc==='function' && docJobId()) planFromDoc(); if(typeof stockBuild==='function') stockBuild(); renderContra();
+    toast(e.target.checked?'Este contrarider ya no suma: cuenta como el mismo material, otros días':'Este contrarider vuelve a sumar su material', '#026'); });
   gToolbar('contra',$('#fx-contra'));
   $('#cImport').onclick=impOpen;
   $$('#tab-contra [data-pc]').forEach(c=>c.onchange=()=>{ CFG.cPrintCols[c.dataset.pc]=c.checked; saveCfg(); });
@@ -7545,17 +7555,28 @@ const stDays = (a,b) => { const out=[]; const d=dOf(a), e=dOf(b); if(!d||!e) ret
 /* material del presupuesto abierto: contrarider enlazado + líneas del presupuesto enlazadas */
 function docMat(D){
   D=D||DOC; const mat=[]; const add=(inv,nombre,n,ext)=>{ if(!inv||!n) return; const x=mat.find(m=>m.inv===inv); if(x){ x.cant+=n; if(ext) x.ext=(x.ext||0)+n; } else mat.push(Object.assign({inv,nombre:nombre||'',cant:n},ext?{ext:n}:{})); };
-  /* material del contrarider que NO está en el inventario (soportes, cables…): hay que cargarlo
-     y se marca en la hoja de nave, pero no cuenta para el stock. Cada línea va suelta, por su
-     id: dos líneas del rider que se llamen igual son dos cosas distintas que cargar. */
-  const addX=(id,nombre,n)=>{ nombre=String(nombre||'').trim(); if(!nombre||!n||!id) return; const k='x:'+id;
-    const x=mat.find(m=>m.xk===k); if(x) x.cant+=n; else mat.push({inv:'', xk:k, nombre, cant:n}); };
-  (D.contras||[]).forEach(c=>(c.lineas||[]).forEach(l=>{
-    if((l.kind||'item')!=='item') return;
-    const n=stNum(l.cant===''||l.cant==null?1:l.cant);
-    if(l.inv && String(l.prop||'').trim()) add(l.inv, l.prop, n, 0);
-    else addX(l.id, l.prop||l.req, n);
-  }));   /* sin material propuesto escrito no cuenta para el stock (enlaces que se quedaron colgados) */
+  /* el material de los contrariders.
+     · Los normales se suman: un telonero o un segundo escenario son otros aparatos.
+     · Los marcados «mismo material, otros días» (c.mismo) no suman: son los mismos aparatos usados
+       otros días, así que de cada material cuenta lo que pida el que más pida.
+     · Lo que no está en el inventario (soportes, cables…) se carga y se marca en la hoja de nave,
+       pero no cuenta para el stock. Se reconoce por su nombre: la 2.ª línea que se llame igual en el
+       mismo contrarider es otra cosa más que cargar. */
+  const porC=c=>{ const m={}, occ={};
+    (c.lineas||[]).forEach(l=>{ if((l.kind||'item')!=='item') return;
+      const n=stNum(l.cant===''||l.cant==null?1:l.cant); if(!n) return;
+      let k, o;
+      if(l.inv && String(l.prop||'').trim()){ k=l.inv; o={inv:l.inv, nombre:l.prop}; }
+      else { const nm=String(l.prop||l.req||'').trim(); if(!nm) return; const b=norm(nm); occ[b]=(occ[b]||0)+1; k='x:'+b+'#'+occ[b]; o={inv:'', xk:k, nombre:nm}; }
+      if(m[k]) m[k].cant+=n; else m[k]=Object.assign(o,{cant:n}); });
+    return m; };
+  const tot={}, orden=[];
+  const pon=(m,maximo)=>Object.keys(m).forEach(k=>{ const x=m[k]; if(!tot[k]){ tot[k]=Object.assign({},x,{cant:0}); orden.push(k); }
+    tot[k].cant = maximo ? Math.max(tot[k].cant, x.cant) : tot[k].cant + x.cant; });
+  const CS=D.contras||[];
+  CS.filter(c=>!c.mismo).forEach(c=>pon(porC(c), false));
+  CS.filter(c=>c.mismo).forEach(c=>pon(porC(c), true));
+  orden.forEach(k=>{ const x=tot[k]; if(x.inv) add(x.inv, x.nombre, x.cant, 0); else mat.push({inv:'', xk:x.xk, nombre:x.nombre, cant:x.cant}); });
   (D.secciones||[]).forEach(s=>(s.lineas||[]).forEach(l=>{ if((l.kind||'item')==='item' && l.inv && l.src!=='contra') add(l.inv, l.concepto, stNum(l.cant===''||l.cant==null?1:l.cant)*Math.max(1,stNum(s.cant)||1)); }));
   (D.extras||[]).forEach(x=>{ if(x.inv) add(x.inv, x.nombre, stNum(x.cant===''||x.cant==null?1:x.cant), true); });   /* material extra / spares: interno */
   return mat;
