@@ -162,6 +162,9 @@ button.card:active{background:var(--azulsuave)}
 .filtros button.on{background:var(--azul);border-color:var(--azul);color:#fff}
 .imp{font-variant-numeric:tabular-nums;font-weight:700}
 
+/* cobros: debajo del importe con IVA, el sin IVA */
+.tot .v .sinIva{display:block;font-size:12.5px;font-weight:500;color:var(--suave);margin-top:2px}
+
 /* nave */
 .nvTop{display:flex;align-items:center;gap:10px;margin:0 0 12px}
 .nvTop .x{flex:none;font-size:26px;line-height:1}
@@ -304,8 +307,8 @@ label.opt small{display:block;color:var(--suave);font-size:13.5px;margin-top:3px
   <section class="vista" id="vCobros">
     <div class="aviso" id="cobAviso"></div>
     <div class="tots">
-      <div class="tot"><div class="e">Por cobrar</div><div class="v" id="totPend">—</div></div>
-      <div class="tot"><div class="e">Cobrado sin liquidar</div><div class="v" id="totSin">—</div></div>
+      <div class="tot"><div class="e">Por cobrar · con IVA</div><div class="v" id="totPend">—</div></div>
+      <div class="tot"><div class="e">Cobrado sin liquidar · con IVA</div><div class="v" id="totSin">—</div></div>
     </div>
     <div class="filtros" id="cobFiltros">
       <button data-f="pend" class="on">Por cobrar</button>
@@ -1164,12 +1167,15 @@ function lbV(row, k){
   return a[k] != null ? a[k] : (k === 'fac' ? '' : 0);
 }
 const lbBase = r => N0(lbV(r, 'base'));
+/* con IVA: lo que llega en la transferencia (el IVA de Configuración sobre el total sin IVA, como en el ordenador) */
+const conIVA = n => Math.round(N0(n) * (1 + N0(CFG().iva) / 100) * 100) / 100;
+const dosImp = n => eur(conIVA(n)) + '<small class="sinIva">' + eur(n) + ' sin IVA</small>';
 function pintaCobros(){
   if(!DATOS.libro.listo) return;
   const L = DATOS.libro.items.slice().sort((a,b) => (b.y - a.y) || (b.m - a.m) || String(a.num).localeCompare(String(b.num)));
   const pend = L.filter(r => !r.cob), cobr = L.filter(r => r.cob);
-  $('#totPend').textContent = eur(pend.reduce((s,r) => s + lbBase(r), 0));
-  $('#totSin').textContent  = eur(cobr.filter(r => !lbLiq(r.id)).reduce((s,r) => s + lbBase(r), 0));
+  $('#totPend').innerHTML = dosImp(pend.reduce((s,r) => s + lbBase(r), 0));
+  $('#totSin').innerHTML  = dosImp(cobr.filter(r => !lbLiq(r.id)).reduce((s,r) => s + lbBase(r), 0));
   const lista = FILTRO === 'pend' ? pend : cobr, host = $('#cobLista');
   if(!lista.length){ host.innerHTML = '<p class="vacio">' + (FILTRO === 'pend' ? 'Nada pendiente de cobro.<br>Bien ahí.' : 'Todavía no hay bolos cobrados.') + '</p>'; return; }
   let html = '', mesAct = '';
@@ -1181,15 +1187,15 @@ function pintaCobros(){
     if(fac) meta.push(esc(fac));
     if(r.cob) meta.push('<b>Cobrado</b> ' + esc(fechaCorta(r.cob)));
     if(liq) meta.push('<span class="pill ent">' + esc(liq.n) + 'ª liquidación</span>');
-    html += '<button class="card" data-fila="' + esc(r.id) + '"><div class="t">' + esc(r.num || '?') + ' <span class="imp">' + eur(lbBase(r)) + '</span></div>' +
-      '<div class="m"><span>' + esc(r.cli || '(sin empresa)') + '</span>' + meta.map(x => '<span>' + x + '</span>').join('') + '</div></button>';
+    html += '<button class="card" data-fila="' + esc(r.id) + '"><div class="t">' + esc(r.num || '?') + ' <span class="imp">' + eur(conIVA(lbBase(r))) + '</span></div>' +
+      '<div class="m"><span>' + esc(r.cli || '(sin empresa)') + '</span><span>' + eur(lbBase(r)) + ' sin IVA</span>' + meta.map(x => '<span>' + x + '</span>').join('') + '</div></button>';
   });
   host.innerHTML = html;
 }
 function fichaFila(id){
   const r = DATOS.libro.items.find(x => x.id === id); if(!r) return;
   const liq = lbLiq(r.id);
-  const f = [['Factura', lbV(r,'fac') || '—'], ['Total sin IVA', eur(lbBase(r))],
+  const f = [['Factura', lbV(r,'fac') || '—'], ['Total con IVA', eur(conIVA(lbBase(r)))], ['Total sin IVA', eur(lbBase(r))],
     ['Gastos', eur(['alq','luis','itu','otros','tra','comp'].reduce((s,k) => s + N0(lbV(r,k)), 0))], ['Cobrado', r.cob ? fechaLarga(r.cob) : 'todavía no']];
   let acc;
   if(liq) acc = '<div class="nota">Este bolo está en la ' + esc(liq.n) + 'ª liquidación de ' + esc(liq.y) + ', que está congelada. Para cambiarlo hay que deshacerla desde el ordenador.</div>' +

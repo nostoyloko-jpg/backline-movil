@@ -711,6 +711,8 @@ nav.tabs .cnav .l1{padding-left:18px!important}nav.tabs .cnav .l2{padding-left:2
 .cfvh{margin:auto;color:#98a2b3;text-align:center;padding:20px}
 .cgen{max-width:1100px;margin:14px auto 30px;background:#fff;border:1px solid #e4e7ec;border-radius:10px;padding:16px 20px}
 .cgcards{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:10px 0 16px}
+.cgc .cgs{font-size:12.5px;color:#475467;margin-top:3px;font-variant-numeric:tabular-nums}
+.cgc .cgs b{color:#1f2937;font-weight:700}
 .cgc{border:1px solid #eef1f6;border-radius:8px;padding:10px 12px}.cgl{font-size:11px;color:#667085;text-transform:uppercase;letter-spacing:.03em}.cgv{font-size:18px;font-weight:700;margin-top:4px;color:#101828}
 .cgc.b .cgv{color:var(--navy)}.cgc.ok .cgv{color:#067647}.cgc.warn .cgv{color:#b54708}
 .cgt{width:100%;border-collapse:collapse}.cgt th{text-align:left;font-size:11px;color:#667085;text-transform:uppercase;padding:6px 8px;border-bottom:1px solid #e4e7ec}.cgt td{padding:7px 8px;border-bottom:1px solid #f2f4f7}.cgt tr[data-cgm]{cursor:pointer}.cgt tr[data-cgm]:hover td{background:#f8fafc}
@@ -3040,7 +3042,7 @@ function pptoDef(){
       const pit = !it && l.inv ? invById(l.inv) : null;
       add(id,{
         A:colA, B:cellT('concepto',{},it?{}:{ac:true, acOpen:pptoAcOpen, pick:x=>pptoPickItem(l,x),
-          pre: pit?`<span class="lnk" title="Enlazado al inventario: ${esc(itemLabel(pit))} · cuenta para el stock">🔗</span>${!PRINT.on&&typeof stockBadge==='function'?stockBadge(l.inv):''}`:''}),
+          pre: pit?`<span class="lnk" title="Enlazado al inventario: ${esc(itemLabel(pit))} · descuenta del stock en las fechas del presupuesto. Puedes cambiar el texto; para soltarlo, clic derecho › Desenlazar">🔗</span>${!PRINT.on&&typeof stockBadge==='function'?stockBadge(l.inv):''}`:''}),
         C:cellN('pvp',tot?{ro:!ED,lockMsg:'El precio viene del total del contrarider (o activa «✎ Edición libre»)',cur:true}:{cur:true}), D:cellN('cant'), E:cellN('dto',{pct:true}), F:cellN('dias'),
         G: libre ? LK({t:'num', v:l.impMan===VACIA?'':man?N0(l.impMan):(noData(l)||typeof calc!=='number'?'':calc), cur:true, sum:typeof imp==='number'?imp:0, base:V, cls:(manV(l.impMan)?'man':'')+(it?' lk':''),
               set:v=>{ if(v===''||v==null){ if(noData(l)) delete l.impMan; else l.impMan=VACIA; } else if(typeof calc==='number' && Math.abs(N0(v)-calc)<0.005) delete l.impMan; else l.impMan=Math.round(N0(v)*100)/100; }})
@@ -3079,9 +3081,13 @@ function pptoDef(){
     cols:[{k:'A',w:118},{k:'B',w:392},{k:'C',w:112},{k:'D',w:70},{k:'E',w:70},{k:'F',w:70},{k:'G',w:168}],
     rows, auto, ops:PPTO_OPS,
     menu:(G,row)=>{ const r=row.ref; const items=[null];
-      if(r && r.li>=0){ const l=DOC.secciones[r.si].lineas[r.li]; if((l.kind||'item')==='item' && l.src!=='contra') items.push(['Poner aquí el total del contrarider (Σ)','sumhere']); }
+      if(r && r.li>=0){ const l=DOC.secciones[r.si].lineas[r.li]; if((l.kind||'item')==='item' && l.src!=='contra'){
+        if(l.inv) items.push(['Ver material enlazado','pshowlink'],['Desenlazar del inventario','punlink'],null);
+        items.push(['Poner aquí el total del contrarider (Σ)','sumhere']); } }
       return items.length>1?items:[]; },
-    extra:{ sumhere:G=>{ const r=G.def.rows[G.act.r].ref; if(r && r.li>=0) linkTotalHere(r.si,r.li); } }
+    extra:{ sumhere:G=>{ const r=G.def.rows[G.act.r].ref; if(r && r.li>=0) linkTotalHere(r.si,r.li); },
+      punlink:G=>{ const r=G.def.rows[G.act.r].ref; const l=r&&r.li>=0&&DOC.secciones[r.si].lineas[r.li]; if(!l) return; snap(); l.inv=null; save(); G.onChange(); toast('Desenlazado: ya no descuenta del stock; el texto y el precio se quedan'); },
+      pshowlink:G=>{ const r=G.def.rows[G.act.r].ref; const l=r&&r.li>=0&&DOC.secciones[r.si].lineas[r.li]; const it=l&&invById(l.inv); toast(it?`Enlazado a: ${itemLabel(it)} · descuenta del stock en las fechas del presupuesto`:'No encuentro ese material en el inventario','#026'); } }
   };
 }
 /* concepto: categorías de Configuración + texto libre + crear categoría nueva */
@@ -3098,7 +3104,9 @@ function pickConcept(x){ if(x.add){ CFG.conceptos=[...CONC_(),x.t]; saveCfg(); t
 function pptoAcOpen(input,onPick){ acOpen(input,onPick); if(AC.open){ AC.sel=-1; $$('#ac .it').forEach(x=>x.classList.remove('on')); } }
 function pptoPickItem(l,it){ l.concepto=itemLabel(it); l.inv=it.id; const pr=invPrice(it); if(hasP(pr) && (l.pvp===''||l.pvp==null)) l.pvp=pr; if(l.cant===''||l.cant==null) l.cant=1; if(l.dias===''||l.dias==null) l.dias=1; }
 function pptoAutofill(l,k){
-  if(k==='concepto' && l.inv){ const it=invById(l.inv); if(!it || l.concepto!==itemLabel(it)) l.inv=null; }   /* si cambias el texto a mano, deja de estar enlazada */                           /* al escribir concepto o precio, cant. 1 y 1 día */
+  /* elegida del inventario, sigue enlazada (y descontando esas fechas) aunque reescribas el texto como quieras;
+     solo se desenlaza si la vacías o con clic derecho › Desenlazar (12-11-2026, antes se soltaba con cualquier cambio) */
+  if(k==='concepto' && l.inv && !String(l.concepto||'').trim()) l.inv=null;                           /* al escribir concepto o precio, cant. 1 y 1 día */
   if((k==='concepto'||k==='pvp') && (l.concepto||l.pvp!=='') && l.cant==='' && l.dias===''){ l.cant=1; l.dias=1; }
 }
 /* filas: insertar, mover y borrar líneas del presupuesto */
@@ -9875,7 +9883,9 @@ function lqTotRow(lab, t, tots, finN, cls){ const e=lbE;
 function lbPinta(){ if(CONTA.v==='gen' && CONTA.g && (CONTA.g.k==='libro'||CONTA.g.k==='liq')) renderLibroGen(); }
 function renderLibroGen(){ const g=CONTA.g; { const h=$('#contaGen .cgen'); if(h) h.classList.add('lbwide'); } if(g.k==='liq') return renderLiq(g); return renderLibro(g.y); }
 const lbE=v=>v?eurS(v):'';
-const lbCard=(l,v,c)=>`<div class="cgc${c?' '+c:''}"><div class="cgl">${l}</div><div class="cgv">${v}</div></div>`;
+const lbCard=(l,v,c,sub)=>`<div class="cgc${c?' '+c:''}"><div class="cgl">${l}</div><div class="cgv">${v}</div>${sub?`<div class="cgs">${sub}</div>`:''}</div>`;
+/* «con IVA» debajo de un total sin IVA: para cuadrar las transferencias, que llegan con IVA */
+const conIva=(base,iva)=>`<b>${eurS(Math.round((N0(base)+N0(iva))*100)/100)||'0,00 €'}</b> con IVA`;
 function renderLibro(y){
   const host=$('#contaGen .cgen'); if(!host) return;
   if(LB.y!==y && !LB.cargando) setTimeout(()=>libroCargar(y),0);
@@ -9914,7 +9924,7 @@ function renderLibro(y){
       <button id="lbRe" title="Vuelve a leer todos los presupuestos del año (lo escrito a mano se respeta)">↻ Releer presupuestos</button>
       <span class="hint">${LB.cargando?`Leyendo presupuestos… ${LB.hecho} de ${LB.total||'?'}`:`${F.length} bolo${F.length===1?'':'s'}`}</span></div>
     ${LB.err.length?`<div class="banner">No pude leer: ${LB.err.map(esc).join(' · ')}</div>`:''}
-    <div class="cgcards">${lbCard('Total sin IVA',eurS(Tall.base)||'0,00 €')}${lbCard('Cobrado (sin IVA)',eurS(Tc.base)||'0,00 €')}${lbCard('Pendiente de cobro',eurS(Tall.base-Tc.base)||'0,00 €')}${lbCard(`Cobrado sin liquidar · ${nS}`,eurS(Ts.base)||'0,00 €','b')}</div>
+    <div class="cgcards">${lbCard('Total sin IVA',eurS(Tall.base)||'0,00 €','',conIva(Tall.base,Tall.iva))}${lbCard('Cobrado sin IVA',eurS(Tc.base)||'0,00 €','',conIva(Tc.base,Tc.iva))}${lbCard('Pendiente de cobro sin IVA',eurS(Tall.base-Tc.base)||'0,00 €','',conIva(Tall.base-Tc.base,Tall.iva-Tc.iva))}${lbCard(`Cobrado sin liquidar · ${nS} · sin IVA`,eurS(Ts.base)||'0,00 €','b',conIva(Ts.base,Ts.iva))}</div>
     ${vis.length?`<div class="liqwrap"><table class="xt lbt" data-xw="libro"${lw?` style="table-layout:fixed;width:${lw.reduce((a,b)=>a+b,0)}px"`:''}>${th}<tbody>${meses}${totR}</tbody></table></div>`:`<p class="hint">${LB.cargando?'Leyendo…':'Nada que enseñar con este filtro.'}</p>`}
     <div class="bfh" style="margin-top:22px">Liquidaciones ${y} <span class="hint">cada una coge los bolos cobrados que aún no estén liquidados</span></div>
     ${liqs}
@@ -9948,7 +9958,7 @@ function renderLiq(g){
     <p class="hint">En material alquilado, transporte y compras, lo que tiene «Luis» o «Itu» en la columna Empresa de la hoja del bolo se cuenta como adelantado por él.</p></div>`;
   host.innerHTML=`<div class="bfh">${prev?'Próxima: ':''}${ordn(n)} liquidación ${y} <span class="hint">${prev?'vista previa · bolos cobrados que aún no están liquidados':`hecha el ${esc(xlDMY(Lq.fecha))}${Lq.por?' por '+esc(Lq.por):''} · congelada`}</span></div>
     <div class="liqbar"><button class="sec" data-cn="l:${y}">‹ Libro ${y}</button>${prev?`<button id="lqHacer" ${L.length?'':'disabled'}>✓ Hacer la ${ordn(n)} liquidación</button>`:''}<button id="lqXl" data-lqxl="${prev?'next':esc(Lq.id)}" ${L.length?'':'disabled'}>Exportar a Excel</button><span class="hint">${L.length} bolo${L.length===1?'':'s'}</span></div>
-    <div class="cgcards">${lbCard('Total sin IVA',eurS(T.base)||'0,00 €')}${lbCard('Material B.K.',eurS(T.bk)||'0,00 €')}${lbCard('Total gastos',eurS(T.g)||'0,00 €')}${lbCard('Beneficio',eurS(ben)||'0,00 €','b')}</div>
+    <div class="cgcards">${lbCard('Total sin IVA',eurS(T.base)||'0,00 €','',conIva(T.base,T.iva))}${lbCard('Material B.K.',eurS(T.bk)||'0,00 €')}${lbCard('Total gastos',eurS(T.g)||'0,00 €')}${lbCard('Beneficio',eurS(ben)||'0,00 €','b')}</div>
     ${L.length?`<div class="liqwrap"><table class="xt" data-xw="liq"${lw?` style="table-layout:fixed;width:${lw.reduce((a,b)=>a+b,0)}px"`:''}>${th}<tbody>${meses}${tot('TOTAL',T,'xgran')}</tbody></table></div>`:'<p class="hint">No hay bolos cobrados sin liquidar.</p>'}
     <div class="liqfin">${rep}${cobH}</div>`;
 }
