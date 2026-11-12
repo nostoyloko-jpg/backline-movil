@@ -1197,7 +1197,7 @@ header.top,nav.tabs,#tabs,.toolbar,.fx,.invbar,#fx-ppto,#fx-mail,#fx-contra,#ctx
 .shell{display:block!important}
 .main{display:block!important;margin:0!important;padding:0!important}
 .tab{padding:0!important;margin:0!important}
-.tab .wrap{padding:58px 6px 92px!important;margin:0!important;overflow:visible!important;display:block}
+.tab .wrap{padding:calc(var(--mvTopH,52px) + 6px) 6px 92px!important;margin:0!important;overflow:visible!important;display:block}
 .sheet{box-shadow:0 2px 10px rgba(16,24,40,.18)!important;margin:0!important;transform-origin:0 0}
 #toast{bottom:96px!important;z-index:200!important}
 td.gd{cursor:pointer}
@@ -1214,6 +1214,13 @@ td.gd.mvsel{outline:2.5px solid #2e6fb5;outline-offset:-2px}
 #mvTop .seg button.on{background:#fff;color:#1f3550}
 #mvTop .sp{flex:1}
 #mvTop #mvLibre.on{background:#f2b52e;color:#1f3550}
+/* móvil en vertical: «Volver» y «Libre» arriba; las pestañas debajo, a todo lo ancho */
+@media (max-width:620px){
+  #mvTop{flex-wrap:wrap;row-gap:6px}
+  #mvTop .sp{order:1} #mvTop #mvLibre{order:2}
+  #mvTop .seg{order:3;flex:1 1 100%}
+  #mvTop .seg button{flex:1 1 0;padding:8px 4px;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+}
 
 /* barra de abajo */
 #mvBot{position:fixed;left:0;right:0;bottom:0;z-index:120;background:#fff;border-top:1px solid #d0d5dd;display:flex;gap:8px;
@@ -1259,7 +1266,7 @@ td.gd.mvsel{outline:2.5px solid #2e6fb5;outline-offset:-2px}
 #mvSub select{font:15px inherit;font-family:inherit;padding:7px 8px;border:1.5px solid #d0d5dd;border-radius:9px;background:#fff;color:#101828;max-width:52vw}
 #mvSub label{color:#667085;font-size:13px}
 #mvSub button{border:1.5px solid #d0d5dd;background:#fff;border-radius:9px;padding:7px 10px;font:600 14px inherit;font-family:inherit;color:#101828}
-body.mvsub .tab .wrap{padding-top:108px!important}
+body.mvsub .tab .wrap{padding-top:calc(var(--mvTopH,52px) + 56px)!important}
 #contra .addline{display:flex!important;gap:8px;flex-wrap:wrap}
 </style>
 </head>
@@ -1492,25 +1499,25 @@ body.mvsub .tab .wrap{padding-top:108px!important}
     <button class="mini sec" id="plToday">Hoy</button>
     <div class="plseg" role="tablist" aria-label="Vista"><button id="plVExt" role="tab">Extendida</button><button id="plVCal" role="tab">Calendario</button></div>
     <button class="mini sec plcomp hidden" id="plComp" title="Los trabajos de varios días salen enteros solo el primer día; el resto, una marquita (pasa el ratón por encima para ver la info)">Compacto</button>
-    <input type="search" id="plQ" placeholder="Buscar concepto, nº, técnico, empresa…">
+    <input type="search" id="plQ" placeholder="Buscar concepto, nº, personal, empresa…">
     <select id="plEst"><option value="*">Todos</option><option value="conf">Confirmados</option><option value="pend">Por confirmar</option><option value="anul">Anulados</option><option value="">Sin estado</option></select>
     <span class="cnt" id="plCount"></span><span class="sys off sysst"></span><button class="mini sec hidden sysbtn" title="Comprueba ahora todo con el almacén común">Sincronizar</button><span style="flex:1"></span>
     <button class="mini sec" id="plPend"></button>
     <button class="mini" id="plNew">＋ Trabajo</button>
-    <button class="mini sec" id="plLists" title="Técnicos, empresas de transporte y tipos">Listas</button>
+    <button class="mini sec" id="plLists" title="Personal, empresas de transporte y tipos">Listas</button>
     <button class="mini sec" id="plImp">Importar Excel…</button><input type="file" id="plFile" accept=".xlsx,.xlsm,.xls" hidden>
     <button class="mini sec" id="plExp">Exportar Excel</button>
   </div>
   <div id="plPendBox" class="hidden"><div class="pph">Pendientes de revisar · pulsa uno para abrir su ficha</div><div id="plPendList"></div></div>
   <div class="plwrap"><div class="plcard" id="plExtBox"><table class="pltab">
-    <colgroup><col style="width:76px"><col style="width:21%"><col style="width:96px"><col style="width:78px"><col style="width:58px"><col style="width:8%"><col style="width:13%"><col style="width:12%"><col><col style="width:124px"></colgroup>
-    <thead><tr><th>Día</th><th>Concepto</th><th>Presupuesto</th><th>Tipo</th><th>Mat.</th><th>Otros</th><th>Técnicos</th><th>Transporte</th><th>Observaciones</th><th>Estado</th></tr></thead>
+    <colgroup><col style="width:76px"><col style="width:24%"><col style="width:96px"><col style="width:78px"><col style="width:15%"><col style="width:13%"><col><col style="width:124px"></colgroup>
+    <thead><tr><th>Día</th><th>Concepto</th><th>Presupuesto</th><th>Tipo</th><th>Personal</th><th>Transporte</th><th>Observaciones</th><th>Estado</th></tr></thead>
     <tbody id="plBody"></tbody></table></div>
     <div class="plcard plcal hidden" id="plCal"></div>
     <div class="pleg">
       <span class="plg"><b>Estado:</b><span class="pls e-conf">Confirmado</span><span class="pls e-pend">Por confirmar</span><span class="pls e-anul">Anulado</span><span class="pls e-ent">Entrega / devolución</span><span><span class="ptag">M. RÍOS</span> etiqueta</span><span><span class="pwarn">!</span> pendiente de revisar</span></span>
-      <span class="plg"><b>Técnico / transporte:</b><span class="pch ok">Confirmado ✓</span><span class="pch ko">Falta o sin confirmar</span><span class="pch na">No hace falta</span><span class="pmut">· pincha en el nombre para confirmarlo</span></span>
-      <span class="plg"><b>Casillas (calendario):</b><span class="pini"><i class="ok">P</i></span>Presupuesto <span class="pini"><i class="ok">M</i></span>Material <span class="pini"><i class="ok">O</i></span>Otros <span class="pini"><i class="ok">T</i></span>Técnico <span class="pini"><i class="ok">Tr</i></span>Transporte</span>
+      <span class="plg"><b>Personal / transporte:</b><span class="pch ok">Confirmado ✓</span><span class="pch ko">Falta o sin confirmar</span><span class="pch na">No hace falta</span><span class="pmut">· pincha en el nombre para confirmarlo</span></span>
+      <span class="plg"><b>Casillas (calendario):</b><span class="pini"><i class="ok">P</i></span>Personal <span class="pini"><i class="ok">T</i></span>Transporte</span>
     </div>
   </div>
 </section>
@@ -1737,25 +1744,29 @@ function busyMsg(msg){ const el=$('#busy'); if(el && BUSY_N) el.querySelector('.
 function busyOff(){ BUSY_N=Math.max(0,BUSY_N-1); if(!BUSY_N){ const el=$('#busy'); if(el) el.style.display='none'; } }
 /* ---------- diálogo de elegir (estilo de la app): devuelve la clave elegida o null ---------- */
 function askDlg(o){ return new Promise(res=>{
+  if(askDlg.pend){ const f=askDlg.pend; askDlg.pend=null; try{ f(null); }catch(e){} }
   let el=$('#askDlg'); if(!el){ el=document.createElement('div'); el.id='askDlg'; el.className='modal hidden'; el.setAttribute('role','dialog'); el.setAttribute('aria-modal','true'); document.body.appendChild(el); }
   el.innerHTML=`<div class="mbox"><div class="mh"><b>${esc(o.title||'')}</b></div><div class="mb">${o.text?`<p class="asktx">${esc(o.text)}</p>`:''}${o.checks&&o.checks.length?`<div class="asklist askchk">${o.checks.map(x=>`<label><input type="checkbox" data-ck="${esc(x.k)}"${x.on===false?'':' checked'}> ${esc(x.label)}</label>`).join('')}</div>`:''}${o.list&&o.list.length?`<div class="asklist">${o.list.map(x=>`<div>${esc(x)}</div>`).join('')}</div>`:''}
     <div class="askopts">${(o.options||[]).map(op=>`<button class="askopt${op.primary?' pri':''}" data-k="${esc(op.k)}"><span class="ai">${op.icon||'›'}</span><span><b>${esc(op.label)}</b>${op.desc?`<small>${esc(op.desc)}</small>`:''}</span></button>`).join('')}</div></div>
     <div class="mf"><div class="acts"><button class="sec" data-k="">${esc(o.cancel||'Cancelar')}</button></div></div></div>`;
   el.classList.remove('hidden');
-  const fin=k=>{ askDlg.sel=[...el.querySelectorAll('input[data-ck]:checked')].map(i=>i.dataset.ck); if(k && o.checks && o.checks.length && !askDlg.sel.length){ toast('Marca al menos un archivo','#c60'); return; } el.classList.add('hidden'); el.onclick=null; document.removeEventListener('keydown',kd,true); res(k||null); };
+  const fin=k=>{ askDlg.sel=[...el.querySelectorAll('input[data-ck]:checked')].map(i=>i.dataset.ck); if(k && o.checks && o.checks.length && !askDlg.sel.length){ toast('Marca al menos un archivo','#c60'); return; } askDlg.pend=null; el.classList.add('hidden'); el.onclick=null; document.removeEventListener('keydown',kd,true); res(k||null); };
+  askDlg.pend=(v)=>{ document.removeEventListener('keydown',kd,true); res(v); };
   el.onclick=e=>{ const b=e.target.closest('button[data-k]'); if(b) fin(b.dataset.k); else if(e.target===el) fin(null); };
   const kd=e=>{ if(e.key==='Escape'){ e.preventDefault(); e.stopPropagation(); fin(null); } }; document.addEventListener('keydown',kd,true);
   setTimeout(()=>{ const f=el.querySelector('.askopt.pri')||el.querySelector('.askopt'); if(f) f.focus(); },30);
 }); }
 /* ---------- diálogos de la app (sustituyen a confirm / alert / prompt del navegador) ---------- */
 function dlgBox(o){ return new Promise(res=>{
+  if(dlgBox.pend){ const f=dlgBox.pend; dlgBox.pend=null; try{ f(); }catch(e){} }
   let el=$('#dlgBox'); if(!el){ el=document.createElement('div'); el.id='dlgBox'; el.className='modal hidden'; el.setAttribute('role','dialog'); el.setAttribute('aria-modal','true'); document.body.appendChild(el); }
   const btns=o.buttons||[{k:'ok',label:'Aceptar',kind:'pri'}];
   el.innerHTML=`<div class="mbox"><div class="mh"><b>${esc(o.title||'')}</b></div><div class="mb">${o.text?`<p class="dlgtx">${esc(o.text)}</p>`:''}${o.list&&o.list.length?`<div class="asklist">${o.list.map(x=>`<div>${esc(x)}</div>`).join('')}</div>`:''}${o.input!=null?`<input class="dlgin" type="text" value="${esc(o.input)}" spellcheck="false">`:''}</div>
     <div class="mf"><div class="acts">${btns.map(b=>`<button class="${b.kind==='pri'?'':b.kind==='danger'?'dlgdanger':'sec'}" data-k="${esc(b.k)}">${esc(b.label)}</button>`).join('')}</div></div></div>`;
   el.classList.remove('hidden');
   const inp=el.querySelector('.dlgin');
-  const fin=k=>{ const v=inp?inp.value:null; el.classList.add('hidden'); el.onclick=null; document.removeEventListener('keydown',kd,true); res({k:k||null, v}); };
+  const fin=k=>{ const v=inp?inp.value:null; dlgBox.pend=null; el.classList.add('hidden'); el.onclick=null; document.removeEventListener('keydown',kd,true); res({k:k||null, v}); };
+  dlgBox.pend=()=>{ document.removeEventListener('keydown',kd,true); res({k:null, v:null}); };
   el.onclick=e=>{ const b=e.target.closest('button[data-k]'); if(b) fin(b.dataset.k); else if(e.target===el && o.cancel!==false) fin(null); };
   const kd=e=>{ if(e.key==='Escape'){ e.preventDefault(); e.stopPropagation(); fin(null); } else if(e.key==='Enter' && (inp || !e.target.closest('textarea'))){ e.preventDefault(); e.stopPropagation(); const d=btns.find(b=>b.kind==='pri'||b.kind==='danger')||btns[btns.length-1]; fin(d.k); } };
   document.addEventListener('keydown',kd,true);
@@ -1835,15 +1846,34 @@ function lsGet(k,def){ try{ const v=localStorage.getItem(k); return v==null?def:
 /* lo último que se leyó de Drive (carpetas, facturas, índice): se enseña al momento y se vuelve a leer por detrás.
    Si el navegador se queda sin sitio, se tiran las copias más viejas; nunca avisa ni bloquea. */
 const DCACHE={ P:'bk_dc:', MAX:40,
-  get(k){ try{ const v=localStorage.getItem(this.P+k); return v?JSON.parse(v).d:null; }catch(e){ return null; } },
-  set(k,d){ const w=()=>localStorage.setItem(this.P+k, JSON.stringify({t:Date.now(), d}));
-    try{ w(); this.poda(); }catch(e){ this.poda(10); try{ w(); }catch(e2){} } },
-  poda(dejar){ try{ const L=Object.keys(localStorage).filter(k=>k.startsWith(this.P) && k!==this.P+'idx').map(k=>{ let t=0; try{ t=JSON.parse(localStorage.getItem(k)).t||0; }catch(e){} return {k,t}; }).sort((a,b)=>b.t-a.t);
+  get(k){ try{ const v=localStorage.getItem(this.P+k); return v?JSON.parse(lzUnpack(v)).d:null; }catch(e){ return null; } },
+  set(k,d){ const w=()=>localStorage.setItem(this.P+k, lzPack(JSON.stringify({t:Date.now(), d})));   /* comprimido: el índice de Drive ocupa mucho */
+    try{ w(); this.poda(); }catch(e){ this.poda(10); try{ w(); }catch(e2){ lsLibera(2); try{ w(); }catch(e3){} } } },
+  poda(dejar){ try{ const L=Object.keys(localStorage).filter(k=>k.startsWith(this.P) && k!==this.P+'idx').map(k=>{ let t=0; try{ t=JSON.parse(lzUnpack(localStorage.getItem(k))).t||0; }catch(e){} return {k,t}; }).sort((a,b)=>b.t-a.t);
     L.slice(dejar==null?this.MAX:dejar).forEach(x=>localStorage.removeItem(x.k)); }catch(e){} } };
-function lsSet(k,v){ let t; try{ t=lzPack(JSON.stringify(v)); localStorage.setItem(k,t); return true; }catch(e){}
-  /* sin sitio: fuera la copia temporal de Drive (se vuelve a leer sola) y otro intento */
-  try{ Object.keys(window.localStorage).filter(x=>x.startsWith(DCACHE.P)).forEach(x=>window.localStorage.removeItem(x)); if(t!=null){ localStorage.setItem(k,t); return true; } }catch(e){}
-  toast('No se pudo guardar en este ordenador (¿memoria llena?). Guarda en el almacén o exporta una copia.','#c00'); return false; }
+/* ---------- memoria del navegador ----------
+   Todo lo de la app vive en la memoria de Chrome, que es pequeña y la comparten todas las copias de la app
+   abiertas desde archivo. Si se llena, la app no puede apuntar ni qué presupuesto está abierto ni que ya
+   está guardado (y al abrirla vuelve a salir el mismo, con cambios «sin guardar»).
+   Para hacer sitio se quita, por este orden, solo lo que se puede volver a conseguir:
+   1 · copias temporales de Drive · 2 · copias de los presupuestos recientes (quedan 5) · 3 · todas esas copias
+   y el índice de Drive (se vuelve a leer del almacén). Nunca el Planning, el inventario ni lo pendiente de subir. */
+function lsUso(){ let n=0; try{ for(let i=0;i<localStorage.length;i++){ const k=localStorage.key(i); n+=k.length+(localStorage.getItem(k)||'').length; } }catch(e){} return n; }
+function lsLibera(nivel){
+  try{
+    if(nivel>=1) Object.keys(localStorage).filter(x=>x.startsWith(DCACHE.P) && x!==DCACHE.P+'idx').forEach(x=>localStorage.removeItem(x));
+    if(nivel>=2){ const K='bk_lib_v1', raw=localStorage.getItem(K);
+      if(raw){ let l=[]; try{ l=JSON.parse(lzUnpack(raw)); }catch(e){} const deja=nivel>=3?0:5;
+        if(!Array.isArray(l) || l.length<=deja){ if(nivel>=3) localStorage.removeItem(K); }
+        else { localStorage.removeItem(K); if(deja){ try{ localStorage.setItem(K, lzPack(JSON.stringify(l.slice(0,deja)))); }catch(e){} } } } }
+    if(nivel>=3) localStorage.removeItem(DCACHE.P+'idx');
+  }catch(e){}
+}
+function lsSet(k,v){ let t; try{ t=lzPack(JSON.stringify(v)); }catch(e){ return false; }
+  for(let n=0;n<=3;n++){ try{ if(n) lsLibera(n); localStorage.setItem(k,t); return true; }catch(e){} }
+  toast('La memoria de este ordenador está llena y no se ha podido apuntar el último cambio. Lo que está en el almacén está a salvo: guarda ahí.','#c00'); return false; }
+/* al arrancar: si la memoria va muy llena, se hace sitio antes de empezar */
+(function(){ try{ if(lsUso()>3.0e6){ lsLibera(1); if(lsUso()>3.0e6) lsLibera(2); if(lsUso()>3.6e6) lsLibera(3); } }catch(e){} })();
 function download(name, blob){ const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=name; document.body.appendChild(a); a.click(); setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove();},500); }
 
 /* ---------- fórmula de las hojas: =IF(dto=1,"S/C", pvp*cant*dias*(1-dto)) ---------- */
@@ -2791,6 +2821,8 @@ function cfgOpen(){
       <input type="file" id="cfgFotoFile" accept="image/*" hidden>
       <div class="hint">Sale en la parte de abajo de la barra de la izquierda cuando entras con tu usuario, en cualquier ordenador.</div></div></div>`
     : `<div class="hint">Entra en el almacén con tu usuario (☁ Entrar) para poner tu foto.</div>`}
+    <label class="cfgchk" style="display:flex;flex-direction:row;gap:8px;align-items:flex-start;margin-top:12px;font-size:13px"><input type="checkbox" id="cfgAbrirNuevo" ${lsGet('bk_abrir_nuevo',false)?'checked':''} style="margin-top:3px;width:auto;flex:none">
+      <span><b>Al abrir la app, empezar con un presupuesto nuevo en blanco</b><br><span class="hint">Solo en este ordenador. Si lo último que tenías abierto tiene cambios sin guardar, te pregunta antes.</span></span></label>
   </section>
   <section><h4>Logo</h4>
     <div class="cfglogo"><img id="cfgLogo" src="${CFG_DRAFT.logo||''}" alt="" style="${CFG_DRAFT.logo?'':'display:none'}"><div>
@@ -2910,6 +2942,7 @@ function cfgClose(){ $('#cfgModal').classList.add('hidden'); document.body.class
 function cfgSave(){
   const iv=+CFG_DRAFT.iva; if(isNaN(iv)||iv<0||iv>100){ toast('El IVA tiene que ser un número entre 0 y 100','#c00'); return; }
   CFG_DRAFT.iva=iv; if(!CFG_DRAFT.fp.length) CFG_DRAFT.fp=clone(CFG_DEF.fp);
+  { const an=$('#cfgAbrirNuevo'); if(an) lsSet('bk_abrir_nuevo', !!an.checked); }   /* de este ordenador, no de los ajustes compartidos */
   CFG=CFG_DRAFT; if(!saveCfg()) return; cfgClose(); cfgApply(); toast('Configuración guardada');
 }
 function cfgApply(){ setLogoTop(); renderTab(); userCard(); }
@@ -4073,6 +4106,7 @@ function salJob(){ const id=typeof docJobId==='function' && docJobId(); return i
 /* mapa clave → marca, para pintar el contrarider */
 function salMapa(){
   const j=salJob(); if(!j) return {};
+  salMatAlDia(j);
   const m={}; naveLineas(j).forEach(l=>{ if(l.nk) m[l.nk]=l; }); return m;
 }
 /* si el material sale, el bolo es real: se ofrece confirmarlo, porque la hoja de nave solo lleva los confirmados */
@@ -4090,8 +4124,16 @@ async function salPrepara(){
   if(!j || !(j.mat&&j.mat.length)){ save(); if(typeof planFromDoc==='function') planFromDoc(); j=salJob(); }
   if(!j){ toast('Guarda el presupuesto antes de marcar la salida','#c60'); return null; }
   if(docEstado()!=='conf'){ const k=await salPregunta(); if(!k) return null; if(k==='conf') j=salJob()||j; }
+  salMatAlDia(j);
   if(!(j.mat&&j.mat.length)){ toast('Este contrarider no tiene material que marcar','#c60'); return null; }
   return j;
+}
+/* la lista de material del bolo se rehace al guardar el presupuesto; antes de marcar se pone al día
+   con lo que hay ahora en el contrarider, para que una línea nueva o renombrada se pueda marcar ya */
+function salMatAlDia(j){
+  if(!j || typeof docMat!=='function') return;
+  const m=docMat(); if(canon(m)===canon(j.mat||[])) return;
+  j.mat=m; j.mod=new Date().toISOString(); if(typeof planSave==='function') planSave();
 }
 function salRefresca(){ if(typeof stockBuild==='function') stockBuild(); renderContra(); if(typeof renderDev==='function' && TAB==='dev') renderDev(); }
 async function salToggle(id){
@@ -4099,7 +4141,8 @@ async function salToggle(id){
   const k=salKey(l); if(!k) return;
   const j=await salPrepara(); if(!j) return;
   const m=salMapa()[k];
-  naveSal(j, k, !(m&&m.salio)); salRefresca();
+  if(!naveSal(j, k, !(m&&m.salio)) && !naveLineas(j).some(x=>x.nk===k)) toast('No he podido marcar esta línea: guarda el presupuesto y vuelve a intentarlo','#c60');
+  salRefresca();
 }
 async function salTodas(){
   const L=salLineas(); if(!L.length){ toast('Este contrarider no tiene material que marcar','#c60'); return; }
@@ -6128,10 +6171,12 @@ async function cloudAskNumber(){
   catch(e){ toast('No se pudo generar la Ref.: '+(e.code==='sin_conexion'?'sin conexión':e.message),'#c00'); }
 }
 let SAVING=false;
+let SAVING_T=0;
 async function cloudSave(force){
   commitEdits();
-  if(SAVING){ toast('Ya se está guardando, espera un momento…','#026'); return false; }
-  SAVING=true; const btn=$('#cloudBtn'); if(btn) btn.classList.add('busy');
+  /* por si algo dejara un guardado a medias: pasado un minuto y medio no se sigue esperando */
+  if(SAVING && Date.now()-SAVING_T<90000){ toast('Ya se está guardando, espera un momento…','#026'); return false; }
+  SAVING=true; SAVING_T=Date.now(); const btn=$('#cloudBtn'); if(btn) btn.classList.add('busy');
   try{
     /* el id se decide antes de enviar: si la respuesta tarda o se corta y se vuelve a guardar, se actualiza el mismo, no se duplica */
     if(!await sinFechaOk()) return false;
@@ -6187,9 +6232,17 @@ async function cloudSave(force){
     const tmp=Object.assign({},DOC); delete tmp.cloud; payload.datos=JSON.stringify(tmp);
     busyOn('Guardando en el almacén…'); let j; try{ j=await api('guardar',payload); } finally{ busyOff(); }
     if(j.error==='conflicto'){
-      const who=j.doc&&j.doc.autor||'otro usuario';
-      const ok=await confirmDlg('Otra persona guardó este presupuesto', `«${who}» lo guardó después de que tú lo abrieras.`, {ok:'Guardar mi versión encima de la suya', cancel:'No guardar (abriré la suya)', danger:true});
-      return ok ? cloudSave(true) : false;
+      /* hasta el 06-11-2026 «Guardar mi versión encima» volvía a llamar a cloudSave con SAVING todavía puesto:
+         salía «Ya se está guardando…», no se guardaba nada y el presupuesto se quedaba atascado «sin guardar».
+         Y «abriré la suya» no la abría. Ahora las dos opciones hacen lo que dicen. */
+      const who=j.doc&&j.doc.autor||'otra persona';
+      const k=await askDlg({title:'Otra persona guardó este presupuesto', text:`«${who}» lo guardó después de que tú lo abrieras${j.doc&&j.doc.version?' (ahora va por la versión '+j.doc.version+')':''}. ¿Con cuál te quedas?`,
+        cancel:'Cancelar · no guardar todavía',
+        options:[{k:'mio', icon:'⤒', label:'Guardar la mía encima', desc:`Lo que guardó ${who} se sustituye por lo que tienes en pantalla`},
+                 {k:'suya', icon:'⤓', label:'Abrir la suya', desc:'Se descarta lo que has cambiado aquí desde que lo abriste'}]});
+      if(k==='mio'){ SAVING=false; return await cloudSave(true); }
+      if(k==='suya'){ SAVING=false; FILE.dirty=false; fileState(); await cloudOpen(c.id); return false; }
+      toast('No se ha guardado','#c60'); return false;
     }
     if(!j.ok){ toast('No se pudo guardar en el almacén: '+(j.error||''),'#c00'); return false; }
     DOC.cloud={id:j.id, version:j.version, autor:CLOUD.usuario||'', mod:new Date().toISOString()}; clGuarda(j.id, j.version, payload.datos);
@@ -6441,7 +6494,7 @@ const SY_COLS={
     get:()=>PLAN.jobs, set:a=>{ PLAN.jobs=a; lsSet(LS_PLAN,PLAN); },
     name:j=>(j.concepto||'(sin concepto)')+(j.ini?' · '+jobFechas(j):''),
     key:j=>j.cloudId?'c:'+j.cloudId:(j.concepto&&j.ini?'k:'+norm(planBase(j.concepto))+'|'+j.ini:''),
-    rows:j=>[['Concepto',j.concepto],['Fechas',jobFechas(j)],['Nº presupuesto',j.num],['Estado',(PL_EST.find(e=>e[0]===j.estado)||['',''])[1]],['Tipo',j.tipo],['Entrega',entRecText({entrega:j.entrega,entregaH:j.entregaH})],['Recogida',entRecText({recogida:j.recogida,recogidaH:j.recogidaH})],['Técnicos',(j.tecnicos||[]).join(', ')],['Transporte',j.transporte===true?'SI':j.transporte===false?'NO':''],['Empresa',j.empresa],['Observaciones',j.obs]].map(([a,b])=>[a,b==null?'':String(b)]),
+    rows:j=>[['Concepto',j.concepto],['Fechas',jobFechas(j)],['Nº presupuesto',j.num],['Estado',(PL_EST.find(e=>e[0]===j.estado)||['',''])[1]],['Tipo',j.tipo],['Entrega',entRecText({entrega:j.entrega,entregaH:j.entregaH})],['Recogida',entRecText({recogida:j.recogida,recogidaH:j.recogidaH})],['Personal',(j.tecnicos||[]).join(', ')],['Transporte',j.transporte===true?'SI':j.transporte===false?'NO':''],['Empresa',j.empresa],['Observaciones',j.obs]].map(([a,b])=>[a,b==null?'':String(b)]),
     after:()=>{ if(TAB==='plan' && $('#plEd').classList.contains('hidden')) renderPlan(); }
   },
   devoluciones:{
@@ -6471,11 +6524,11 @@ const SY_COLS={
         else if(String(o.id).startsWith('foto:')){ CFG.fotos=CFG.fotos||{}; const u=o.id.slice(5); if(o.img) CFG.fotos[u]=o.img; else delete CFG.fotos[u]; }
         else if(o.id==='listas') ['tecnicos','empresas','tipos'].forEach(k=>{ if(Array.isArray(o[k])) PLAN.listas[k]=o[k]; }); });
       CFG.empresa=Object.assign(clone(CFG_DEF.empresa),CFG.empresa||{}); lsSet(LS_CFG,CFG); lsSet(LS_PLAN,PLAN); },
-    name:o=>String(o.id).startsWith('foto:') ? 'Foto de '+o.id.slice(5) : ({cfg:'Configuración (empresa, IVA, textos…)',logo:'Logo',listas:'Listas del Planning (técnicos, empresas, tipos)'})[o.id]||o.id,
+    name:o=>String(o.id).startsWith('foto:') ? 'Foto de '+o.id.slice(5) : ({cfg:'Configuración (empresa, IVA, textos…)',logo:'Logo',listas:'Listas del Planning (personal, empresas, tipos)'})[o.id]||o.id,
     key:()=>'',
     pristine:o=>{ if(o.id==='logo' || String(o.id).startsWith('foto:')) return !o.img; if(o.id==='listas') return canon({tecnicos:o.tecnicos,empresas:o.empresas,tipos:o.tipos})===canon({tecnicos:['Itu','Luis'],empresas:['Tramisa','Videoenlace','Transfenix'],tipos:['Bolo','Entrega','Recogida','Tarimas','Otros']});
       return SHARED_CFG.every(([k])=>canon(o[k]==null?CFG_DEF[k]:o[k])===canon(CFG_DEF[k]==null?null:CFG_DEF[k])); },
-    rows:o=>String(o.id).startsWith('foto:') ? [['Foto',o.img?'imagen de '+Math.round(o.img.length*0.75/1024)+' KB':'sin foto']] : o.id==='cfg' ? SHARED_CFG.map(([k,t])=>[t,shortV(o[k])]) : o.id==='logo' ? [['Logo',o.img?'imagen de '+Math.round(o.img.length*0.75/1024)+' KB':'sin logo']] : [['Técnicos',(o.tecnicos||[]).join(', ')],['Empresas',(o.empresas||[]).join(', ')],['Tipos',(o.tipos||[]).join(', ')]],
+    rows:o=>String(o.id).startsWith('foto:') ? [['Foto',o.img?'imagen de '+Math.round(o.img.length*0.75/1024)+' KB':'sin foto']] : o.id==='cfg' ? SHARED_CFG.map(([k,t])=>[t,shortV(o[k])]) : o.id==='logo' ? [['Logo',o.img?'imagen de '+Math.round(o.img.length*0.75/1024)+' KB':'sin logo']] : [['Personal',(o.tecnicos||[]).join(', ')],['Empresas',(o.empresas||[]).join(', ')],['Tipos',(o.tipos||[]).join(', ')]],
     after:()=>{ try{ setLogoTop(); }catch(e){} if(typeof userCard==='function') userCard(); if(['ppto','mail','fact','contra','bolo'].includes(TAB) && !GACT) renderTab(); }
   }
 };
@@ -7169,7 +7222,7 @@ function tecCell(j){ const st=tecSt(j), tt=j.tecnicos||[];
   let h; if(j.tecReq===false) h='<span class="pch na">No</span>';
   else if(!tt.length) h=st?'<span class="pch ko">¿quién?</span>':'';
   else h=tt.map(n=>`<span class="pch ${st==='ok'?'ok':st?'ko':'na'}">${esc(n)}${st==='ok'?' ✓':st?' · ¿?':''}</span>`).join('');
-  return `<td${st&&tt.length?` data-cf="tec" title="${j.tecConf?'Confirmado · clic para quitar la confirmación':'Sin confirmar · clic para confirmar'}"`:st?' title="Falta poner técnico (abre la ficha)"':''}>${h}</td>`; }
+  return `<td${st&&tt.length?` data-cf="tec" title="${j.tecConf?'Confirmado · clic para quitar la confirmación':'Sin confirmar · clic para confirmar'}"`:st?' title="Falta poner quién va de personal (abre la ficha)"':''}>${h}</td>`; }
 function traCell(j){ const st=traSt(j), e=(j.empresa||'').trim();
   let h; if(j.transporte===false) h='<span class="pch na">No</span>';
   else if(!e) h=st?'<span class="pch ko">¿quién?</span>':'';
@@ -7177,7 +7230,7 @@ function traCell(j){ const st=traSt(j), e=(j.empresa||'').trim();
   return `<td${st&&e?` data-cf="tra" title="${j.traConf?'Confirmado · clic para quitar la confirmación':'Sin confirmar · clic para confirmar'}"`:st?' title="Falta poner empresa de transporte (abre la ficha)"':''}>${h}</td>`; }
 const jobFechas = j => j.dias&&j.dias.length ? fechasText(j.dias,'varios') : (j.ini ? (j.fin&&j.fin!==j.ini ? fechasText([j.ini,j.fin],'rango') : fNum(j.ini)) : '');
 function jobFlags(j){
-  const f=[]; const all=[j.concepto,j.num,j.otros,j.obs,j.empresa].join(' ');
+  const f=[]; const all=[j.concepto,j.num,j.obs,j.empresa].join(' ');   /* «Otros» ya no se ve en el Planning (12-11-2026): no avisa por él */
   if(!j.ini) f.push('sin fecha');
   if(j.estado==='pend') f.push('por confirmar');
   if(typeof jobShort==='function') jobShort(j).forEach(x=>f.push('⚠ '+x+(j.estado==='pend'?' si se confirma':'')));
@@ -7185,7 +7238,7 @@ function jobFlags(j){
   if(j.recogida && (j.fin||j.ini) && j.recogida<(j.fin||j.ini)) f.push('devolución antes del fin');
   if(/¿|\?/.test(all)) f.push('tiene «¿?»');
   if(j.revisar) f.push(j.revisar);
-  if(j.estado!=='anul' && j.tecReq===true && !(j.tecnicos||[]).length) f.push('falta técnico');
+  if(j.estado!=='anul' && j.tecReq===true && !(j.tecnicos||[]).length) f.push('falta personal');
   if(j.num){ const otros=PLAN.jobs.filter(x=>x!==j && x.num && x.num.toUpperCase()===j.num.toUpperCase() && planCore(x.concepto)!==planCore(j.concepto)); if(otros.length) f.push('nº repetido en «'+otros[0].concepto+'»'); }
   return f;
 }
@@ -7256,12 +7309,12 @@ function renderPlan(){
       if(k==='fin'){ h+=`<tr data-job="${j.id}" class="pfin ${cls} ${EST_CLS[j.estado||'']}">${i===0?head:''}<td class="pc" colspan="8"><span class="pcn">fin · ${esc(j.concepto)}</span> <span class="pmut">(${esc(jobFechas(j))})</span></td>${est}</tr>`; return; }
       if(k==='ent'||k==='rec'){ const hh=k==='ent'?j.entregaH:j.recogidaH;
         h+=`<tr data-job="${j.id}" class="${cls} ${j.estado==='anul'?'':'e-ent'}">${i===0?head:''}<td class="pc"><span class="pcn">${k==='ent'?'ENTREGA':'DEVOLUCIÓN'} · ${esc(j.concepto)}</span>${tag}${warn}${hh?`<span class="pdn">${esc(hh)}</span>`:''}</td>
-          ${num}<td>${k==='ent'?'Entrega':'Devolución'}</td><td></td><td></td>${tecCell(j)}${traCell(j)}<td></td>${est}</tr>`; return; }
+          ${num}<td>${k==='ent'?'Entrega':'Devolución'}</td>${tecCell(j)}${traCell(j)}<td></td>${est}</tr>`; return; }
       const sub = k==='ini' ? `<span class="pdn">${esc(jobFechas(j))} · ${nd} días · inicio</span>` : (nd>1?`<span class="pdn">día ${jobIdx(j,ds)} de ${nd}</span>`:'');
       const ent=j.estado!=='anul'&&j.tipo&&/entrega|recogida/i.test(j.tipo);
       h+=`<tr data-job="${j.id}" class="${cls} ${ent?'e-ent':EST_CLS[j.estado||'']}">${i===0?head:''}
         <td class="pc"><span class="pcn">${esc(j.concepto||'(sin concepto)')}</span>${tag}${warn}${sub}</td>
-        ${num}<td>${esc(j.tipo||'')}</td><td>${yn(j.material)}</td><td>${esc(j.otros||'')}</td>
+        ${num}<td>${esc(j.tipo||'')}</td>
         ${tecCell(j)}${traCell(j)}<td class="pobs2">${esc(j.obs||'')}</td>${est}</tr>`; });
   }
   $('#plBody').innerHTML=h;
@@ -7271,11 +7324,10 @@ function renderPlan(){
   $('#plCount').textContent=`${PLAN.jobs.filter(j=>{ const [a,b]=jobSpan(j); return a && a<=ymd(new Date(y,m,n)) && b>=ymd(new Date(y,m,1)); }).length} trabajos este mes · ${PLAN.jobs.length} en total`;
   if(typeof setTH==='function') setTH();
 }
-/* casillas P · M · O · T · Tr de una tarjeta del calendario */
+/* casillas P · T de una tarjeta del calendario: Personal y Transporte (hasta el 12-11-2026 había también Presupuesto, Material y Otros) */
 function planCasillas(j){
-  const an=j.estado==='anul', t=tecSt(j), r=traSt(j);
-  const c=[['P','Presupuesto',an?'na':j.num?'ok':'ko'],['M','Material',an||j.material===false?'na':j.material===true?'ok':'ko'],['O','Otros',(j.otros||'').trim()?'ok':'na'],
-    ['T','Técnico',t==='ok'?'ok':t?'ko':'na'],['Tr','Transporte',r==='ok'?'ok':r?'ko':'na']];
+  const t=tecSt(j), r=traSt(j);
+  const c=[['P','Personal',t==='ok'?'ok':t?'ko':'na'],['T','Transporte',r==='ok'?'ok':r?'ko':'na']];
   const txt={ok:'ok',ko:'falta o sin confirmar',na:'no aplica'};
   return `<span class="pini">${c.map(([s,nm,st])=>`<i class="${st}" title="${nm}: ${txt[st]}">${s}</i>`).join('')}</span>`;
 }
@@ -7330,12 +7382,10 @@ function planEdit(j, isNew){
     <input type="hidden" data-pf="estado" value="${esc(j.estado||'')}">
     <label>Tipo<select data-pf="tipo"><option value=""></option>${opt(L.tipos,j.tipo)}</select></label>
     <label>Etiqueta<input data-pf="etiqueta" value="${esc(j.etiqueta)}" placeholder="M. Ríos…"></label>
-    <label>Material${yn('material',j.material)}</label>
-    <label class="w2">Otros<input data-pf="otros" value="${esc(j.otros)}"></label>
-    <label>¿Técnico?${yn('tecReq',j.tecReq)}</label>
-    <div class="w3 plchips"><span>Técnicos</span>${[...new Set([...L.tecnicos,...(j.tecnicos||[])])].map(t=>`<label class="chip"><input type="checkbox" data-tec="${esc(t)}" ${(j.tecnicos||[]).includes(t)?'checked':''}> ${esc(t)}</label>`).join('')}
-      <input class="plotro" data-otro="1" placeholder="Otro técnico (nombre)…" title="Escribe el nombre de otra persona; varias, separadas por comas">
-      <label class="chip conf"><input type="checkbox" data-cfk="tecConf" ${j.tecConf?'checked':''}> ✓ Técnico confirmado</label></div>
+    <label>¿Personal?${yn('tecReq',j.tecReq)}</label>
+    <div class="w3 plchips"><span>Personal</span>${[...new Set([...L.tecnicos,...(j.tecnicos||[])])].map(t=>`<label class="chip"><input type="checkbox" data-tec="${esc(t)}" ${(j.tecnicos||[]).includes(t)?'checked':''}> ${esc(t)}</label>`).join('')}
+      <input class="plotro" data-otro="1" placeholder="Otra persona (nombre)…" title="Escribe el nombre de otra persona; varias, separadas por comas">
+      <label class="chip conf"><input type="checkbox" data-cfk="tecConf" ${j.tecConf?'checked':''}> ✓ Personal confirmado</label></div>
     <label>Transporte${yn('transporte',j.transporte)}</label>
     <label class="w2">Empresa de transporte<input data-pf="empresa" list="plEmpList" value="${esc(j.empresa)}"><datalist id="plEmpList">${L.empresas.map(e=>`<option value="${esc(e)}">`).join('')}</datalist></label>
     <label class="chip conf w3c"><input type="checkbox" data-cfk="traConf" ${j.traConf?'checked':''}> ✓ Transporte confirmado</label>
@@ -7409,7 +7459,7 @@ function planImportXlsx(wb, year){
       const tecs=[]; if(yes(v(8))) tecs.push('Luis'); if(yes(v(9))) tecs.push('Itu'); const k10=v(10); if(k10 && !/^[\s¿?]*$/.test(k10)) tecs.push(k10.charAt(0)+k10.slice(1).toLowerCase());
       const L11=v(11); const trans=yes(L11)?true:no(L11)?false:(L11?true:null); const emp=[!yes(L11)&&!no(L11)?L11:'', v(12)].filter(Boolean).join(' / ');
       const ex={concepto:conc, num:nm, estado:est, tipo:kind==='ent'||/entrega|recogida/i.test(conc)?(/recogida/i.test(conc)?'Recogida':'Entrega'):(/tarima/i.test(conc)?'Tarimas':'Bolo'), etiqueta:kind==='mrios'?'M. Ríos':'',
-        material:mat, otros:v(6), tecReq:yes(v(7))?true:no(v(7))?false:null, tecnicos:tecs, transporte:trans, empresa:emp, obs:v(13), revisar:/¿|\?/.test(k10)?'técnico «¿?»':''};
+        material:mat, otros:v(6), tecReq:yes(v(7))?true:no(v(7))?false:null, tecnicos:tecs, transporte:trans, empresa:emp, obs:v(13), revisar:/¿|\?/.test(k10)?'personal «¿?»':''};
       const rng=/\(([^)]*\d[^)]*)\)/.exec(conc);
       if(rng){ const f=planParseFechas(rng[1], year, mi); if(f){ out.push(Object.assign(newJob(ex),{ini:f.ini,fin:f.fin},f.dias?{dias:f.dias}:{},{revisar:'fechas leídas del texto «'+rng[1]+'»'})); continue; } }
       days.forEach(d=>out.push(Object.assign(newJob(ex),{ini:ymd(new Date(year,mi,d)),fin:ymd(new Date(year,mi,d))})));
@@ -7431,8 +7481,8 @@ async function planExportXlsx(){
   const B=XBook(), y=PV.y; const FILL={conf:'#00FF00',pend:'#FFFF00',anul:'#FF0000'};
   const hd={b:true,bg:'#C0C0C0',bd:{t:1,r:1,b:1,l:1}}, bd={bd:{t:1,r:1,b:1,l:1}};
   PL_MES.forEach((mn,m)=>{
-    const S=B.sheet(mn); [4,5,34,12,9,14,22,11,16,40,13].forEach((w,i)=>S.cols[i]=w);
-    ['','Día','Concepto','Presupuesto','Material','Otros','Técnicos','Transporte','Empresa','Observaciones','Estado'].forEach((t,c)=>S.set(0,c,t,hd));
+    const S=B.sheet(mn); [4,5,34,12,22,11,16,40,13].forEach((w,i)=>S.cols[i]=w);
+    ['','Día','Concepto','Presupuesto','Personal','Transporte','Empresa','Observaciones','Estado'].forEach((t,c)=>S.set(0,c,t,hd));
     let r=1; const n=new Date(y,m+1,0).getDate();
     for(let d=1;d<=n;d++){ const day=new Date(y,m,d), ds=ymd(day);
       const act=planDay(ds,PLAN.jobs.filter(j=>j.ini||j.entrega||j.recogida)).rows;
@@ -7440,10 +7490,10 @@ async function planExportXlsx(){
         if(j){ const yn=v=>v===true?'SI':v===false?'NO':''; const k=jobDays(j);
           const txt = kd==='ent' ? 'ENTREGA · '+j.concepto+(j.entregaH?' · '+j.entregaH:'') : kd==='rec' ? 'DEVOLUCIÓN · '+j.concepto+(j.recogidaH?' · '+j.recogidaH:'') : kd==='fin' ? 'fin · '+j.concepto : j.concepto+(k>1?` (${jobFechas(j)})`:'');
           S.set(r,2,txt,Object.assign({bg:j.estado==='anul'?FILL.anul:kd==='ent'||kd==='rec'||(j.tipo&&/entrega|recogida/i.test(j.tipo))?'#FF9900':kd==='fin'?null:(j.etiqueta==='M. Ríos'?'#00FFFF':FILL[j.estado]),i:kd==='fin'},bd));
-          S.set(r,3,j.num||'',bd); S.set(r,4,yn(j.material),Object.assign({ha:'center'},bd)); S.set(r,5,j.otros||'',bd);
-          S.set(r,6,j.tecReq===false?'NO':(j.tecnicos||[]).join(', '),Object.assign({bg:{ok:'#C6EFCE',no:'#FFC7CE'}[tecSt(j)]||null},bd)); S.set(r,7,yn(j.transporte),Object.assign({ha:'center'},bd)); S.set(r,8,j.empresa||'',Object.assign({bg:{ok:'#C6EFCE',no:'#FFC7CE'}[traSt(j)]||null},bd));
-          S.set(r,9,j.obs||'',Object.assign({wr:true},bd)); S.set(r,10,(PL_EST.find(e=>e[0]===j.estado)||['',''])[1],bd); }
-        else for(let c=2;c<=10;c++) S.set(r,c,'',bd);
+          S.set(r,3,j.num||'',bd);
+          S.set(r,4,j.tecReq===false?'NO':(j.tecnicos||[]).join(', '),Object.assign({bg:{ok:'#C6EFCE',no:'#FFC7CE'}[tecSt(j)]||null},bd)); S.set(r,5,yn(j.transporte),Object.assign({ha:'center'},bd)); S.set(r,6,j.empresa||'',Object.assign({bg:{ok:'#C6EFCE',no:'#FFC7CE'}[traSt(j)]||null},bd));
+          S.set(r,7,j.obs||'',Object.assign({wr:true},bd)); S.set(r,8,(PL_EST.find(e=>e[0]===j.estado)||['',''])[1],bd); }
+        else for(let c=2;c<=8;c++) S.set(r,c,'',bd);
         r++; }); }
     S.portrait=false; S.fitH=0;
   });
@@ -7460,7 +7510,7 @@ function initPlan(){
   $('#plNew').onclick=()=>planEdit(newJob({ini:ymd(new Date(PV.y,PV.m,1)),fin:ymd(new Date(PV.y,PV.m,1))}),true);
   $('#plBody').addEventListener('click',e=>{ const cf=e.target.closest('td[data-cf]');
     if(cf){ const j=PLAN.jobs.find(x=>x.id===cf.closest('tr').dataset.job); if(j){ const k=cf.dataset.cf==='tec'?'tecConf':'traConf'; j[k]=!j[k]; j.mod=new Date().toISOString(); planSave(); renderPlan();
-      toast((cf.dataset.cf==='tec'?'Técnico':'Transporte')+(j[k]?' confirmado ✓':': sin confirmar'),j[k]?'#067647':'#b54708'); } return; }
+      toast((cf.dataset.cf==='tec'?'Personal':'Transporte')+(j[k]?' confirmado ✓':': sin confirmar'),j[k]?'#067647':'#b54708'); } return; }
     const tr=e.target.closest('tr'); if(!tr) return;
     if(tr.dataset.job){ const j=PLAN.jobs.find(x=>x.id===tr.dataset.job); if(j) planEdit(j,false); }
     else if(tr.dataset.new) planEdit(newJob({ini:tr.dataset.new,fin:tr.dataset.new}),true); });
@@ -7486,7 +7536,7 @@ function initPlan(){
   $('#plPend').onclick=()=>{ const b=$('#plPendBox'); b.classList.toggle('hidden'); if(!b.classList.contains('hidden')) planPendRender(); };
   $('#plPendList').addEventListener('click',e=>{ const it=e.target.closest('[data-job]'); if(!it) return; const j=PLAN.jobs.find(x=>x.id===it.dataset.job); if(!j) return; if(j.ini){ const d=dOf(j.ini); PV.y=d.getFullYear(); PV.m=d.getMonth(); renderPlan(); } planEdit(j,false); });
   $('#plLists').onclick=async()=>{ const L=PLAN.listas;
-    const t=await promptDlg('Listas del Planning (1 de 3)','Técnicos (separados por comas):',L.tecnicos.join(', '),{ok:'Siguiente'}); if(t==null) return;
+    const t=await promptDlg('Listas del Planning (1 de 3)','Personal (nombres, separados por comas):',L.tecnicos.join(', '),{ok:'Siguiente'}); if(t==null) return;
     const em=await promptDlg('Listas del Planning (2 de 3)','Empresas de transporte (separadas por comas):',L.empresas.join(', '),{ok:'Siguiente'}); if(em==null) return;
     const ti=await promptDlg('Listas del Planning (3 de 3)','Tipos de trabajo (separados por comas):',L.tipos.join(', '),{ok:'Guardar'}); if(ti==null) return;
     const sp=s=>s.split(',').map(x=>x.trim()).filter(Boolean); L.tecnicos=sp(t); L.empresas=sp(em); L.tipos=sp(ti); planSave(); if(typeof syncSoon==='function') syncSoon('ajustes'); toast('Listas guardadas'); };
@@ -7527,7 +7577,7 @@ function planTipHtml(j, ds, fuera){
   const r=(a,b)=>b?`<div class="stt-r"><span>${a}</span><b>${esc(b)}</b></div>`:'';
   return `<div class="stt-h">${esc(j.concepto||'(sin concepto)')}</div><div style="margin-bottom:6px">${plPill(j)}</div>`
     + (fuera?r('Material', 'fuera · vuelve el '+dmy(j.recogida||jobSpan(j)[1])):'') + r('Nº', j.num) + r('Fechas', jobFechas(j)) + (nd>1?r('Hoy', 'día '+jobIdx(j,ds)+' de '+nd):'') + r('Tipo', j.tipo)
-    + r('Técnico', tec || (j.tecReq===false?'no':'')) + r('Transporte', j.empresa || (j.transporte===false?'no':''))
+    + r('Personal', tec || (j.tecReq===false?'no':'')) + r('Transporte', j.empresa || (j.transporte===false?'no':''))
     + (fl.length?`<div class="stt-f ju">Pendiente: ${esc(fl.join(' · '))}</div>`:'') + `<div class="stt-n" style="margin-top:6px">Clic para abrir su ficha</div>`;
 }
 (()=>{ let t=null, cur=null;
@@ -10288,7 +10338,23 @@ function init(){
   window.addEventListener('drop',e=>{ e.preventDefault(); const f=e.dataTransfer.files[0]; if(!f) return; if(TAB==='inv' && /\.xls/i.test(f.name)){ const dt=new DataTransfer(); dt.items.add(f); $('#invFile').files=dt.files; $('#invFile').onchange({target:$('#invFile')}); } else openFile(f); });
   switchTab(RENDER[TAB]?TAB:'ppto');
   if(WIN2) win2Init();
-  setTimeout(()=>{ FILE.dirty=FILE_BOOT_DIRTY && !(FILE.clean && docSig()===FILE.clean); fileState(); FILE.tag=docTag(); },0);
+  setTimeout(()=>{ FILE.dirty=FILE_BOOT_DIRTY && !(FILE.clean && docSig()===FILE.clean); fileState(); FILE.tag=docTag();
+    if(!WIN2 && lsGet('bk_abrir_nuevo',false)) bootNuevo(); },0);
+}
+/* «Al abrir la app, empezar con un presupuesto nuevo» (opción de cada ordenador, en Configuración › Usuario) */
+async function bootNuevo(){
+  if(FILE.dirty){
+    const nom=FILE.name || [DOC.meta.num, DOC.concepto.evento].filter(Boolean).join(' · ') || 'el último presupuesto';
+    const k=await askDlg({title:'Lo último que tenías abierto no está guardado', text:`«${nom}» tiene cambios sin guardar.`,
+      cancel:'Seguir con él',
+      options:[{k:'g', icon:'☁', label:'Guardarlo y empezar uno nuevo', desc:'Se guarda y después se abre uno en blanco', primary:true},
+               {k:'d', icon:'✕', label:'Descartar los cambios y empezar uno nuevo', desc:'Lo que no estaba guardado se pierde'}]});
+    if(!k) return;
+    if(k==='g' && !await fileSave(false)) return;
+    if(k==='d'){ FILE.dirty=false; fileState(); }
+  }
+  cloudUnlock(); const cols=DOC.factura.cols; DOC=newDoc(); DOC.factura.cols=cols; DOC.jobId=uid(); save();
+  FILE={name:'',dirty:false,handle:null}; fileState(); switchTab('ppto'); FILE.tag=docTag();
 }
 /* (en el móvil arranca motor.js) */
 /* clic fuera de una ventana (en el fondo oscuro) = cerrarla, como su «×» */
@@ -10404,12 +10470,15 @@ function mvUI(){
     else if(e.target.closest('#mvMandar')) mvMandar();
   });
 }
+/* la barra de arriba puede ocupar una o dos filas: el contenido empieza justo debajo */
+function mvAltoTop(){ const t = $('#mvTop'); if(t) document.documentElement.style.setProperty('--mvTopH', t.offsetHeight + 'px'); }
+addEventListener('resize', () => mvAltoTop());
 function mvPinta(){
   $$('#mvTop [data-v]').forEach(b => b.classList.toggle('on', b.dataset.v === TAB));
   const sc = $('#mvSegC'); if(sc) sc.hidden = !MV.contra;
   const sub = $('#mvSub'), enC = MV.contra && TAB === 'contra';
+  mvAltoTop();
   if(sub){ sub.hidden = !enC; document.body.classList.toggle('mvsub', enC);
-    const t = $('#mvTop'); if(t) document.documentElement.style.setProperty('--mvTopH', t.offsetHeight + 'px');
     if(enC){ const c = contraAct();
       sub.innerHTML = `<select id="mvCsel" aria-label="Contrarider">${DOC.contras.map((x, i) => `<option value="${esc(x.id)}" ${x.id === DOC.cAct ? 'selected' : ''}>${esc(contraName(x, i))}</option>`).join('')}</select>
         <label for="mvCpp">Al presupuesto:</label><select id="mvCpp">${[['off','No pasa'],['items','Línea a línea'],['total','Una línea con el total']].map(([v, t]) => `<option value="${v}" ${c.pp === v ? 'selected' : ''}>${t}</option>`).join('')}</select>

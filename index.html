@@ -1123,10 +1123,9 @@ function fichaJob(id){
   if(j.tipo) f.push(['Tipo', j.tipo]);
   if(j.entrega) f.push(['Entrega', fechaLarga(j.entrega) + (j.entregaH ? ' · ' + j.entregaH : '')]);
   if(j.recogida) f.push(['Recogida', fechaLarga(j.recogida) + (j.recogidaH ? ' · ' + j.recogidaH : '')]);
-  if((j.tecnicos || []).length) f.push(['Técnicos', j.tecnicos.join(', ') + (j.tecConf ? '' : ' (sin confirmar)')]);
+  if((j.tecnicos || []).length) f.push(['Personal', j.tecnicos.join(', ') + (j.tecConf ? '' : ' (sin confirmar)')]);
   if(j.transporte === true || j.empresa) f.push(['Transporte', (j.empresa || 'sí') + (j.traConf ? '' : ' (sin confirmar)')]);
   else if(j.transporte === false) f.push(['Transporte', 'no']);
-  if(j.material === false) f.push(['Material', 'no sale material']);
   if(j.mat && j.mat.length) f.push(['Material', j.mat.map(m => m.cant + ' ' + (m.nombre || (inv().byId[m.inv] ? itemLabel(inv().byId[m.inv]) : '?'))).join('\n')]);
   if(j.obs) f.push(['Observaciones', j.obs]);
   abreHoja('<h2>' + esc(j.concepto || '(sin concepto)') + '</h2><div class="sub">' + estPill(j.estado) + '</div>' +
