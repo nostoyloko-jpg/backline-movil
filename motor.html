@@ -9760,8 +9760,11 @@ function liqFila(D, x){
       const q=per(f.e); if(q!=='otros') r.adl[q][k]+=i; }); });   /* Empresa = Luis o Itu en alquilado/transporte/compras: lo adelantó él */
   ((D.bolo&&D.bolo.pagos)||[]).forEach(p=>{ const i=N0(p.i); if(i){ const e=String(p.n||'').trim(), q=per(e); r[q]+=i; if(q==='otros') r.lin.otros.push({e,i}); r.pend++; } });   /* «Personal y empresas» sin imputar: cuenta como personal */
   const rd=v=>Math.round(v*100)/100;
-  { const TM=(libreOn(P) && P.libre.tot)||{}; if(manNum(TM.base)) base=N0(TM.base); if(CFG.redondeo) base=redE(base); }
-  r.base=rd(base); r.bkl=rd(bkl==null?0:bkl); r.bk=rd((bkl==null?0:bkl)-r.alq); r.sinBk=bkl==null; LIQ_COLS.forEach(([k])=>r[k]=rd(r[k]));
+  /* IVA y total con IVA: los del propio presupuesto, como salen en su hoja (también si en «Edición libre» se escribieron a mano) */
+  let iva=null, tot=null;
+  { const TM=(libreOn(P) && P.libre.tot)||{}; if(manNum(TM.base)) base=N0(TM.base); if(CFG.redondeo) base=redE(base);
+    iva = manNum(TM.iva) ? N0(TM.iva) : base*IVA()/100; tot = manNum(TM.total) ? N0(TM.total) : base+iva; }
+  r.base=rd(base); r.iva=rd(iva); r.tot=rd(tot); r.bkl=rd(bkl==null?0:bkl); r.bk=rd((bkl==null?0:bkl)-r.alq); r.sinBk=bkl==null; LIQ_COLS.forEach(([k])=>r[k]=rd(r[k]));
   const num=(x&&x.numero)||D.meta.num||'', F=new Set(); if(D.factura && D.factura.emitida && D.factura.num) F.add(D.factura.num);
   (REG||[]).forEach(f=>{ if(f.presupuesto && f.presupuesto===num && f.estado!=='RECTIFICADA') F.add(f.num); });
   r.fac=[...F].join(', ');
@@ -9781,11 +9784,16 @@ function lbV(row,k){
   return a[k]!=null ? a[k] : (k==='fac'?'':0); }
 const liqGastos=r=>N0(r.alq)+N0(r.luis)+N0(r.itu)+N0(r.otros)+N0(r.tra)+N0(r.comp);
 const ivaDe=b=>b*IVA()/100;
-function liqSum(L){ const t={bk:0,alq:0,luis:0,itu:0,otros:0,tra:0,comp:0,base:0,iva:0,g:0}; L.forEach(r=>{ LB_K.forEach(k=>t[k]+=N0(r[k])); t.iva+=N0(r.iva); t.g+=liqGastos(r); }); return t; }
+const lbTot=r=>r.tot!=null ? N0(r.tot) : N0(r.base)+N0(r.iva);   /* con IVA (las liquidaciones antiguas no lo guardaban) */
+function liqSum(L){ const t={bk:0,alq:0,luis:0,itu:0,otros:0,tra:0,comp:0,base:0,iva:0,tot:0,g:0}; L.forEach(r=>{ LB_K.forEach(k=>t[k]+=N0(r[k])); t.iva+=N0(r.iva); t.tot+=lbTot(r); t.g+=liqGastos(r); }); return t; }
 function liqCob(L){ const c={luis:{alq:0,tra:0,comp:0}, itu:{alq:0,tra:0,comp:0}}; L.forEach(r=>{ if(r.adl) ['luis','itu'].forEach(q=>['alq','tra','comp'].forEach(k=>c[q][k]+=N0(r.adl[q]&&r.adl[q][k]))); }); return c; }
 /* una fila del libro tal como entra en una liquidación */
 function lbPlano(row){ const o={id:row.id, num:row.num, cli:row.cli, m:row.m, fac:lbV(row,'fac'), cob:lbCobFecha(row), lin:{}, adl:{luis:{alq:0,tra:0,comp:0}, itu:{alq:0,tra:0,comp:0}}};
-  LB_K.forEach(k=>o[k]=N0(lbV(row,k))); o.iva=Math.round(ivaDe(o.base)*100)/100;
+  LB_K.forEach(k=>o[k]=N0(lbV(row,k)));
+  /* con IVA: el del presupuesto. Si el total sin IVA se ha cambiado a mano en el libro, se le aplica el mismo % de ese presupuesto */
+  { const a=row.a||{}, manB=!!(row.man && 'base' in row.man), rd=v=>Math.round(v*100)/100;
+    if(!manB && a.iva!=null){ o.iva=N0(a.iva); o.tot=a.tot!=null?N0(a.tot):rd(o.base+o.iva); }
+    else { const pc=(a.iva!=null && N0(a.base)) ? N0(a.iva)/N0(a.base) : IVA()/100; o.iva=rd(o.base*pc); o.tot=rd(o.base+o.iva); } }
   LB_LIN.forEach(c=>{ o.lin[c]=clone(lbLin(row,c)); if(c!=='otros') o.lin[c].forEach(x=>{ const q=liqPer(x.e); if(q!=='otros') o.adl[q][c]+=N0(x.i); }); });   /* Empresa Luis/Itu: lo adelantó él */
   return o; }
 /* las líneas de una fila ya plana (liquidación): las antiguas no las tenían */
@@ -9885,7 +9893,7 @@ function renderLibroGen(){ const g=CONTA.g; { const h=$('#contaGen .cgen'); if(h
 const lbE=v=>v?eurS(v):'';
 const lbCard=(l,v,c,sub)=>`<div class="cgc${c?' '+c:''}"><div class="cgl">${l}</div><div class="cgv">${v}</div>${sub?`<div class="cgs">${sub}</div>`:''}</div>`;
 /* «con IVA» debajo de un total sin IVA: para cuadrar las transferencias, que llegan con IVA */
-const conIva=(base,iva)=>`<b>${eurS(Math.round((N0(base)+N0(iva))*100)/100)||'0,00 €'}</b> con IVA`;
+const conIva=t=>`<b>${eurS(Math.round(N0(t)*100)/100)||'0,00 €'}</b> con IVA`;
 function renderLibro(y){
   const host=$('#contaGen .cgen'); if(!host) return;
   if(LB.y!==y && !LB.cargando) setTimeout(()=>libroCargar(y),0);
@@ -9906,7 +9914,7 @@ function renderLibro(y){
       h+=lin(r,'alq',i,lock);
       if(i===0) h+=`<td${rs}>${inp(r,'luis',lock)}</td><td${rs}>${inp(r,'itu',lock)}</td>`;
       h+=lin(r,'otros',i,lock)+lin(r,'tra',i,lock)+lin(r,'comp',i,lock);
-      if(i===0) h+=`<td${rs}>${inp(r,'base',lock)}</td><td${rs}>${lbE(o.base+o.iva)}</td><td${rs}><b>${lbE(liqGastos(o))}</b></td><td${rs} class="${o.base-liqGastos(o)<0?'xneg':''}">${lbE(o.base-liqGastos(o))}</td>
+      if(i===0) h+=`<td${rs}>${inp(r,'base',lock)}</td><td${rs}>${lbE(o.tot)}</td><td${rs}><b>${lbE(liqGastos(o))}</b></td><td${rs} class="${o.base-liqGastos(o)<0?'xneg':''}">${lbE(o.base-liqGastos(o))}</td>
         <td class="lbcob"${rs}>${lock?`<span class="lbok">✓ ${cf==='registro'?'cobrada':esc(xlDMY(cf))}</span>`:`<input type="date" data-lbc="${esc(r.id)}" value="${/^\d{4}-/.test(cf)?esc(cf):''}" title="${cf==='registro'?'Cobrada según el registro de facturas':'Fecha de cobro'}">${cf==='registro'?'<span class="lbok">✓ registro</span>':''}`}</td>
         <td class="lbact"${rs}>${L?`<a href="#" data-lqver="${esc(L.id)}" class="lbbadge">${ordn(L.n)}</a>`:`<button class="lbadd" data-lbadd="${esc(r.id)}" title="Añadir una línea de gasto a este bolo">＋</button>${man?`<button class="lbre" data-lbre="${esc(r.id)}" title="Volver a coger todo de la hoja del bolo">↺</button>`:''}`}</td>`;
       h+='</tr>'; }
@@ -9915,7 +9923,7 @@ function renderLibro(y){
   const NC=LQ_NC(4)+2;
   let meses=''; for(let m=0;m<12;m++){ const L=vis.filter(r=>r.m===m); if(!L.length) continue; meses+=`<tr class="liqmes"><td colspan="${NC}"><span>${LIQ_MES[m]} ${y}</span></td></tr>${L.map(fila).join('')}`; }
   const Tv=liqSum(vis.map(pl));
-  const totR=lqTotRow(`TOTAL${LB.f==='todos'?' '+y:' (filtro)'}`, Tv, [Tv.base,Tv.base+Tv.iva,Tv.g,Tv.base-Tv.g], 2, 'xgran');
+  const totR=lqTotRow(`TOTAL${LB.f==='todos'?' '+y:' (filtro)'}`, Tv, [Tv.base,Tv.tot,Tv.g,Tv.base-Tv.g], 2, 'xgran');
   const LQ=LIQS.filter(l=>l.y===y).sort((a,b)=>a.n-b.n), ult=LQ.length?LQ[LQ.length-1]:null;
   const liqs=LQ.length?`<table class="xt xlist"><thead><tr><th>Liquidación</th><th>Fecha</th><th>Bolos</th><th>Total sin IVA</th><th>Gastos</th><th>Beneficio</th><th></th></tr></thead><tbody>${LQ.map(l=>{ const t=liqSum(l.filas); return `<tr><td><a href="#" data-lqver="${esc(l.id)}"><b>${ordn(l.n)} liquidación ${y}</b></a></td><td>${esc(xlDMY(l.fecha))}${l.por?` <span class="hint">· ${esc(l.por)}</span>`:''}</td><td>${l.filas.length}</td><td>${lbE(t.base)}</td><td>${lbE(t.g)}</td><td><b>${lbE(t.base-t.g)}</b></td><td><button data-lqxl="${esc(l.id)}">Excel</button>${l===ult?` <button class="sec" data-lqdel="${esc(l.id)}">Deshacer</button>`:''}</td></tr>`; }).join('')}</tbody></table>`:'<p class="hint">Aún no hay liquidaciones de este año.</p>';
   const fb=(k,l)=>`<button class="${LB.f===k?'on':''}" data-lbf="${k}">${l}</button>`;
@@ -9924,7 +9932,7 @@ function renderLibro(y){
       <button id="lbRe" title="Vuelve a leer todos los presupuestos del año (lo escrito a mano se respeta)">↻ Releer presupuestos</button>
       <span class="hint">${LB.cargando?`Leyendo presupuestos… ${LB.hecho} de ${LB.total||'?'}`:`${F.length} bolo${F.length===1?'':'s'}`}</span></div>
     ${LB.err.length?`<div class="banner">No pude leer: ${LB.err.map(esc).join(' · ')}</div>`:''}
-    <div class="cgcards">${lbCard('Total sin IVA',eurS(Tall.base)||'0,00 €','',conIva(Tall.base,Tall.iva))}${lbCard('Cobrado sin IVA',eurS(Tc.base)||'0,00 €','',conIva(Tc.base,Tc.iva))}${lbCard('Pendiente de cobro sin IVA',eurS(Tall.base-Tc.base)||'0,00 €','',conIva(Tall.base-Tc.base,Tall.iva-Tc.iva))}${lbCard(`Cobrado sin liquidar · ${nS} · sin IVA`,eurS(Ts.base)||'0,00 €','b',conIva(Ts.base,Ts.iva))}</div>
+    <div class="cgcards">${lbCard('Total sin IVA',eurS(Tall.base)||'0,00 €','',conIva(Tall.tot))}${lbCard('Cobrado sin IVA',eurS(Tc.base)||'0,00 €','',conIva(Tc.tot))}${lbCard('Pendiente de cobro sin IVA',eurS(Tall.base-Tc.base)||'0,00 €','',conIva(Tall.tot-Tc.tot))}${lbCard(`Cobrado sin liquidar · ${nS} · sin IVA`,eurS(Ts.base)||'0,00 €','b',conIva(Ts.tot))}</div>
     ${vis.length?`<div class="liqwrap"><table class="xt lbt" data-xw="libro"${lw?` style="table-layout:fixed;width:${lw.reduce((a,b)=>a+b,0)}px"`:''}>${th}<tbody>${meses}${totR}</tbody></table></div>`:`<p class="hint">${LB.cargando?'Leyendo…':'Nada que enseñar con este filtro.'}</p>`}
     <div class="bfh" style="margin-top:22px">Liquidaciones ${y} <span class="hint">cada una coge los bolos cobrados que aún no estén liquidados</span></div>
     ${liqs}
@@ -9943,9 +9951,9 @@ function renderLiq(g){
       if(i===0) h+=`<td class="xl xid"${rs}><b>${esc(r.num||'—')}</b></td><td class="xl"${rs}>${r.fac?esc(r.fac):'<span class="liqno">sin factura</span>'}</td><td class="liqev"${rs} title="${esc(r.cli||'')}">${esc(r.cli||'')}</td><td${rs}>${e(r.bk)}</td>`;
       h+=c2('alq',i); if(i===0) h+=`<td${rs}>${e(r.luis)}</td><td${rs}>${e(r.itu)}</td>`;
       h+=c2('otros',i)+c2('tra',i)+c2('comp',i);
-      if(i===0) h+=`<td${rs}>${e(r.base)}</td><td${rs}>${e(r.base+r.iva)}</td><td${rs}><b>${e(liqGastos(r))}</b></td><td${rs}>${r.cob&&r.cob!=='registro'?esc(xlDMY(r.cob)):'✓'}</td>`;
+      if(i===0) h+=`<td${rs}>${e(r.base)}</td><td${rs}>${e(lbTot(r))}</td><td${rs}><b>${e(liqGastos(r))}</b></td><td${rs}>${r.cob&&r.cob!=='registro'?esc(xlDMY(r.cob)):'✓'}</td>`;
       h+='</tr>'; } return h; };
-  const tot=(lab,t,cls)=>lqTotRow(lab, t, [t.base,t.base+t.iva,t.g], 1, cls);
+  const tot=(lab,t,cls)=>lqTotRow(lab, t, [t.base,t.tot,t.g], 1, cls);
   let meses=''; for(let m=0;m<12;m++){ const M=L.filter(r=>r.m===m); if(!M.length) continue;
     meses+=`<tr class="liqmes"><td colspan="${LQ_NC(3)+1}"><span>${LIQ_MES[m]} ${y}</span></td></tr>${M.map(fila).join('')}${tot('Total '+LIQ_MES[m].toLowerCase(),liqSum(M))}`; }
   const R=prev?liqRep():Lq.rep, sp=R.reduce((t,x)=>t+N0(x.p),0);
@@ -9958,7 +9966,7 @@ function renderLiq(g){
     <p class="hint">En material alquilado, transporte y compras, lo que tiene «Luis» o «Itu» en la columna Empresa de la hoja del bolo se cuenta como adelantado por él.</p></div>`;
   host.innerHTML=`<div class="bfh">${prev?'Próxima: ':''}${ordn(n)} liquidación ${y} <span class="hint">${prev?'vista previa · bolos cobrados que aún no están liquidados':`hecha el ${esc(xlDMY(Lq.fecha))}${Lq.por?' por '+esc(Lq.por):''} · congelada`}</span></div>
     <div class="liqbar"><button class="sec" data-cn="l:${y}">‹ Libro ${y}</button>${prev?`<button id="lqHacer" ${L.length?'':'disabled'}>✓ Hacer la ${ordn(n)} liquidación</button>`:''}<button id="lqXl" data-lqxl="${prev?'next':esc(Lq.id)}" ${L.length?'':'disabled'}>Exportar a Excel</button><span class="hint">${L.length} bolo${L.length===1?'':'s'}</span></div>
-    <div class="cgcards">${lbCard('Total sin IVA',eurS(T.base)||'0,00 €','',conIva(T.base,T.iva))}${lbCard('Material B.K.',eurS(T.bk)||'0,00 €')}${lbCard('Total gastos',eurS(T.g)||'0,00 €')}${lbCard('Beneficio',eurS(ben)||'0,00 €','b')}</div>
+    <div class="cgcards">${lbCard('Total sin IVA',eurS(T.base)||'0,00 €','',conIva(T.tot))}${lbCard('Material B.K.',eurS(T.bk)||'0,00 €')}${lbCard('Total gastos',eurS(T.g)||'0,00 €')}${lbCard('Beneficio',eurS(ben)||'0,00 €','b')}</div>
     ${L.length?`<div class="liqwrap"><table class="xt" data-xw="liq"${lw?` style="table-layout:fixed;width:${lw.reduce((a,b)=>a+b,0)}px"`:''}>${th}<tbody>${meses}${tot('TOTAL',T,'xgran')}</tbody></table></div>`:'<p class="hint">No hay bolos cobrados sin liquidar.</p>'}
     <div class="liqfin">${rep}${cobH}</div>`;
 }
@@ -10007,7 +10015,7 @@ async function liqExcel(L, y, titulo, REP, archivo){
         S.set(r,0,f?LIQ_MES[m].toLowerCase():'',nom); S.set(r,1,f?x.num:'',Object.assign({},nom,f?{b:true}:{})); S.set(r,2,f?x.fac:'',nom);
         S.set(r,3,f?rd(x.bk):'',cur); S.set(r,6,f?rd(x.luis):'',cur); S.set(r,7,f?rd(x.itu):'',cur);
         [['alq',4],['otros',8],['tra',10],['comp',12]].forEach(([c,col])=>{ const z=lqLin(x,c)[i]; S.set(r,col,z?String(z.e||''):'',nomC); S.set(r,col+1,z?rd(N0(z.i)):'',cur); });
-        S.set(r,14,f?rd(x.base):'',cur); S.set(r,15,f?rd(x.base+x.iva):'',cur); S.set(r,16,'',cur);
+        S.set(r,14,f?rd(x.base):'',cur); S.set(r,15,f?rd(lbTot(x)):'',cur); S.set(r,16,'',cur);
         datos.push(r+1); r++; usadas++; }
       const r1=r; S.set(r0-1,16,Math.round(liqGastos(x)*100)/100,Object.assign({b:true},cur),`SUM(F${r0}:F${r1},G${r0}:H${r1},J${r0}:J${r1},L${r0}:L${r1},N${r0}:N${r1})`);
       if(n>1) [0,1,2,3,6,7,14,15,16].forEach(c=>S.merge(r0-1,c,r1-1,c)); });
@@ -10018,7 +10026,7 @@ async function liqExcel(L, y, titulo, REP, archivo){
   S.merge(r,0,r,2); r++;
   const RT=r+1, T=liqSum(L), sm=c=>`SUM(${c}${d0}:${c}${d1})`;
   [[3,'D','bk'],[5,'F','alq'],[6,'G','luis'],[7,'H','itu'],[9,'J','otros'],[11,'L','tra'],[13,'N','comp'],[14,'O','base']].forEach(([c,Lt,k])=>S.set(r,c,Math.round(T[k]*100)/100,redN,sm(Lt)));
-  S.set(r,15,Math.round((T.base+T.iva)*100)/100,redN,sm('P')); S.set(r,16,Math.round(T.g*100)/100,redN,sm('Q'));
+  S.set(r,15,Math.round(T.tot*100)/100,redN,sm('P')); S.set(r,16,Math.round(T.g*100)/100,redN,sm('Q'));
   const ben=T.base-T.g; S.set(r,17,Math.round(ben*100)/100,redN,`O${RT}-Q${RT}`); r+=3;
   S.set(r,0,`TOTAL A FACTURAR: ${eurS(T.base)} - TOTAL GASTOS: ${eurS(T.g)} = ${eurS(ben)}`,{sz:16,fc:'#FF0000'}); S.merge(r,0,r,16); r+=2;
   const R=REP, r0=r;

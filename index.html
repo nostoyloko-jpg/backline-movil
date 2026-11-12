@@ -1167,15 +1167,22 @@ function lbV(row, k){
   return a[k] != null ? a[k] : (k === 'fac' ? '' : 0);
 }
 const lbBase = r => N0(lbV(r, 'base'));
-/* con IVA: lo que llega en la transferencia (el IVA de Configuración sobre el total sin IVA, como en el ordenador) */
-const conIVA = n => Math.round(N0(n) * (1 + N0(CFG().iva) / 100) * 100) / 100;
-const dosImp = n => eur(conIVA(n)) + '<small class="sinIva">' + eur(n) + ' sin IVA</small>';
+/* con IVA: lo que llega en la transferencia. Es el total con IVA del propio presupuesto (lo guarda el ordenador al leerlo);
+   si el total sin IVA se cambió a mano en el libro, se le aplica el % de ese presupuesto; si no hay dato, el de Configuración */
+function lbConIva(r){
+  const a = r.a || {}, manB = !!(r.man && 'base' in r.man), b = lbBase(r), rd = v => Math.round(v * 100) / 100;
+  if(!manB && a.tot != null) return N0(a.tot);
+  const pc = (a.iva != null && N0(a.base)) ? N0(a.iva) / N0(a.base) : N0(CFG().iva) / 100;
+  return rd(b * (1 + pc));
+}
+const dosImp = (con, sin) => eur(con) + '<small class="sinIva">' + eur(sin) + ' sin IVA</small>';
 function pintaCobros(){
   if(!DATOS.libro.listo) return;
   const L = DATOS.libro.items.slice().sort((a,b) => (b.y - a.y) || (b.m - a.m) || String(a.num).localeCompare(String(b.num)));
   const pend = L.filter(r => !r.cob), cobr = L.filter(r => r.cob);
-  $('#totPend').innerHTML = dosImp(pend.reduce((s,r) => s + lbBase(r), 0));
-  $('#totSin').innerHTML  = dosImp(cobr.filter(r => !lbLiq(r.id)).reduce((s,r) => s + lbBase(r), 0));
+  const sinLiq = cobr.filter(r => !lbLiq(r.id)), suma = (L, f) => L.reduce((s,r) => s + f(r), 0);
+  $('#totPend').innerHTML = dosImp(suma(pend, lbConIva), suma(pend, lbBase));
+  $('#totSin').innerHTML  = dosImp(suma(sinLiq, lbConIva), suma(sinLiq, lbBase));
   const lista = FILTRO === 'pend' ? pend : cobr, host = $('#cobLista');
   if(!lista.length){ host.innerHTML = '<p class="vacio">' + (FILTRO === 'pend' ? 'Nada pendiente de cobro.<br>Bien ahí.' : 'Todavía no hay bolos cobrados.') + '</p>'; return; }
   let html = '', mesAct = '';
@@ -1187,7 +1194,7 @@ function pintaCobros(){
     if(fac) meta.push(esc(fac));
     if(r.cob) meta.push('<b>Cobrado</b> ' + esc(fechaCorta(r.cob)));
     if(liq) meta.push('<span class="pill ent">' + esc(liq.n) + 'ª liquidación</span>');
-    html += '<button class="card" data-fila="' + esc(r.id) + '"><div class="t">' + esc(r.num || '?') + ' <span class="imp">' + eur(conIVA(lbBase(r))) + '</span></div>' +
+    html += '<button class="card" data-fila="' + esc(r.id) + '"><div class="t">' + esc(r.num || '?') + ' <span class="imp">' + eur(lbConIva(r)) + '</span></div>' +
       '<div class="m"><span>' + esc(r.cli || '(sin empresa)') + '</span><span>' + eur(lbBase(r)) + ' sin IVA</span>' + meta.map(x => '<span>' + x + '</span>').join('') + '</div></button>';
   });
   host.innerHTML = html;
@@ -1195,7 +1202,7 @@ function pintaCobros(){
 function fichaFila(id){
   const r = DATOS.libro.items.find(x => x.id === id); if(!r) return;
   const liq = lbLiq(r.id);
-  const f = [['Factura', lbV(r,'fac') || '—'], ['Total con IVA', eur(conIVA(lbBase(r)))], ['Total sin IVA', eur(lbBase(r))],
+  const f = [['Factura', lbV(r,'fac') || '—'], ['Total con IVA', eur(lbConIva(r))], ['Total sin IVA', eur(lbBase(r))],
     ['Gastos', eur(['alq','luis','itu','otros','tra','comp'].reduce((s,k) => s + N0(lbV(r,k)), 0))], ['Cobrado', r.cob ? fechaLarga(r.cob) : 'todavía no']];
   let acc;
   if(liq) acc = '<div class="nota">Este bolo está en la ' + esc(liq.n) + 'ª liquidación de ' + esc(liq.y) + ', que está congelada. Para cambiarlo hay que deshacerla desde el ordenador.</div>' +
