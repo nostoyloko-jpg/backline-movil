@@ -598,13 +598,27 @@ function pintaLibre(){
   host.innerHTML = R.map(({gk, it}) => {
     const L = libres(gk, a, b), cl = claseN(L);
     const n = L.qty == null ? '?' : Math.max(0, L.libres);
+    const alt = L.qty != null && L.libres < 1 ? ' · toca para ver lo parecido libre' : '';
     const det = L.qty == null ? 'sin unidades puestas' : ('de ' + L.qty + (L.av ? ' · ' + L.av + ' averiad' + (L.av === 1 ? 'a' : 'as') : '') +
       (L.firm - L.dev ? ' · ' + (L.firm - L.dev) + ' fuera' : '') + (L.tot - L.firm ? ' · ' + (L.tot - L.firm) + ' provisional' + (L.tot - L.firm === 1 ? '' : 'es') : '') +
       (L.dev ? ' · ' + L.dev + ' sin volver' : ''));
     return '<button class="card" data-gk="' + esc(gk) + '"><div class="res"><div class="izq">' +
-      '<div class="t">' + esc(itemLabel(it)) + '</div><div class="m"><span>' + esc(det) + '</span></div></div>' +
+      '<div class="t">' + esc(itemLabel(it)) + '</div><div class="m"><span>' + esc(det + alt) + '</span></div></div>' +
       '<div class="der"><div class="n ' + cl + '">' + n + '<small>' + (n === 1 ? 'libre' : 'libres') + '</small></div></div></div></button>';
   }).join('');
+}
+/* lo parecido (misma subcategoría; si no queda nada, misma categoría) que sí está libre esas fechas.
+   Igual que en el contrarider del ordenador: primero lo que llega, luego la misma marca, luego lo que más tiene libre. */
+function parecidosLibres(gk, a, b, need){
+  const I = inv(), it0 = grupo(gk).it; if(!it0) return {lista:[], nivel:''};
+  const vistos = new Set([gk]); need = need || 1;
+  const busca = f => { const out = [];
+    Object.keys(I.g).forEach(k => { if(vistos.has(k)) return; const it = I.g[k][0]; if(!it || !f(it)) return; vistos.add(k);
+      const L = libres(k, a, b); if(L.qty != null && L.libres > 0) out.push({gk:k, it, libres:L.libres, alcanza:L.libres >= need, marca:!!it0.marca && norm(it.marca || '') === norm(it0.marca)}); });
+    return out.sort((x, y) => (y.alcanza - x.alcanza) || (y.marca - x.marca) || (y.libres - x.libres) || itemLabel(x.it).localeCompare(itemLabel(y.it))); };
+  let lista = it0.sub ? busca(it => it.cat === it0.cat && it.sub === it0.sub) : [], nivel = it0.sub ? 'sub' : 'cat';
+  if(!lista.length){ lista = busca(it => it.cat === it0.cat); nivel = 'cat'; }
+  return {lista, nivel, it0};
 }
 function fichaGrupo(gk){
   const [a, b] = rangoLibre(), L = libres(gk, a, b), it = L.G.it;
@@ -624,6 +638,12 @@ function fichaGrupo(gk){
       '<div class="card"><div class="t">' + esc(x.cant) + ' · ' + esc(x.j.concepto || '(sin concepto)') + ' ' + estPill(x.j.estado) + '</div>' +
       '<div class="m"><span>' + esc(x.j.num || '') + '</span><span>' + esc(fechaCorta(x.a)) + ' → ' + esc(fechaCorta(x.b)) + '</span></div></div>').join('')
       : '<p class="hint">Ningún bolo lo usa esos días.</p>') +
+    (L.qty != null && L.libres < 1 ? (() => { const A = parecidosLibres(gk, a, b, 1), tipo = A.nivel === 'sub' && it.sub ? it.cat + ' › ' + it.sub : (it.cat || '');
+      return '<div class="dia"><b>Parecido y libre esos días</b> <span class="hint">· ' + esc(tipo) + '</span></div>' +
+        (A.lista.length ? A.lista.slice(0, 8).map(x => { const p = invPrice(x.it);
+          return '<button class="card" data-gk="' + esc(x.gk) + '"><div class="res"><div class="izq"><div class="t">' + esc(itemLabel(x.it)) + '</div>' +
+            (hasP(p) ? '<div class="m"><span>' + eur(p) + ' / día</span></div>' : '') + '</div><div class="der"><div class="n si">' + x.libres + '<small>' + (x.libres === 1 ? 'libre' : 'libres') + '</small></div></div></div></button>'; }).join('')
+          : '<p class="hint">No hay nada parecido libre esos días: habrá que subalquilar.</p>'); })() : '') +
     '<div class="acciones" style="margin-top:12px"><button class="btn sec" data-cerrar>Cerrar</button></div>'
   );
 }

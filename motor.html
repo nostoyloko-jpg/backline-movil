@@ -805,6 +805,10 @@ body.calc-on #pGrid td.gd, body.calc-on #cGrid td.gd{cursor:crosshair}
 table.g td.stkno .cv, table.g td.stkno .cv *{color:#C00000!important;font-weight:600}
 table.g td.stkju .cv{color:#B54708!important}
 .stkm{display:inline-block;width:0;height:0}
+.stalt{display:inline-grid;place-items:center;min-width:20px;height:18px;padding:0 4px;margin:0 4px 0 2px;border:1px solid #f0b4a8;border-radius:5px;background:#fff;color:#b42318;font:700 12px/1 inherit;cursor:pointer;vertical-align:1px}
+.stalt:hover{background:#fef3f2}
+@media print{.stalt{display:none!important}}
+body.pdfgen .stalt{display:none!important}
 table.g td.stkno, table.g td.stkju{cursor:help}
 #stkTip{position:fixed;display:none;z-index:96;max-width:440px;min-width:280px;background:#fff;border:1px solid #cfd6e4;border-radius:10px;box-shadow:0 14px 34px rgba(16,24,40,.22);padding:10px 12px;font:12.5px/1.4 "Segoe UI",Calibri,Arial,sans-serif;color:#101828;pointer-events:none}
 #stkTip .stt-h{font-weight:700;color:var(--navy);margin-bottom:6px}
@@ -2653,7 +2657,7 @@ addEventListener('mousemove',e=>{ GDRAG.x=e.clientX; GDRAG.y=e.clientY; if(!GDRA
 function gBind(id){
   const G=GRIDS[id], host=G.el;
   host.addEventListener('mousedown',e=>{
-    if(e.target.closest('input.cksal')) return;        /* casillas de la propia hoja («Salió»): se marcan solas */
+    if(e.target.closest('input.cksal, .stalt')) return;        /* casillas de la propia hoja («Salió»): se marcan solas */
     if(e.target.id==='ged'){ gMenuClose(); return; }   /* dentro de lo que se está escribiendo: solo mueve el cursor o selecciona (como en Excel) */
     if(e.button===2){ const thr=e.target.closest('th[data-gr]'); if(thr){ const r=+thr.dataset.gr, S=G.sel; if(G.editing) gCommit(G,null); if(!(r>=S.r0&&r<=S.r1&&S.c0===0&&S.c1===G.def.cols.length-1)){ G.act={r,c:0}; G.sel=gExpand(G,{r0:r,c0:0,r1:r,c1:G.def.cols.length-1}); gPaint(G); } GACT=id; return; }
       const thc=e.target.closest('th[data-ch]'); if(thc){ const c=+thc.dataset.ch, S=G.sel; if(G.editing) gCommit(G,null); if(!(c>=S.c0&&c<=S.c1&&S.r0===0&&S.r1===G.def.rows.length-1)){ G.act={r:0,c}; G.sel=gExpand(G,{r0:0,c0:c,r1:G.def.rows.length-1,c1:c}); gPaint(G); } GACT=id; return; }
@@ -3388,7 +3392,7 @@ const fD = s => { const m=/^(\d{4})-(\d\d)-(\d\d)$/.exec(s||''); return m?{y:+m[
 const fNum = s => { const x=fD(s); return x?String(x.d).padStart(2,'0')+'/'+String(x.m+1).padStart(2,'0')+'/'+x.y:''; };
 const yJoin = a => a.length<2 ? (a[0]||'') : a.slice(0,-1).join(', ')+' y '+a[a.length-1];
 /* formatos a elegir en el desplegable (cada presupuesto guarda el suyo) */
-const FFMT=[['auto','Automático','07/11/2026 · del 21 al 23 de octubre de 2026'],['num','Números','04/11/2026'],['corto','Corto','4/11/26'],['largo','Largo','4 de noviembre de 2026'],['abrev','Abreviado','4 nov 2026'],['dia','Con día de la semana','miércoles 4 de noviembre']];
+const FFMT=[['auto','Automático','07/11/2026 · del 21 al 23 de octubre de 2026'],['num','Números','04/11/2026'],['corto','Corto','4/11/26'],['largo','Largo','4 de noviembre de 2026'],['abrev','Abreviado','4 nov 2026'],['dia','Con día de la semana','miércoles 4 de noviembre de 2026']];
 const FSEM=['domingo','lunes','martes','miércoles','jueves','viernes','sábado'], FMA=['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
 const fWd = x => FSEM[new Date(x.y,x.m,x.d).getDay()];
 function fmtDefault(){ try{ return localStorage.getItem('bk_fmt')||'auto'; }catch(e){ return 'auto'; } }
@@ -3409,14 +3413,15 @@ function fechasText(dias, modo, fmt){
 function fechasTextF(d, modo, f){
   const X=d.map(fD), p2=n=>String(n).padStart(2,'0');
   const one = x => f==='num' ? p2(x.d)+'/'+p2(x.m+1)+'/'+x.y : f==='corto' ? x.d+'/'+(x.m+1)+'/'+String(x.y).slice(2)
-    : f==='largo' ? `${x.d} de ${FMES[x.m]} de ${x.y}` : f==='abrev' ? `${x.d} ${FMA[x.m]} ${x.y}` : `${fWd(x)} ${x.d} de ${FMES[x.m]}`;
+    : f==='largo' ? `${x.d} de ${FMES[x.m]} de ${x.y}` : f==='abrev' ? `${x.d} ${FMA[x.m]} ${x.y}` : `${fWd(x)} ${x.d} de ${FMES[x.m]} de ${x.y}`;
   if(X.length===1) return one(X[0]);
   const a=X[0], b=X[X.length-1];
   if(modo==='rango'){
     if(f==='num'||f==='corto') return `del ${one(a)} al ${one(b)}`;
     if(f==='abrev') return a.y!==b.y ? `del ${one(a)} al ${one(b)}` : a.m!==b.m ? `del ${a.d} ${FMA[a.m]} al ${one(b)}` : `del ${a.d} al ${one(b)}`;
     if(f==='largo') return fechasText(d,'rango');
-    return a.m!==b.m||a.y!==b.y ? `del ${one(a)} al ${one(b)}` : `del ${fWd(a)} ${a.d} al ${fWd(b)} ${b.d} de ${FMES[a.m]}`;
+    /* con día de la semana: el año al final, una sola vez si es el mismo */
+    return a.y!==b.y ? `del ${one(a)} al ${one(b)}` : a.m!==b.m ? `del ${fWd(a)} ${a.d} de ${FMES[a.m]} al ${one(b)}` : `del ${fWd(a)} ${a.d} al ${one(b)}`;
   }
   if(f==='num'||f==='corto') return yJoin(X.map(one));
   if(f==='largo') return fechasText(d,'varios');
@@ -3424,7 +3429,7 @@ function fechasTextF(d, modo, f){
   const g=[]; X.forEach(x=>{ const L=g[g.length-1]; if(L && L.y===x.y && L.m===x.m) L.x.push(x); else g.push({y:x.y,m:x.m,x:[x]}); });
   const oneY=g.every(z=>z.y===g[0].y);
   if(f==='abrev') return yJoin(g.map(z=>yJoin(z.x.map(x=>String(x.d)))+' '+FMA[z.m]+(!oneY?' '+z.y:''))) + (oneY?' '+g[0].y:'');
-  return yJoin(g.map(z=>yJoin(z.x.map(x=>fWd(x)+' '+x.d))+' de '+FMES[z.m]));
+  return yJoin(g.map(z=>yJoin(z.x.map(x=>fWd(x)+' '+x.d))+' de '+FMES[z.m]+(!oneY?' de '+z.y:''))) + (oneY?' de '+g[0].y:'');
 }
 /* entrega / recogida (no se imprimen en el presupuesto) */
 const fShort = s => { const x=fD(s); return x?String(x.d).padStart(2,'0')+'/'+String(x.m+1).padStart(2,'0'):''; };
@@ -3904,7 +3909,7 @@ function contraDef(){
       B:txt('req',{},{ph:blank?'Lo que pide el rider…':'',pre:l.noPpto?'<span class="nopp" title="Esta fila no se pasa al presupuesto (clic derecho para volver a incluirla)">⊘</span>':''}),
       C:{t:'num',v:l.cant,d:qx(l.cant),set:v=>l.cant=v,base:S_(B1,{ha:'right'})},
       D:txt('prop',{},Object.assign({ac:true,acOpen:l.inv?pptoAcOpen:null,ph:blank?'Escribe para buscar en el inventario…':'',
-        pre: it?`<span class="lnk" title="Enlazado al inventario: ${esc(itemLabel(it))} · ${hasP(invPrice(it))?eur(invPrice(it))+' €/día':'sin precio'}">🔗</span>${stk.lvl==='?'?'<span class="stb sq noprint" title="Este material no tiene unidades puestas en el Inventario: no se puede saber si hay">?</span>':''}${stk.lvl?`<span class="stkm" data-stk="${esc(l.inv)}"></span>`:''}`:'',
+        pre: it?`<span class="lnk" title="Enlazado al inventario: ${esc(itemLabel(it))} · ${hasP(invPrice(it))?eur(invPrice(it))+' €/día':'sin precio'}">🔗</span>${stk.lvl==='?'?'<span class="stb sq noprint" title="Este material no tiene unidades puestas en el Inventario: no se puede saber si hay">?</span>':''}${stk.lvl?`<span class="stkm" data-stk="${esc(l.inv)}"></span>`:''}${stk.lvl==='no'||stk.lvl==='justo'?`<button class="stalt noprint" data-stalt="${esc(l.id)}" title="Ver qué hay parecido libre esos días">⇄</button>`:''}`:'',
         pick:p=>contraPickItem(l,p)}, (stk.lvl==='no'||stk.lvl==='justo') && !((DOC.fmt.contra.cells[id+'|D']||{}).fc) ? {cls:stk.lvl==='no'?'stkno':'stkju'} : {})),
       E:{t:'num',v:l.pvp,set:v=>l.pvp=v,base:B1,cur:true},
       U:{t:'num',v:blank?'':udsOf(l),d:blank?'':(udsSet(l)?fmtIn(l.uds):(l.cant===''||l.cant==null?'':fmtIn(l.cant))),set:v=>{ l.uds = (v===''||v==null) ? '' : v; },
@@ -3952,6 +3957,26 @@ function propUnlink(l){
 }
 const PROP_GEN=new Set('combo ampli amp amps amplificador cabezal pantalla caja bajo guitarra teclado set kit para con sin similar tipo los las del una uno dos tres'.split(' '));
 const normTxt = s => String(s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/\s+/g,' ').trim();
+/* ⇄ de una línea sin unidades libres: lo parecido que sí está libre esos días, y cambiarlo con un clic */
+async function contraAlternativas(id){
+  const l=DOC.contra.find(x=>x.id===id); if(!l || !l.inv) return;
+  const S=stockLvl(l.inv), need=S.need||stNum(l.cant)||1, sp=docSpan();
+  const A=stAlternativas(l.inv, need, sp, docJobId()), it0=A.it0;
+  const fd=d=>{ const x=dOf(d); return x?x.toLocaleDateString('es-ES',{day:'numeric',month:'short'}):''; };
+  const cuando=sp?(sp[0]===sp[1]?'el '+fd(sp[0]):'del '+fd(sp[0])+' al '+fd(sp[1])):'ahora mismo (el presupuesto no tiene fechas)';
+  const tipo=it0 ? (A.nivel==='sub'&&it0.sub ? it0.cat+' › '+it0.sub : it0.cat) : '';
+  if(!A.lista.length){ toast(`No hay nada parecido (${tipo}) libre ${cuando}: habrá que subalquilar`,'#c60'); return; }
+  const L=A.lista.slice(0,10);
+  const k=await askDlg({title:'Parecido y libre '+cuando,
+    text:`Pides ${need} de «${it0?itemLabel(it0):l.prop}» y quedan ${Math.max(0,S.hay||0)}. Esto es lo que hay libre en ${tipo}${A.nivel==='cat'&&it0&&it0.sub?' (en «'+it0.sub+'» no queda nada)':''}. Si eliges uno, cambia el material propuesto de esta línea y su precio; se deshace con Deshacer.`,
+    cancel:'Dejar el que está',
+    options:L.map(x=>({k:x.it.id, icon:x.alcanza?'✓':'½', label:itemLabel(x.it),
+      desc:`${x.libres} libre${x.libres===1?'':'s'}${x.alcanza?'':' · no llega a '+need}${hasP(x.pr)?' · '+eur(x.pr)+' €/día':' · sin precio'}`, primary:false}))});
+  if(!k) return;
+  const it=invById(k); if(!it) return;
+  snap(); contraPickItem(l,it); save(); if(GRIDS.contra && GRIDS.contra.onChange) GRIDS.contra.onChange(); else renderContra();
+  toast('Cambiado por «'+itemLabel(it)+'»','#067647');
+}
 function contraPickItem(l,it){
   l.prop=itemLabel(it); l.inv=it.id;
   const pr=invPrice(it); if(hasP(pr)) l.pvp=pr; else toast('Ese material no tiene precio en el inventario','#c60');
@@ -4165,6 +4190,7 @@ function initContra(){
   initCSel();
   document.addEventListener('change', e=>{ const c=e.target.closest('[data-csal]'); if(c) salToggle(c.dataset.csal); });
   document.addEventListener('click', e=>{ if(e.target.closest('#cSalAll')) salTodas(); });
+  document.addEventListener('click', e=>{ const b=e.target.closest('[data-stalt]'); if(b){ e.preventDefault(); e.stopPropagation(); contraAlternativas(b.dataset.stalt); } }, true);
   document.addEventListener('change', e=>{ if(e.target.id!=='cMismo') return; const c=contraAct(); if(!c) return;
     snap(); if(e.target.checked) c.mismo=true; else delete c.mismo; save();
     if(typeof planFromDoc==='function' && docJobId()) planFromDoc(); if(typeof stockBuild==='function') stockBuild(); renderContra();
@@ -7172,17 +7198,28 @@ const MESN={enero:0,ene:0,febrero:1,feb:1,marzo:2,mar:2,abril:3,abr:3,mayo:4,may
 /* «21 al 23 de octubre», «3 de marzo a 10 de julio», «29 y 1», «21/10 al 23/10», «2, 3 y 4» → {ini,fin} */
 function planParseFechas(txt, defY, defM){
   const t=norm(String(txt||'')).replace(/º/g,'').replace(/(\d{1,2})\s*[-–]\s*(\d{1,2})(?=\s*(de\s+)?[a-z]{3})/g,'$1 al $2');
-  const out=[];
+  /* cada fecha recuerda de dónde sale su año: 'exp' escrito con ella (05/01/2027), 'her' de un «de 2027» escrito
+     después, 'imp' supuesto. Así «del 30 de diciembre de 2026 al 2 de enero de 2027» no se lee todo en 2026. */
+  const F=[];
   let m; const re=/(\d{1,2})[\/.\-](\d{1,2})(?:[\/.\-](\d{2,4}))?/g;
-  while((m=re.exec(t))){ const y=m[3]?(+m[3]<100?2000+ +m[3]:+m[3]):defY; out.push(new Date(y,+m[2]-1,+m[1])); }
+  while((m=re.exec(t))){ const y=m[3]?(+m[3]<100?2000+ +m[3]:+m[3]):defY; F.push({dt:new Date(y,+m[2]-1,+m[1]), y:m[3]?'exp':'imp'}); }
   const rest=t.replace(re,' ');
-  const yy=/\b(20\d\d)\b/.exec(rest); if(yy) defY=+yy[1];   /* «… de 2027» */
-  const tok=rest.split(/[^a-z0-9]+/).filter(Boolean); let pend=[], anyMonth=false;
-  tok.forEach(w=>{ if(/^\d{1,2}$/.test(w) && +w>=1 && +w<=31) pend.push(+w);
-    else if(MESN[w]!=null){ anyMonth=true; const mm=MESN[w], last=pend[pend.length-1]; pend.forEach(d=>out.push(new Date(defY, d>last?mm-1:mm, d))); pend=[]; } });   /* «16 al 1 de mayo»: el 16 es de abril */
-  if(pend.length && defM!=null){ let mm=defM, prev=0; pend.forEach(d=>{ if(d<prev) mm++; prev=d; out.push(new Date(defY,mm,d)); }); }
-  if(!out.length) return null;
-  const isList = out.length>1 && !/\b(al|a|hasta)\b|–| - /.test(rest);
+  const yy=/\b(20\d\d)\b/.exec(rest); if(yy) defY=+yy[1];   /* «… de 2027»: el año de lo que no lleve otro */
+  const tok=rest.split(/[^a-z0-9]+/).filter(Boolean); let pend=[], anyMonth=false, sinY=[];
+  const rango=/\b(al|a|hasta)\b|–| - /.test(rest);   /* «del 16 al 1 de mayo»: solo en un intervalo el primer día puede ser del mes anterior */
+  tok.forEach(w=>{
+    if(/^20\d\d$/.test(w)){ const Y=+w; sinY.forEach(i=>{ const x=F[i].dt; F[i]={dt:new Date(Y,x.getMonth(),x.getDate()), y:'her'}; }); sinY=[]; return; }
+    if(/^\d{1,2}$/.test(w) && +w>=1 && +w<=31) pend.push(+w);
+    else if(MESN[w]!=null){ anyMonth=true; const mm=MESN[w], last=pend[pend.length-1]; pend.forEach(d=>{ F.push({dt:new Date(defY, rango && d>last?mm-1:mm, d), y:'imp'}); sinY.push(F.length-1); }); pend=[]; } });   /* «16 al 1 de mayo»: el 16 es de abril; «12, 5 y 7 de noviembre»: todos de noviembre */
+  if(pend.length && defM!=null){ let mm=defM, prev=0; pend.forEach(d=>{ if(d<prev) mm++; prev=d; F.push({dt:new Date(defY,mm,d), y:'imp'}); }); }
+  if(!F.length) return null;
+  /* cambio de año (de oct–dic a ene–mar): lo que va detrás sin año es del año siguiente; lo que va delante sin año propio, del anterior */
+  const salta=(x,y)=>x.getMonth()>=9 && y.getMonth()<=2 && y<x;
+  const mueve=(o,n)=>{ o.dt=new Date(o.dt.getFullYear()+n, o.dt.getMonth(), o.dt.getDate()); };
+  for(let i=1;i<F.length;i++) if(F[i].y==='imp' && salta(F[i-1].dt,F[i].dt)) mueve(F[i],1);
+  for(let i=F.length-2;i>=0;i--) if(F[i].y!=='exp' && F[i].dt>F[i+1].dt && F[i].dt.getMonth()>=9 && F[i+1].dt.getMonth()<=2) mueve(F[i],-1);
+  const out=F.map(o=>o.dt);
+  const isList = out.length>1 && !rango;
   if(isList){ const ds=[...new Set(out.map(ymd))].sort(); return {ini:ds[0], fin:ds[ds.length-1], dias:ds}; }
   let a=out[0], b=out[out.length-1];
   if(b<a && !anyMonth && out.length>1) b=new Date(b.getFullYear(), b.getMonth()+1, b.getDate());   /* «29 y 1»: el 1 es del mes siguiente */
@@ -7748,6 +7785,22 @@ function stockTipHtml(inv){
   document.addEventListener('mousedown',()=>{ clearTimeout(t); cur=null; const b=document.getElementById('stkTip'); if(b) b.style.display='none'; },true);
   window.addEventListener('scroll',()=>{ const b=document.getElementById('stkTip'); if(b) b.style.display='none'; cur=null; },true);
 })();
+/* ---------- alternativas: algo parecido que sí esté libre esos días ----------
+   «Parecido» = la misma subcategoría del inventario (AMP.GUIT › Combo…); si ahí no queda nada, la misma categoría.
+   No decide nada: solo enseña lo que hay. Elegir el bueno es cosa de producción. */
+function stAlternativas(inv, need, sp, excl){
+  const it0=invById(inv); if(!it0) return {lista:[], nivel:''};
+  const vistos=new Set([stGk(inv)]), dev=gk=>typeof devPendQty==='function'?devPendQty(gk):0;
+  const libresDe=it=>{ if(sp){ const r=stockAvail(it.id, sp[0], sp[1], excl); return r.qty==null?null:r.libres; }
+    const gk=stGk(it.id), G=stGroupInfo(gk); return G.qty==null?null:G.qty-G.av-dev(gk); };
+  const busca=f=>{ const out=[]; INV.forEach(it=>{ const k=stGk(it.id); if(vistos.has(k) || !f(it)) return; vistos.add(k);
+      const n=libresDe(it); if(n!=null && n>0) out.push({it, libres:n, alcanza:n>=need, pr:invPrice(it), marca:!!it0.marca && norm(it.marca||'')===norm(it0.marca)}); });
+    /* primero lo que llega a lo que se pide; después la misma marca; después lo que más unidades libres tiene */
+    return out.sort((a,b)=>(b.alcanza-a.alcanza)||(b.marca-a.marca)||(b.libres-a.libres)||itemLabel(a.it).localeCompare(itemLabel(b.it))); };
+  let lista=it0.sub?busca(it=>it.cat===it0.cat && it.sub===it0.sub):[], nivel=it0.sub?'sub':'cat';
+  if(!lista.length){ lista=busca(it=>it.cat===it0.cat); nivel='cat'; }
+  return {lista, nivel, it0};
+}
 /* faltas de material de un trabajo del Planning (para Pendientes) */
 function jobShort(j){
   if(j.estado==='anul' || !(j.mat&&j.mat.length)) return [];
@@ -10501,9 +10554,9 @@ function mvRotulo(G, r, c){
   return A + (col && c > 1 ? ' · ' + col : '');
 }
 document.addEventListener('dblclick', e => { if(e.target.closest('td.gd')){ e.preventDefault(); e.stopPropagation(); } }, true);
-document.addEventListener('mousedown', e => { if(e.target.closest('input.cksal')) return; if(e.target.closest('td.gd') && !e.target.closest('#mvEd')){ e.stopPropagation(); } }, true);
+document.addEventListener('mousedown', e => { if(e.target.closest('input.cksal, .stalt')) return; if(e.target.closest('td.gd') && !e.target.closest('#mvEd')){ e.stopPropagation(); } }, true);
 document.addEventListener('click', e => {
-  if(e.target.closest('input.cksal')) return;        /* la casilla de «Salió» se marca sola: no abrir el editor */
+  if(e.target.closest('input.cksal, .stalt')) return;        /* la casilla de «Salió» se marca sola: no abrir el editor */
   const td = e.target.closest('td.gd'); if(!td || !MV.cargado) return;
   const sh = td.closest('#ppto,#mail,#contra'); if(!sh) return;
   e.preventDefault(); e.stopPropagation();
