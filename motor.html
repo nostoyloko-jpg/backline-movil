@@ -355,7 +355,7 @@ table.empser input,table.empser select{padding:4px 6px;font-size:12.5px;width:10
 #factura.rojo .rj-tab td{border:0;border-bottom:1px solid #dcdcd9;padding:13.8px 6px 12.2px 0;font-size:10px;line-height:16px;vertical-align:middle;text-align:right;background:none}
 #factura.rojo .rj-tab td.rj-d{text-align:left;padding-left:12px;position:relative}
 #factura.rojo .rj-tab td:last-child{padding-right:12px}
-#factura.rojo .rj-tab .rj-sub{color:#636360;line-height:18px}
+#factura.rojo .rj-tab .rj-sub{color:#636360;line-height:18px}#factura.rojo .rj-tab .cel.rj-subi{color:#636360!important;line-height:18px;height:18px}
 #factura.rojo .rj-tab tr.rj-sec td{border-bottom:0;padding:13.8px 6px 0 12px;font-weight:700;background:none}
 #factura.rojo .rj-tab tr.rj-sec td.rj-d .cel{font-weight:700}
 #factura.rojo .rj-tab .rj-b{font-weight:700}
@@ -1090,7 +1090,7 @@ table.g.gp td.lk,table.g.gp td.nt{background-color:transparent}
 #askDlg{z-index:98;align-items:center}#dlgBox{z-index:99;align-items:center}#dlgBox .mbox{width:min(500px,100%)}#dlgBox .mh b{font-size:16px;color:var(--navy)}
 .dlgtx{margin:0 0 10px;color:#344054;font-size:14px;line-height:1.5;white-space:pre-line}
 .dlgin{width:100%;box-sizing:border-box;border:1.5px solid #d0d5dd;border-radius:8px;padding:9px 11px;font:inherit;font-size:14px}.dlgin:focus{outline:none;border-color:var(--navy);box-shadow:0 0 0 3px rgba(31,58,120,.12)}
-#dlgBox .mf .acts{justify-content:flex-end}.nsform label{display:block;margin:0 0 10px;font-size:13px;color:#344054}.nsform input:not([type=checkbox]),.nsform select{display:block;width:100%;box-sizing:border-box;margin-top:4px;border:1.5px solid #d0d5dd;border-radius:8px;padding:8px 10px;font:inherit;font-size:14px}.nsform .nsrow{display:flex;gap:12px}.nsform .nsrow label{flex:1}.nsform .nsej{margin:2px 0 12px;font-size:14px}.nsform .nsej b{color:var(--navy)}.nsform label.ck{display:flex;gap:8px;align-items:center;font-size:14px;color:#101828}.nsform .hint{font-size:12px}button.dlgdanger{background:#c62828!important;border-color:#c62828!important;color:#fff!important}#askDlg .mbox{width:min(560px,100%)}#askDlg .mh b{font-size:16px;color:var(--navy)}
+#dlgBox .mf .acts{justify-content:flex-end}#factura .frefv{display:flex;align-items:center;gap:5px}#factura .fver{font-size:12px;color:#1d1d1b;white-space:nowrap}#factura.rojo .rj-refv{display:flex;align-items:center;gap:4px}#factura.rojo .rj-meta .rj-refv:has(.rj-ver) .rj-ref{width:auto;min-width:60px;max-width:150px;field-sizing:content}#factura .frefv:has(.fver) #fRef{field-sizing:content;min-width:90px;width:auto}#factura.rojo .rj-ver{white-space:nowrap}#factura td.fsel{background:#dbe7fb!important;box-shadow:inset 0 0 0 1px #6f93d8}#factura .cel.fsel{background:transparent!important}body.fsel-drag #factura,body.fsel-drag #factura *{user-select:none;cursor:cell}@media print{#factura td.fsel{background:transparent!important;box-shadow:none}}.nsform label{display:block;margin:0 0 10px;font-size:13px;color:#344054}.nsform input:not([type=checkbox]),.nsform select{display:block;width:100%;box-sizing:border-box;margin-top:4px;border:1.5px solid #d0d5dd;border-radius:8px;padding:8px 10px;font:inherit;font-size:14px}.nsform .nsrow{display:flex;gap:12px}.nsform .nsrow label{flex:1}.nsform .nsej{margin:2px 0 12px;font-size:14px}.nsform .nsej b{color:var(--navy)}.nsform label.ck{display:flex;gap:8px;align-items:center;font-size:14px;color:#101828}.nsform .hint{font-size:12px}button.dlgdanger{background:#c62828!important;border-color:#c62828!important;color:#fff!important}#askDlg .mbox{width:min(560px,100%)}#askDlg .mh b{font-size:16px;color:var(--navy)}
 .asktx{margin:0 0 8px;color:#475467;font-size:13px}
 .asklist{background:#f5f8ff;border:1px solid #e1e8f5;border-radius:8px;padding:8px 12px;margin:0 0 14px;font-size:13px;color:#1d2939;display:flex;flex-direction:column;gap:3px;font-weight:600}
 .askchk label{display:flex;align-items:center;gap:8px;cursor:pointer;padding:2px 0}.askchk input{width:16px;height:16px;accent-color:var(--navy);flex:none}
@@ -3660,6 +3660,12 @@ function facturaFromPpto(){                      /* convierte el presupuesto en 
 }
 function syncFactura(){
   const f=F(); if(!f.auto) return;
+  /* siempre de la versión que CUENTA (✓ Confirmada / Vigente), aunque se esté viendo otra; con varias versiones, la factura dice cuál */
+  if(typeof verWithOk==='function' && typeof verSt==='function' && verSt().max>1 && verSt().ok!==verSt().cur) return verWithOk(()=>facSyncDe(f));
+  facSyncDe(f);
+}
+function facSyncDe(f){
+  if(typeof verMulti==='function' && verMulti()) f.verN=verSt().ok; else delete f.verN;
   f.cliente=clone(DOC.cliente); f.contacto=clone(DOC.contacto); f.concepto=clone(DOC.concepto);
   f.ref=DOC.meta.num||''; f.refY=(()=>{ const d=typeof rentalDate==='function'&&rentalDate(); return d?d.getFullYear():new Date().getFullYear(); })(); f.lineas=facturaFromPpto();
   f.pago=FP_()[(+DOC.fp||0)-1]||''; f.cuenta=facCuenta(f);
@@ -3674,9 +3680,11 @@ function nextNum(serie, year){
 function unlink(){ const f=F(); if(f.auto){ f.auto=false; renderSyncBar(); } }
 function renderSyncBar(){
   const b=$('#fSyncBar'), f=F();
-  if(f.auto){ b.className='banner ok noprint'; b.innerHTML='Factura enlazada al presupuesto: se actualiza sola con lo que cambies en la pestaña 1. Si editas aquí una línea o un dato, se desvincula.'; }
-  else { b.className='banner noprint'; b.innerHTML='Factura desvinculada del presupuesto (editada a mano o abierta del registro). <button class="mini" id="fRelink">Volver a sincronizar con el presupuesto</button>';
-    $('#fRelink').onclick=async()=>{ if(!await confirmDlg('Enlazar con el presupuesto', 'Se sustituirán las líneas y datos de la factura por los del presupuesto.', {ok:'Sustituir', danger:true})) return; snap(); F().auto=true; F().free=false; F().frozen=null; F().totText=null; renderFactura(); save(); }; }
+  const okV=(typeof verMulti==='function' && verMulti())?verSt().ok:0, cur=(typeof verSt==='function')?verSt().cur:0;
+  if(!f.emitida && !f.auto && okV && +f.verN && +f.verN!==okV){ b.className='banner warn noprint'; b.innerHTML=`Esta factura es de la <b>V${+f.verN}</b> del presupuesto, pero ahora cuenta la <b>V${okV}</b>. <button class="mini" id="fRelink">Volver a sincronizar con el presupuesto</button>`; }
+  else if(f.auto){ b.className='banner ok noprint'; b.innerHTML='Factura enlazada al presupuesto: se actualiza sola con lo que cambies en la pestaña 1. Si editas aquí una línea o un dato, se desvincula.'+(okV?` Sale de la <b>V${okV}</b>, la versión que cuenta${cur!==okV?` (estás viendo la V${cur})`:''}.`:''); return; }
+  else { b.className='banner noprint'; b.innerHTML='Factura desvinculada del presupuesto (editada a mano o abierta del registro). <button class="mini" id="fRelink">Volver a sincronizar con el presupuesto</button>'; }
+  { const rl=$('#fRelink'); if(rl) rl.onclick=async()=>{ if(!await confirmDlg('Enlazar con el presupuesto', 'Se sustituirán las líneas y datos de la factura por los del presupuesto.', {ok:'Sustituir', danger:true})) return; snap(); F().auto=true; F().free=false; F().frozen=null; F().totText=null; renderFactura(); save(); }; }
 }
 function facLegacy(f){   /* facturas de antes: si su número está en el registro, cuenta como emitida; si no, vuelve a borrador */
   if(f.emitida || !f.num) return;
@@ -3686,6 +3694,8 @@ function facLegacy(f){   /* facturas de antes: si su número está en el registr
 let FAC_PROF=false;
 const facProfNum = f => 'PF-'+String(facRefTxt(f)||DOC.meta.num||'').trim().toUpperCase().replace(/\s+/g,'');
 /* referencia del presupuesto con su año (OCT014-BK-2026): que no se confunda con la del mismo nº de otro año */
+/* «V2» de la versión aceptada (solo si el presupuesto tiene varias) */
+const facVerTxt = f => (f && +f.verN) ? 'V'+(+f.verN) : '';
 function facRefTxt(f){ const r=String((f&&f.ref)||'').trim(); if(!r) return ''; if(/-\d{4}$/.test(r) && !/-BK$/i.test(r)) return r; const y=(f&&f.refY) || (f&&f.fecha&&+String(f.fecha).slice(0,4)) || ''; return y ? r+'-'+y : r; }
 function facCabecera(f){
   const E=facEmisor(f), prof=FAC_PROF;   /* la empresa que emite (p2d_empresas.js); una emitida, con los datos que tenía al emitirla */
@@ -3711,7 +3721,7 @@ function facCabecera(f){
           <input class="cel" data-c="cliente.cif" value="${esc(f.cliente.cif)}" placeholder="CIF / NIF">
           <textarea class="cel" data-c="cliente.domicilio" data-nl="1" rows="2" placeholder="Domicilio">${esc(domC)}</textarea></div>
         <div class="ffec"><div class="fh">Fecha</div><input id="fFecha" type="date" value="${esc(f.fecha)}" ${f.emitida?'disabled':''}>
-          <div class="fref"><span>Presupuesto</span><input id="fRef" value="${esc(facRefTxt(f))}"></div></div>
+          <div class="fref"><span>Presupuesto</span><div class="frefv"><input id="fRef" value="${esc(facRefTxt(f))}">${facVerTxt(f)?`<b class="fver" title="Versión del presupuesto aceptada">· ${facVerTxt(f)}</b>`:''}</div></div></div>
       </div>
     </div>
   </div>`;
@@ -3732,7 +3742,7 @@ function renderFactura(){
   const L=f.lineas.map((l,i)=>{
     if(l.tipo==='sec') return `<tr class="sec"><td class="noprint" style="width:26px"><button class="mini danger" data-fdel="${i}" title="Eliminar">&times;</button></td><td><input class="cel" data-l="${i}" data-f="concepto" value="${esc(l.concepto)}"></td><td colspan="5"></td></tr>`;
     const impCell = f.free
-      ? `<td data-col="imp" style="width:90px"><input class="cel num" data-l="${i}" data-f="impText" value="${esc(l.impText ?? fImp(l))}"></td>`
+      ? `<td data-col="imp" style="width:90px"><input class="cel num" data-l="${i}" data-f="impText" value="${esc(l.impText ?? (typeof fImp(l)==='number'?eurS(fImp(l)):fImp(l)))}"></td>`
       : `<td data-col="imp" style="width:90px" class="num">${fImpShown(l)}</td>`;
     return `<tr>
       <td class="noprint" style="width:26px"><button class="mini danger" data-fdel="${i}" title="Eliminar">&times;</button></td>
@@ -3873,7 +3883,7 @@ function fBind(){
   fc.querySelectorAll('[data-l]').forEach(i=> i.oninput=()=>{ if(i.tagName==='TEXTAREA') fGrow(i);
     unlink(); const l=f.lineas[+i.dataset.l]; const k=i.dataset.f;
     if(k==='concepto'){ l.concepto=i.value; save(); return; }
-    if(k==='impText'){ l.impText=i.value; save(); return; }
+    if(k==='impText'||k==='subText'||k==='ivaText'){ l[k]=i.value; save(); return; }   /* texto libre (sub/iva: diseño Rojo, edición libre) */
     if(k==='pvp'){ l.pvp=pnum(i.value); } else { const v=i.value.replace(/%/g,'').trim().replace(',','.'); l[k]=(v===''?'':(isNaN(+v)?i.value:+v)); }
     if(!f.free){ fCalc(); fRenderTots(); const row=i.closest('tr'); row.cells[row.cells.length-1].textContent=fImpShown(l); }
     save();
@@ -3898,6 +3908,7 @@ function fBind(){
       if(to>=0){ const inp=$(`#factura [data-l="${to}"][data-f="concepto"]`); if(inp) inp.focus(); }
     });
   };
+  if(typeof fselBind==='function') fselBind();   /* seleccionar varias celdas arrastrando (p2e_fsel.js) */
   $('#fAddItem').onclick=()=>{ snap(); unlink(); f.lineas.push({tipo:'item',concepto:'',pvp:'',cant:'',dto:'',dias:''}); save(); renderFactura(); };
   /* las 5 filas en blanco: pinchar en una añade la línea y siguen quedando 5 */
   $$('#factura tr.fblank').forEach(tr=>tr.onclick=()=>{ if(f.emitida) return; snap(); unlink(); f.lineas.push({tipo:'item',concepto:'',pvp:'',cant:'',dto:'',dias:''}); save(); renderFactura(); const L=$$('#factura input[data-f="concepto"]'); const i=L[L.length-1]; if(i) i.focus(); });
@@ -3997,8 +4008,9 @@ function renderFacturaRojo(f,T){
   const meta=[[prof?'Número de proforma':'Número de factura', `<span class="${f.num||prof?'':'rj-draft'}">${esc(num)}</span>`],
     ['Fecha de emisión', fecha('fFecha', f.fecha)], ['Fecha de vencimiento', fecha('fVence', vence)]];
   if(f.serie==='R' && f.rectifica) meta.push(['Rectifica a', esc(f.rectifica)+(f.rectFecha?' · '+esc(rjDMY(f.rectFecha)):'')]);
-  if(!P) meta.push(['Presupuesto', `<input id="fRef" class="rj-ref" value="${esc(ref)}" placeholder="—">`]);
-  else if(ref) meta.push(['Presupuesto', esc(ref)]);
+  const vt=(typeof facVerTxt==='function')?facVerTxt(f):'';
+  if(!P) meta.push(['Presupuesto', `<span class="rj-refv"><input id="fRef" class="rj-ref" value="${esc(ref)}" placeholder="—">${vt?`<span class="rj-ver" title="Versión del presupuesto aceptada">· ${vt}</span>`:''}</span>`]);
+  else if(ref) meta.push(['Presupuesto', esc(ref)+(vt?' · '+vt:'')]);
   const ivaC=rjIVA(f.cliente.cif), ivaPct=fmtIn(IVA())+' %';
 
   const rows=f.lineas.map((l,i)=>{
@@ -4007,9 +4019,14 @@ function renderFacturaRojo(f,T){
     const sub=[]; if(l.dias!=='' && l.dias!=null && !isNaN(+l.dias) && +l.dias!==1) sub.push(fmtIn(+l.dias)+(+l.dias===1?' día':' días')); if(fPct(l)) sub.push('dto. '+fmtIn(fPct(l))+' %');
     const cant = P ? esc(l.cant===''||l.cant==null?'':fmtIn(l.cant)) : `<input class="cel num" data-l="${i}" data-f="cant" value="${esc(l.cant??'')}">`;
     const pvp = P ? esc(eurV(l.pvp)) : `<input class="cel num" data-l="${i}" data-f="pvp" data-eur value="${esc(eurV(l.pvp))}">`;
-    const imp = (f.free && !P) ? `<input class="cel num" data-l="${i}" data-f="impText" value="${esc(l.impText ?? fImp(l))}">` : esc(fImpShown(l));
-    return `<tr class="rj-it"><td class="rj-d">${del}${fld(l.concepto,`data-l="${i}" data-f="concepto"`,'Concepto')}${sub.length?`<div class="rj-sub">${esc(sub.join(' · '))}</div>`:''}</td>
-      <td class="num">${cant}</td><td class="num">${pvp}</td><td class="num">${ivaPct}</td><td class="num">${imp}</td></tr>`;
+    const imp = (f.free && !P) ? `<input class="cel num" data-l="${i}" data-f="impText" value="${esc(l.impText ?? (typeof fImp(l)==='number'?eurS(fImp(l)):fImp(l)))}">` : esc(fImpShown(l));
+    /* edición libre: la línea gris (días · dto.) y el IVA de la línea también se escriben a mano (y se pueden dejar vacíos) */
+    const subT = (f.free && l.subText!=null) ? String(l.subText) : sub.join(' · ');
+    const ivaT = (f.free && l.ivaText!=null) ? String(l.ivaText) : ivaPct;
+    const subH = (f.free && !P) ? `<input class="cel rj-subi" data-l="${i}" data-f="subText" value="${esc(subT)}" placeholder="días · dto.">` : (subT?`<div class="rj-sub">${esc(subT)}</div>`:'');
+    const ivaH = (f.free && !P) ? `<input class="cel num" data-l="${i}" data-f="ivaText" value="${esc(ivaT)}">` : esc(ivaT);
+    return `<tr class="rj-it"><td class="rj-d">${del}${fld(l.concepto,`data-l="${i}" data-f="concepto"`,'Concepto')}${subH}</td>
+      <td class="num">${cant}</td><td class="num">${pvp}</td><td class="num">${ivaH}</td><td class="num">${imp}</td></tr>`;
   }).join('');
   const tot = k => (f.free && !P) ? `<td class="num"><input class="cel num" data-tt="${k}" value="${esc(T[k]??'')}"></td>` : `<td class="num">${esc(f.free ? (typeof T[k]==='number'?eurS(T[k]):String(T[k]??'')) : eurS(T[k]))}</td>`;
   const nota = String(prof ? (CFG.notaProforma||PROF_NOTA) : (CFG.notaFactura||'')).trim();
