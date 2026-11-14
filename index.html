@@ -1151,9 +1151,51 @@ function fichaJob(id){
   else if(j.transporte === false) f.push(['Transporte', 'no']);
   if(j.mat && j.mat.length) f.push(['Material', j.mat.map(m => m.cant + ' ' + (m.nombre || (inv().byId[m.inv] ? itemLabel(inv().byId[m.inv]) : '?'))).join('\n')]);
   if(j.obs) f.push(['Observaciones', j.obs]);
+  if(j.confPor || j.confEn) f.push(['Confirmado por', nvSello(j.confPor, j.confEn)]);
+  const sePuede = j.estado !== 'conf' && j.estado !== 'anul';
   abreHoja('<h2>' + esc(j.concepto || '(sin concepto)') + '</h2><div class="sub">' + estPill(j.estado) + '</div>' +
     '<dl class="dl">' + f.map(([a,b]) => '<dt>' + esc(a) + '</dt><dd style="white-space:pre-line">' + esc(b) + '</dd>').join('') + '</dl>' +
-    '<div class="acciones"><button class="btn sec" data-cerrar>Cerrar</button></div>');
+    '<div class="acciones">' + (sePuede ? '<button class="btn" data-act="confBolo" data-id="' + esc(j.id) + '">Confirmar bolo</button>' : '') +
+    '<button class="btn sec" data-cerrar>Cerrar</button></div>');
+}
+
+/* ---------- confirmar un bolo desde el móvil ----------
+   El estado del trabajo en el Planning es el que manda en toda la app: el presupuesto, el stock, la Nave
+   y el libro de contabilidad lo leen de aquí. Por eso confirmar es cambiarlo aquí, sin tocar el documento
+   del presupuesto: el ordenador lo verá así en cuanto lo abra. Queda apuntado quién lo confirmó y cuándo.
+   Desde el móvil SOLO se confirma: anular o volver a dejarlo provisional sigue siendo cosa del ordenador. */
+function confirmaBolo(id){
+  const j = DATOS.planning.items.find(x => x.id === id); if(!j) return;
+  const d = [['Fechas', j.ini ? (j.fin && j.fin !== j.ini ? 'del ' + fechaCorta(j.ini) + ' al ' + fechaLarga(j.fin) : fechaLarga(j.ini)) : '(sin fechas)']];
+  if(j.num) d.push(['Nº presupuesto', j.num]);
+  const uds = (j.mat || []).reduce((t, m) => t + N0(m.cant), 0);
+  if(uds) d.push(['Material', uds + (uds === 1 ? ' unidad' : ' unidades') + ' · ' + j.mat.length + (j.mat.length === 1 ? ' línea' : ' líneas')]);
+  abreHoja('<h2>¿Confirmar «' + esc(j.concepto || 'este bolo') + '»?</h2>' +
+    '<div class="sub">Pasa a <b>Confirmado</b> para todos, aquí y en el ordenador: su material deja de estar libre esas fechas, sale en la Nave y el bolo entra en la contabilidad.</div>' +
+    '<dl class="dl">' + d.map(([a,b]) => '<dt>' + esc(a) + '</dt><dd>' + esc(b) + '</dd>').join('') + '</dl>' +
+    '<p class="hint">El importe no se ve desde el móvil. Si dudas de cuál es este presupuesto, ábrelo antes en «Abrir».</p>' +
+    '<p class="hint" id="cbAviso"></p>' +
+    '<div class="acciones"><button class="btn" data-act="confBoloSi" data-id="' + esc(j.id) + '">Sí, confirmar</button>' +
+    '<button class="btn sec" data-cerrar>Ahora no</button></div>', true);
+}
+async function confirmaBoloYa(id, boton){
+  const j = DATOS.planning.items.find(x => x.id === id); if(!j) return;
+  if(j.estado === 'conf'){ cierraHoja(); toast('Ya estaba confirmado'); return; }
+  const txt = boton.textContent; boton.disabled = true; boton.textContent = 'Confirmando…';
+  const av = $('#cbAviso'); if(av) av.textContent = '';
+  const antes = {estado:j.estado, mod:j.mod, por:j.confPor, en:j.confEn, tenia:('confPor' in j)};
+  j.estado = 'conf'; j.confEn = new Date().toISOString(); j.confPor = USUARIO; j.mod = j.confEn;
+  try{
+    const r = await guardaCol('planning', [j], o => (o.concepto || '(sin concepto)') + (o.ini ? ' · ' + fechaCorta(o.ini) : ''));
+    if(r.conflicto) throw new Error('alguien lo ha cambiado desde otro sitio mientras tanto. Vuelve a entrar en el bolo, míralo y confírmalo otra vez.');
+    INV_CACHE = null; cierraHoja(); pintaSemana(); pintaNave(); toast('Bolo confirmado');
+  }catch(e){
+    j.estado = antes.estado; j.mod = antes.mod;
+    if(antes.tenia){ j.confPor = antes.por; j.confEn = antes.en; } else { delete j.confPor; delete j.confEn; }
+    INV_CACHE = null;
+    boton.disabled = false; boton.textContent = txt;
+    const a2 = $('#cbAviso'); if(a2) a2.textContent = 'No se ha confirmado: ' + e.message;
+  }
 }
 
 /* ============================================================
@@ -1404,6 +1446,8 @@ document.addEventListener('click', e => {
   else if(act === 'abreIgual'){ const x = AB.pend; cierraHoja(); if(x) abreAbierto(x.id, x.doc, x.version); }
   else if(act === 'mandaYa'){ const p = HOJA.pend; cierraHoja(); if(p) navigator.share({files:[p.file], title:p.file.name}).catch(e => { if(e.name !== 'AbortError') p.descarga(); }); }
   else if(act === 'bajaYa'){ const p = HOJA.pend; cierraHoja(); if(p) p.descarga(); }
+  else if(act === 'confBolo') confirmaBolo(a.dataset.id);
+  else if(act === 'confBoloSi') confirmaBoloYa(a.dataset.id, a);
 });
 
 
