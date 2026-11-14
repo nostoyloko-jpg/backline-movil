@@ -1090,7 +1090,7 @@ table.g.gp td.lk,table.g.gp td.nt{background-color:transparent}
 #askDlg{z-index:98;align-items:center}#dlgBox{z-index:99;align-items:center}#dlgBox .mbox{width:min(500px,100%)}#dlgBox .mh b{font-size:16px;color:var(--navy)}
 .dlgtx{margin:0 0 10px;color:#344054;font-size:14px;line-height:1.5;white-space:pre-line}
 .dlgin{width:100%;box-sizing:border-box;border:1.5px solid #d0d5dd;border-radius:8px;padding:9px 11px;font:inherit;font-size:14px}.dlgin:focus{outline:none;border-color:var(--navy);box-shadow:0 0 0 3px rgba(31,58,120,.12)}
-#dlgBox .mf .acts{justify-content:flex-end}button.dlgdanger{background:#c62828!important;border-color:#c62828!important;color:#fff!important}#askDlg .mbox{width:min(560px,100%)}#askDlg .mh b{font-size:16px;color:var(--navy)}
+#dlgBox .mf .acts{justify-content:flex-end}.nsform label{display:block;margin:0 0 10px;font-size:13px;color:#344054}.nsform input:not([type=checkbox]),.nsform select{display:block;width:100%;box-sizing:border-box;margin-top:4px;border:1.5px solid #d0d5dd;border-radius:8px;padding:8px 10px;font:inherit;font-size:14px}.nsform .nsrow{display:flex;gap:12px}.nsform .nsrow label{flex:1}.nsform .nsej{margin:2px 0 12px;font-size:14px}.nsform .nsej b{color:var(--navy)}.nsform label.ck{display:flex;gap:8px;align-items:center;font-size:14px;color:#101828}.nsform .hint{font-size:12px}button.dlgdanger{background:#c62828!important;border-color:#c62828!important;color:#fff!important}#askDlg .mbox{width:min(560px,100%)}#askDlg .mh b{font-size:16px;color:var(--navy)}
 .asktx{margin:0 0 8px;color:#475467;font-size:13px}
 .asklist{background:#f5f8ff;border:1px solid #e1e8f5;border-radius:8px;padding:8px 12px;margin:0 0 14px;font-size:13px;color:#1d2939;display:flex;flex-direction:column;gap:3px;font-weight:600}
 .askchk label{display:flex;align-items:center;gap:8px;cursor:pointer;padding:2px 0}.askchk input{width:16px;height:16px;accent-color:var(--navy);flex:none}
@@ -1840,16 +1840,16 @@ function dlgBox(o){ return new Promise(res=>{
   if(dlgBox.pend){ const f=dlgBox.pend; dlgBox.pend=null; try{ f(); }catch(e){} }
   let el=$('#dlgBox'); if(!el){ el=document.createElement('div'); el.id='dlgBox'; el.className='modal hidden'; el.setAttribute('role','dialog'); el.setAttribute('aria-modal','true'); document.body.appendChild(el); }
   const btns=o.buttons||[{k:'ok',label:'Aceptar',kind:'pri'}];
-  el.innerHTML=`<div class="mbox"><div class="mh"><b>${esc(o.title||'')}</b></div><div class="mb">${o.text?`<p class="dlgtx">${esc(o.text)}</p>`:''}${o.list&&o.list.length?`<div class="asklist">${o.list.map(x=>`<div>${esc(x)}</div>`).join('')}</div>`:''}${o.input!=null?`<input class="dlgin" type="text" value="${esc(o.input)}" spellcheck="false">`:''}</div>
+  el.innerHTML=`<div class="mbox"><div class="mh"><b>${esc(o.title||'')}</b></div><div class="mb">${o.text?`<p class="dlgtx">${esc(o.text)}</p>`:''}${o.list&&o.list.length?`<div class="asklist">${o.list.map(x=>`<div>${esc(x)}</div>`).join('')}</div>`:''}${o.input!=null?`<input class="dlgin" type="text" value="${esc(o.input)}" spellcheck="false">`:''}${o.form||''}</div>
     <div class="mf"><div class="acts">${btns.map(b=>`<button class="${b.kind==='pri'?'':b.kind==='danger'?'dlgdanger':'sec'}" data-k="${esc(b.k)}">${esc(b.label)}</button>`).join('')}</div></div></div>`;
   el.classList.remove('hidden');
   const inp=el.querySelector('.dlgin');
-  const fin=k=>{ const v=inp?inp.value:null; dlgBox.pend=null; el.classList.add('hidden'); el.onclick=null; document.removeEventListener('keydown',kd,true); res({k:k||null, v}); };
+  const fin=k=>{ const v=inp?inp.value:null, fv={}; el.querySelectorAll('[data-fv]').forEach(x=>fv[x.dataset.fv]=x.type==='checkbox'?x.checked:x.value); dlgBox.pend=null; el.classList.add('hidden'); el.onclick=null; document.removeEventListener('keydown',kd,true); res({k:k||null, v, f:fv}); };
   dlgBox.pend=()=>{ document.removeEventListener('keydown',kd,true); res({k:null, v:null}); };
   el.onclick=e=>{ const b=e.target.closest('button[data-k]'); if(b) fin(b.dataset.k); else if(e.target===el && o.cancel!==false) fin(null); };
   const kd=e=>{ if(e.key==='Escape'){ e.preventDefault(); e.stopPropagation(); fin(null); } else if(e.key==='Enter' && (inp || !e.target.closest('textarea'))){ e.preventDefault(); e.stopPropagation(); const d=btns.find(b=>b.kind==='pri'||b.kind==='danger')||btns[btns.length-1]; fin(d.k); } };
   document.addEventListener('keydown',kd,true);
-  setTimeout(()=>{ if(inp){ inp.focus(); inp.select(); } else { const f=el.querySelector('.mf button:last-child'); if(f) f.focus(); } },30);
+  setTimeout(()=>{ const ff=el.querySelector('input[data-fv]'); if(inp){ inp.focus(); inp.select(); } else if(ff){ ff.focus(); ff.select(); } else { const f=el.querySelector('.mf button:last-child'); if(f) f.focus(); } },30);
 }); }
 /* ¿Sí o no?  → true / false */
 async function confirmDlg(title, text, o={}){ const r=await dlgBox({title, text, list:o.list, buttons:[{k:'',label:o.cancel||'Cancelar',kind:'sec'},{k:'ok',label:o.ok||'Aceptar',kind:o.danger?'danger':'pri'}]}); return r.k==='ok'; }
@@ -4129,15 +4129,45 @@ function facSetEmp(id){ const f=F(); if(f.emitida){ toast('Esta factura ya está
   const e=empLista().find(x=>x.id===id); if(!e) return; snap(); f.empresa=e.id; f.plantilla=e.plantilla==='rojo'?'rojo':'std'; f.serieId='';
   CFG.empresaDef=e.id; saveCfg(); save(); renderFactura(); toast('Emite '+empNombre(e),'#026'); }
 function facSetSerie(id){ const f=F(); if(f.emitida) return; snap(); f.serieId=id; save(); renderFactura(); }
-function empInit(){ const se=$('#fEmp'), ss=$('#fSerie'); if(se) se.onchange=()=>facSetEmp(se.value); if(ss) ss.onchange=()=>facSetSerie(ss.value); }
+function empInit(){ const se=$('#fEmp'), ss=$('#fSerie'); if(se) se.onchange=()=>facSetEmp(se.value); if(ss) ss.onchange=()=>{ if(ss.value==='__nueva') facNuevaSerie(); else facSetSerie(ss.value); }; }
+/* «＋ Nueva serie…» desde el desplegable de la factura: se crea en la empresa que emite (lo mismo que ⚙ Configuración › Empresas que facturan › + Nueva serie) */
+async function facNuevaSerie(){
+  const f=F(); if(f.emitida){ empButtons(); return; }
+  const E0=facEmp(f), tipo=(f.serie==='R')?'R':'F', y=+String(f.fecha||today()).slice(0,4)||new Date().getFullYear(), nomE=empNombre(E0);
+  let v={nombre:'', pref:tipo==='R'?'R':'F', dig:'3', def:true};
+  for(;;){
+    const opt=n=>`<option value="${n}"${String(v.dig)===String(n)?' selected':''}>${n}</option>`;
+    const form=`<div class="nsform">
+      <label>Nombre <span class="hint">(para reconocerla en la lista)</span><input data-fv="nombre" value="${esc(v.nombre)}" placeholder="p. ej. Rojo" spellcheck="false"></label>
+      <div class="nsrow"><label>Prefijo <span class="hint">(letras del principio)</span><input data-fv="pref" value="${esc(v.pref)}" maxlength="6" spellcheck="false"></label>
+      <label>Dígitos <span class="hint">(cifras del número)</span><select data-fv="dig">${[1,2,3,4,5,6].map(opt).join('')}</select></label></div>
+      <p class="nsej">El primer número será: <b id="nsEj"></b></p>
+      <label class="ck"><input type="checkbox" data-fv="def"${v.def?' checked':''}> Que salga por defecto en las ${tipo==='R'?'rectificativas':'facturas'} de ${esc(nomE)}</label>
+      <p class="hint">Si esta serie sigue una numeración que ya llevabais en otro programa (por ejemplo Qonto), al emitir la primera factura la app te preguntará por qué número ibais.</p></div>`;
+    const p=dlgBox({title:`Nueva serie de ${tipo==='R'?'rectificativas':'facturas'} · ${nomE}`, form, buttons:[{k:'',label:'Cancelar',kind:'sec'},{k:'ok',label:'Crear serie',kind:'pri'}]});
+    const box=$('#dlgBox'), ej=()=>{ const pr=String(box.querySelector('[data-fv="pref"]').value||'').toUpperCase().replace(/[^A-Z0-9]/g,''); $('#nsEj').textContent=pr?serieMuestra({pref:pr, dig:+box.querySelector('[data-fv="dig"]').value},y):'(falta el prefijo)'; };
+    box.querySelectorAll('[data-fv="pref"],[data-fv="dig"]').forEach(x=>x.addEventListener(x.tagName==='SELECT'?'change':'input',ej)); ej();
+    const r=await p; if(r.k!=='ok'){ empButtons(); return; }
+    v=Object.assign(v,r.f); v.pref=String(v.pref||'').toUpperCase().replace(/[^A-Z0-9]/g,''); v.dig=Math.min(6,Math.max(1,+v.dig||3)); v.nombre=String(v.nombre||'').trim();
+    if(!v.pref){ toast('Falta el prefijo (por ejemplo F)','#c00'); continue; }
+    let dup=null; empLista().forEach(e=>(e.series||[]).forEach(s=>{ if(String(s.pref).toUpperCase()===v.pref && (+s.dig||4)===v.dig) dup=empNombre(e)+' · '+(s.nombre||s.pref); }));
+    if(dup){ toast(`Ya hay una serie ${serieMuestra({pref:v.pref,dig:v.dig},y)} (${dup}): cambia el prefijo o los dígitos`,'#c00'); continue; }
+    break; }
+  const E=empMat().find(x=>x.id===E0.id); if(!E){ empButtons(); return; }
+  const s={id:'s'+uid(), pref:v.pref, dig:v.dig, tipo, nombre:v.nombre||v.pref}; E.series=E.series||[]; E.series.push(s);
+  if(v.def) E[tipo==='R'?'serieR':'serieF']=s.id; empSerieFix(E); saveCfg();
+  snap(); f.serieId=s.id; save(); renderFactura();
+  toast(`Serie «${s.nombre}» creada (${serieMuestra(s,y)})${v.def?' y puesta por defecto':''}`,'#067647');
+}
 function empButtons(){ const f=F(), se=$('#fEmp'), ss=$('#fSerie'); if(!se||!ss) return; const e=facEmp(f), y=+String(f.fecha||today()).slice(0,4)||new Date().getFullYear();
   const L=empLista().filter(x=>x.activa!==false || x.id===e.id);
   se.innerHTML=L.map(x=>`<option value="${esc(x.id)}"${x.id===e.id?' selected':''}>${esc(f.emitida&&f.emisor&&x.id===e.id ? (f.emisor.nombre||empNombre(x)) : empNombre(x))}</option>`).join('');
   const s=facSerieObj(f), S=(e.series||[]).filter(x=>x.tipo===((f.serie)||'F'));
-  ss.innerHTML=S.length ? S.map(x=>`<option value="${esc(x.id)}"${s&&x.id===s.id?' selected':''}>${esc((x.nombre||x.pref)+' · '+serieMuestra(x,y))}</option>`).join('') : '<option value="">(sin serie: créala en ⚙ Configuración)</option>';
+  ss.innerHTML=S.length ? S.map(x=>`<option value="${esc(x.id)}"${s&&x.id===s.id?' selected':''}>${esc((x.nombre||x.pref)+' · '+serieMuestra(x,y))}</option>`).join('') : '<option value="">(sin serie)</option>';
+  if(!f.emitida) ss.innerHTML+='<option value="__nueva">＋ Nueva serie…</option>';
   se.disabled=ss.disabled=!!f.emitida;
   se.title=f.emitida?'Emitida: la empresa queda fijada':'La empresa que emite la factura. Se dan de alta en ⚙ Configuración › Empresas que facturan';
-  ss.title=f.emitida?'Emitida: la serie queda fijada':'Serie de numeración. Cada serie lleva su propio contador'; }
+  ss.title=f.emitida?'Emitida: la serie queda fijada':'Serie de numeración. Cada serie lleva su propio contador. «＋ Nueva serie…» crea otra para esta empresa'; }
 
 /* ---------- ⚙ Configuración › Empresas que facturan (trabaja sobre CFG_DRAFT, se guarda con «Guardar») ---------- */
 function empCfgPrep(C){ C.empresas=clone(empLista(C)); C.empLogos=Object.assign({},C.empLogos||{}); if(!C.empresas.some(e=>e.id===C.empresaDef)) C.empresaDef='principal'; }
