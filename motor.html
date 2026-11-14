@@ -2925,7 +2925,7 @@ function cfgOpen(){
   <section><h4>Cobro</h4>
     <label class="full">Conceptos <span class="hint">(categorías del desplegable «Concepto»; una por línea, la primera es la que sale por defecto)</span><textarea data-c="conceptos" rows="4">${esc((CFG_DRAFT.conceptos||CFG_DEF.conceptos).join('\n'))}</textarea></label>
     <label class="full">Formas de pago <span class="hint">(una por línea; el orden es el del desplegable del presupuesto)</span><textarea data-c="fp" rows="6">${esc((CFG_DRAFT.fp||[]).join('\n'))}</textarea></label>
-    <label class="full">Nº de cuenta de la factura (IBAN para la transferencia)<input data-c="cuenta" value="${esc(CFG_DRAFT.cuenta)}" placeholder="ES00 0000 0000 0000 0000 0000"></label>
+    <p class="hint full">El <b>Nº de cuenta</b> (IBAN) de la factura va ahora en cada empresa, en «Empresas que facturan», arriba.${String(CFG_DRAFT.cuenta||'').trim()?` Antes estaba aquí: <b>${esc(CFG_DRAFT.cuenta)}</b> (ya no se usa).`:''}</p>
   </section>
   <section><h4>Contrarider</h4>
     <label class="rng">Color de las cabeceras <input type="color" data-c="cColor" value="${esc(CFG_DRAFT.cColor||'#548DD4')}" style="width:60px;padding:0;height:30px"></label>
@@ -3662,7 +3662,7 @@ function syncFactura(){
   const f=F(); if(!f.auto) return;
   f.cliente=clone(DOC.cliente); f.contacto=clone(DOC.contacto); f.concepto=clone(DOC.concepto);
   f.ref=DOC.meta.num||''; f.refY=(()=>{ const d=typeof rentalDate==='function'&&rentalDate(); return d?d.getFullYear():new Date().getFullYear(); })(); f.lineas=facturaFromPpto();
-  f.pago=FP_()[(+DOC.fp||0)-1]||''; f.cuenta=CFG.cuenta||'';
+  f.pago=FP_()[(+DOC.fp||0)-1]||''; f.cuenta=facCuenta(f);
   if(!f.fecha) f.fecha=today();
 }
 /* número sugerido (solo para preguntar por dónde va la serie la primera vez) */
@@ -3759,11 +3759,11 @@ function renderFactura(){
   <div class="tools noprint"><button class="mini sec" id="fAddItem">+ línea</button><button class="mini sec" id="fAddSec">+ sección</button></div>
   <table style="margin-top:4px">
     <tr><td class="lbl" style="width:18%">FORMA DE PAGO:</td><td><input class="cel" data-c="pago" value="${esc(f.pago)}"></td></tr>
-    <tr><td class="lbl">Nº DE CUENTA:</td><td><input class="cel" data-c="cuenta" value="${esc(f.cuenta)}" placeholder="ES00 0000 0000 0000 0000 0000 (se pone una vez en ⚙ Configuración › Cobro)"></td></tr>
+    <tr><td class="lbl">Nº DE CUENTA:</td><td><input class="cel" ${f.emitida&&!f.emisor?'data-c="cuenta"':'data-r="iban"'} value="${esc(facCuenta(f))}" placeholder="ES00 0000 0000 0000 0000 0000 (el IBAN de la empresa, en ⚙ Configuración › Empresas que facturan)"></td></tr>
   </table>
   <div class="nota">${esc(FAC_PROF ? (CFG.notaProforma||PROF_NOTA) : (CFG.notaFactura||""))}</div>
   <div class="firmas"><span>FDO:</span><span>RECIBÍ CONFORME</span></div>`;
-  fTextareas(); fApplyCols(); fBind(); renderReg();
+  fTextareas(); fApplyCols(); fBind(); rojoBind(); renderReg();   /* rojoBind: el Nº de cuenta (data-r="iban") es el de la empresa que emite */
   fc.classList.toggle('fdraftdoc', !f.num && !FAC_PROF);
   if(f.emitida){ fc.querySelectorAll('input,textarea').forEach(i=>{ i.readOnly=true; i.disabled=i.id==='fFecha'; }); fc.querySelectorAll('[data-fdel],#fAddItem,#fAddSec').forEach(b=>b.style.display='none'); }
   facButtons();
@@ -3807,7 +3807,7 @@ async function emitFactura(){
   if(!f.lineas.some(l=>l.tipo==='item')) faltan.push('líneas');
   const EMP=facEmp(f), EM=empDatos(EMP), PG=empPago(EMP), rojo=facPlant(f)==='rojo', SER=facSerieObj(f);
   if(!(EM.nombre||'').trim()) faltan.push('nombre de la empresa que emite'); if(!(EM.cif||'').trim()) faltan.push('NIF de la empresa que emite');
-  if(rojo && !(PG.iban||'').trim()) faltan.push('IBAN (detalles del pago)');
+  if(!(PG.iban||'').trim()) faltan.push(rojo?'IBAN (detalles del pago)':'Nº de cuenta (IBAN de la empresa)');
   if(faltan.length && !await confirmDlg('A esta factura le falta algo', 'Falta: '+faltan.join(', ')+'.', {ok:'Emitirla igualmente', danger:true})) return;
   const serie=f.serie||'F', year=+fecha.slice(0,4);
   if(!SER){ alertDlg('Falta la serie', `«${empNombre(EMP)}» no tiene ninguna serie de ${serie==='R'?'rectificativas':'facturas'}. Créala en ⚙ Configuración › Empresas que facturan.`); return; }
@@ -3834,7 +3834,7 @@ async function emitFactura(){
       else if(!(r0 && r0.conflicto)) throw new Error(j.error||'no se pudo reservar el número');
     }
     if(!num) throw new Error('el almacén está muy ocupado, prueba otra vez');
-    snap(); f.plantilla=rojo?'rojo':'std'; f.empresa=EMP.id; f.serieId=SER.id; f.emisor=facEmisorCopia(f);   /* empresa, serie y una copia del emisor quedan con la factura */
+    snap(); f.plantilla=rojo?'rojo':'std'; f.empresa=EMP.id; f.serieId=SER.id; f.emisor=facEmisorCopia(f); f.cuenta=(PG.iban||'');   /* empresa, serie y una copia del emisor quedan con la factura */
     f.num=num; f.fecha=fecha; f.emitida=true; f.serie=serie; f.auto=false; f.emitidaPor=CLOUD.usuario; f.emitidaEn=new Date().toISOString();
     const rec=clone(f); delete rec.auto; delete rec.cols; rec.id=num; rec.totales={ base:+T.base||0, iva:+T.iva||0, total:+T.total||0 }; rec.estado='PENDIENTE'; rec.presupuesto=DOC.meta.num||'';
     REG=REG.filter(x=>x.num!==num); REG.push(rec);
@@ -4115,6 +4115,8 @@ function serieUltimoReg(s,year){ const re=new RegExp('^'+String(s.pref).replace(
 const facEmisor = f => (f.emitida && f.emisor) ? f.emisor : empDatos(facEmp(f));
 const facPago = f => (f.emitida && f.emisor) ? Object.assign({benef:'',bic:'',iban:'',pie:''}, f.emisor.pago||{}) : Object.assign({benef:'',bic:'',iban:'',pie:''}, empPago(facEmp(f)));
 const facEmisorEdit = () => { const f=F(); if(facEmp(f).id!=='principal') empMat(); return empDatos(facEmp(f)); };
+/* Nº de cuenta de la factura (los dos diseños): el IBAN de la empresa que emite. Las emitidas antes del 14-11 sin copia del emisor guardan el suyo en f.cuenta */
+const facCuenta = f => (f.emitida && !f.emisor) ? (f.cuenta||'') : (facPago(f).iban||'');
 const facPagoEdit = () => { const f=F(); if(facEmp(f).id!=='principal') empMat(); return empPago(facEmp(f)); };
 function facLogoSrc(f){ const k=(f.emitida && f.emisor && f.emisor.logo) || facEmp(f).logo || 'btt', id=(f.emitida && f.emisor && f.emisor.empresa) || facEmp(f).id;
   return k==='btt' ? (typeof ROJO_LOGO!=='undefined'?ROJO_LOGO:'') : k==='propio' ? ((CFG.empLogos||{})[id]||'') : (CFG.logo||''); }
@@ -6839,7 +6841,7 @@ const canon = o => Array.isArray(o) ? '['+o.map(canon).join(',')+']'
 const noMod = o => { const c=Object.assign({},o); delete c.mod; return c; };
 const typing = sel => { const a=document.activeElement; return !!(a && a.closest && a.closest(sel) && /INPUT|TEXTAREA|SELECT/.test(a.tagName)); };
 let INV_BASE_MAP=null;
-const SHARED_CFG=[['empresa','Empresa'],['rojo','Datos del pago (factura Rojo)'],['facPlantilla','Diseño de factura'],['empresas','Empresas que facturan y sus series'],['empresaDef','Empresa que factura por defecto'],['liqReparto','Reparto de la liquidación'],['redondeo','Redondeo del TOTAL'],['facProv','Proveedores de facturas recibidas'],['facNuestros','NIF propios (destinatario de las facturas)'],['fp','Formas de pago'],['conceptos','Conceptos'],['cuenta','Cuenta bancaria'],['iva','IVA'],['validez','Validez'],['obs','Observaciones por defecto'],['notaFactura','Nota de la factura'],['fmtDefault','Formato por defecto'],['priceMode','Precio del inventario'],['logoH','Tamaño del logo'],['cColor','Color del contrarider'],['cPrintCols','Columnas del contrarider'],['gastoTipos','Tipos de gasto del Bolo'],['gastosFijos','Gastos fijos de la hoja del bolo'],['gastoEmpresas','Empresas de los gastos del Bolo']];
+const SHARED_CFG=[['empresa','Empresa'],['rojo','Datos del pago de la empresa (IBAN, BIC…)'],['facPlantilla','Diseño de factura'],['empresas','Empresas que facturan y sus series'],['empresaDef','Empresa que factura por defecto'],['liqReparto','Reparto de la liquidación'],['redondeo','Redondeo del TOTAL'],['facProv','Proveedores de facturas recibidas'],['facNuestros','NIF propios (destinatario de las facturas)'],['fp','Formas de pago'],['conceptos','Conceptos'],['cuenta','Cuenta bancaria'],['iva','IVA'],['validez','Validez'],['obs','Observaciones por defecto'],['notaFactura','Nota de la factura'],['fmtDefault','Formato por defecto'],['priceMode','Precio del inventario'],['logoH','Tamaño del logo'],['cColor','Color del contrarider'],['cPrintCols','Columnas del contrarider'],['gastoTipos','Tipos de gasto del Bolo'],['gastosFijos','Gastos fijos de la hoja del bolo'],['gastoEmpresas','Empresas de los gastos del Bolo']];
 const shortV = v => { if(v==null||v==='') return ''; if(typeof v==='object'){ const t=JSON.stringify(v); return t.length>140?t.slice(0,140)+'…':t; } return String(v); };
 const SY_COLS={
   clientes:{
@@ -7372,7 +7374,7 @@ function xlFactura(B,logo){
   tot(`I.V.A. (${IVA()}%)`,T.iva,`ROUND(F${rb}*${IVA()}/100,2)`);
   tot('TOTAL FACTURA',T.total,`F${rb}+F${rb+1}`,true);
   r++; S.set(r,0,'FORMA DE PAGO:',lbl); S.set(r,1,f.pago||'',val); S.merge(r,1,r,5); for(let c=2;c<=5;c++) S.style(r,c,{bd:bd1}); r++;
-  S.set(r,0,'Nº DE CUENTA:',lbl); S.set(r,1,f.cuenta||'',val); S.merge(r,1,r,5); for(let c=2;c<=5;c++) S.style(r,c,{bd:bd1}); r+=2;
+  S.set(r,0,'Nº DE CUENTA:',lbl); S.set(r,1,(typeof facCuenta==='function'?facCuenta(f):f.cuenta)||'',val); S.merge(r,1,r,5); for(let c=2;c<=5;c++) S.style(r,c,{bd:bd1}); r+=2;
   if(CFG.notaFactura){ S.set(r,0,CFG.notaFactura,{i:true,sz:8,wr:true}); S.merge(r,0,r,5); S.rows[r]=24; r+=2; }
   S.set(r,0,'FDO:',{b:true,fc:navy}); S.set(r,5,'RECIBÍ CONFORME',{b:true,fc:navy,ha:'right'});
 }
