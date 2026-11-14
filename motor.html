@@ -321,6 +321,76 @@ body.pdfgen #factura .noprint,body.pdfgen #ppto .plibre,body.pdfgen #ppto .pajus
 #factura input.fdraft{color:#b54708;font-weight:700;letter-spacing:.06em}
 #factura .frect{margin:4px 0 8px;font-size:12.5px}#factura .frect textarea{width:100%;border:1px dashed #c9d2e6}
 #factura.fdraftdoc{position:relative}
+/* ===== Factura · diseño «Rojo» (p2c_rojo.js) · calco del modelo de Rojo Logística: medidas del original en pt × 4/3 ===== */
+#fCols.hidden{display:none!important}
+.fsel{padding:5px 6px;border:1px solid var(--soft);border-radius:6px;background:#fff;font-size:12.5px;max-width:230px}
+#regEmp{margin:6px 0}#regTable td.regemp{white-space:nowrap;max-width:180px;overflow:hidden;text-overflow:ellipsis}
+.empc{border:1px solid #e4e7ec;border-radius:10px;padding:10px 12px;margin:8px 0;background:#fcfcfd}.empc.off{opacity:.6}
+.empc-h{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:8px}.empc-h b{font-size:13.5px;color:var(--navy)}
+.empc .cfggrid{margin-bottom:8px}#cfgBody .empc label.ck{display:inline-flex;flex-direction:row;gap:5px;align-items:center;font-size:12.5px;margin:0}
+#cfgBody .empc label.ck input{width:auto;margin:0}
+.fgrp{display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
+.emplogo{display:flex;gap:10px;align-items:center;margin:2px 0 8px}.emplogo img{max-height:46px;max-width:180px;border:1px solid #eaecf0;border-radius:6px;padding:4px;background:#fff}
+table.empser{width:100%;border-collapse:collapse;margin:4px 0 6px;font-size:12.5px}
+table.empser th{text-align:left;font-weight:600;color:#475467;padding:3px 6px;border-bottom:1px solid #e4e7ec}
+table.empser td{padding:3px 6px;border-bottom:1px solid #f2f4f7}
+table.empser input,table.empser select{padding:4px 6px;font-size:12.5px;width:100%;box-sizing:border-box}
+#factura.sheet.rojo{width:210mm;min-height:297mm;padding:0;box-sizing:border-box;display:flex;flex-direction:column;font-family:Helvetica,Arial,sans-serif;font-size:10px;line-height:1.2;color:#1d1d1b}
+#factura.rojo .rj-main{padding:48px 48px 0}
+#factura.rojo .rj-top{display:flex;justify-content:space-between;align-items:flex-start}
+#factura.rojo .rj-tit{font-size:32px;font-weight:700;line-height:32px;margin:0;color:#1d1d1b;letter-spacing:-.3px}
+#factura.rojo .rj-meta{display:grid;grid-template-columns:148.7px auto;margin-top:24.2px;line-height:20px;white-space:nowrap}
+#factura.rojo .k{font-weight:700}
+#factura.rojo .rj-draft{color:#b54708}
+#factura.rojo .rj-logo{display:block;width:188px;height:94px;object-fit:contain;margin:0}
+#factura.rojo .rj-par{display:grid;grid-template-columns:1fr 1fr;column-gap:24px;margin-top:40.3px}
+#factura.rojo .rj-nom{font-size:12px;font-weight:700;line-height:16px;margin-bottom:6.7px}
+#factura.rojo .rj-ln{line-height:18px}
+#factura.rojo .rj-rect{margin-top:18px;line-height:18px}
+#factura.rojo .rj-rect textarea.cel{display:inline-block;width:auto;min-width:60%;vertical-align:top}
+#factura.rojo table.rj-tab{width:100%;border-collapse:collapse;table-layout:fixed;margin-top:41.2px}
+#factura.rojo .rj-tab th{background:#1d1d1b;color:#fff;font-size:10px;font-weight:700;height:24px;padding:0 6px 0 0;border:0;text-align:right;vertical-align:middle;white-space:nowrap}
+#factura.rojo .rj-tab th:first-child{text-align:left;padding-left:12px}
+#factura.rojo .rj-tab th:last-child{padding-right:12px}
+#factura.rojo .rj-tab td{border:0;border-bottom:1px solid #dcdcd9;padding:13.8px 6px 12.2px 0;font-size:10px;line-height:16px;vertical-align:middle;text-align:right;background:none}
+#factura.rojo .rj-tab td.rj-d{text-align:left;padding-left:12px;position:relative}
+#factura.rojo .rj-tab td:last-child{padding-right:12px}
+#factura.rojo .rj-tab .rj-sub{color:#636360;line-height:18px}
+#factura.rojo .rj-tab tr.rj-sec td{border-bottom:0;padding:13.8px 6px 0 12px;font-weight:700;background:none}
+#factura.rojo .rj-tab tr.rj-sec td.rj-d .cel{font-weight:700}
+#factura.rojo .rj-tab .rj-b{font-weight:700}
+#factura.rojo .rj-del{position:absolute;left:-30px;top:50%;transform:translateY(-50%)}
+#factura.rojo table.rj-tots{margin-left:57.83%;width:42.17%;border-collapse:collapse}
+#factura.rojo .rj-tots td{border:0;height:32px;padding:0 12px;font-size:10px;vertical-align:middle;background:none}
+#factura.rojo .rj-tots td.t{font-weight:700;color:#1d1d1b;text-align:left;font-size:10px}
+#factura.rojo .rj-tots td.num{text-align:right}
+#factura.rojo .rj-tots tr.rj-gran td{background:#f3f3f3;font-weight:700}
+#factura.rojo .rj-nota{margin-top:24px;color:#636360;line-height:14px;font-size:9px}
+#factura.rojo .tools{margin:8px 0 0}
+#factura.rojo .rj-pie{margin-top:auto;background:#f3f3f3;padding:24px 48px 23px}
+#factura.rojo .rj-ph{font-size:12px;font-weight:700;line-height:16px;margin-bottom:6.7px}
+#factura.rojo .rj-pg{display:grid;grid-template-columns:180.3px auto;line-height:18px}
+#factura.rojo .rj-hr{border-top:1px solid #dcdcd9;margin:15.2px 0 6.8px;height:0}
+#factura.rojo .rj-legal{color:#676765;line-height:18px}
+#factura.rojo .rj-pnum{color:#636360;text-align:right;line-height:18px;margin-top:6px}
+/* campos: se ven como texto; al pasar por encima, se nota que se pueden cambiar */
+#factura.rojo input.cel,#factura.rojo textarea.cel,#factura.rojo .rj-ref,#factura.rojo .rj-date{display:block;width:100%;box-sizing:border-box;border:0;margin:0;padding:0;background:transparent;font:inherit;line-height:inherit;color:inherit;letter-spacing:inherit;resize:none;overflow:hidden;min-height:0}
+#factura.rojo .rj-meta .rj-date,#factura.rojo .rj-meta .rj-ref{height:20px;width:150px}
+#factura.rojo input.cel.num{text-align:right}
+#factura.rojo .rj-legal input.cel{color:#676765}
+#factura.rojo input.cel:hover,#factura.rojo textarea.cel:hover,#factura.rojo .rj-ref:hover,#factura.rojo .rj-date:hover{background:#f2f5fb}
+#factura.rojo .rj-pie input.cel:hover{background:#e9edf4}
+#factura.rojo input.cel:focus,#factura.rojo textarea.cel:focus,#factura.rojo .rj-ref:focus{outline:1px solid var(--acc);background:#fff}
+#factura.rojo .cel::placeholder,#factura.rojo .rj-ref::placeholder{color:#b8bec9;font-style:italic;font-weight:400}
+#factura.rojo .cel.rj-nom{font-size:12px;font-weight:700;line-height:16px;margin-bottom:6.7px}
+#factura.rojo .cel.rj-ln{line-height:18px}
+#factura.rojo .cel.rj-b{font-weight:700}
+#factura.rojo textarea.cel{white-space:pre-wrap;overflow-wrap:break-word;word-break:normal}
+@media print{
+  #factura.sheet.rojo{width:210mm!important;min-height:296.8mm;padding:0!important;margin:0;box-shadow:none}
+  #factura.rojo .cel::placeholder{color:transparent!important}
+}
+
 @media print{ #factura.fdraftdoc::after{content:'BORRADOR';position:absolute;top:38%;left:8%;font-size:110px;font-weight:800;color:rgba(200,0,0,.13);transform:rotate(-24deg);pointer-events:none} }
 #invBody td.cat{cursor:pointer}#invBody td.cat:hover{text-decoration:underline;color:var(--navy)}
 /* stock */
@@ -1350,19 +1420,22 @@ body.mvsub .tab .wrap{padding-top:calc(var(--mvTopH,52px) + 56px)!important}
     <button class="sec" id="fBlank">Factura en blanco</button>
     <button class="sec" id="fProf" title="PDF de la factura como PROFORMA: no gasta número, no entra en el registro ni en la contabilidad">Proforma (PDF)</button>
     <button class="sec" id="fHac" title="Abre la aplicación gratuita de facturas de Hacienda (VERI*FACTU)">Facturar en Hacienda ↗</button>
+    <span class="fgrp"><span class="hint">Emite:</span><select id="fEmp" class="fsel"></select></span><span class="fgrp"><span class="hint">Serie:</span><select id="fSerie" class="fsel"></select></span>
+    <span class="fgrp"><span class="hint">Diseño:</span><div class="seg" id="fPlant"><button data-pl="std">Estándar</button><button data-pl="rojo">Rojo</button></div></span>
     <label class="sw" id="swFree"><input type="checkbox" id="tglFree"> Modo edición libre (no recalcula)</label>
-    <span class="hint">Columnas:</span>
+    <span id="fCols" style="display:contents"><span class="hint">Columnas:</span>
     <label class="ck"><input type="checkbox" data-colchk="pvp" checked> pvp</label>
     <label class="ck"><input type="checkbox" data-colchk="cant" checked> Cant.</label>
     <label class="ck"><input type="checkbox" data-colchk="dto" checked> Dto.%</label>
     <label class="ck"><input type="checkbox" data-colchk="dias" checked> días</label>
-    <label class="ck"><input type="checkbox" data-colchk="imp" checked> Importe</label>
+    <label class="ck"><input type="checkbox" data-colchk="imp" checked> Importe</label></span>
   </div>
   <div class="banner noprint" id="fSyncBar"></div>
   <div class="banner noprint hidden" id="freeHint">Modo edición libre ACTIVO: puedes reescribir cualquier texto (inclusive importes y totales) sin que se recalcule nada. Al apagarlo, todo vuelve a calcularse desde pvp × cant × días × (1 − dto%).</div>
   <div class="reg noprint">
     <details id="regBox"><summary>Registro de facturas (<span id="regCount">0</span>)</summary>
-      <table id="regTable"><thead><tr><th>Nº</th><th>Fecha</th><th>Cliente</th><th style="text-align:right">Total</th><th>Estado</th><th></th></tr></thead><tbody></tbody></table>
+      <select id="regEmp" class="fsel hidden" title="Ver solo las facturas de una empresa"></select>
+      <table id="regTable"><thead><tr><th>Nº</th><th>Fecha</th><th>Emite</th><th>Cliente</th><th style="text-align:right">Total</th><th>Estado</th><th></th></tr></thead><tbody></tbody></table>
       <div class="toolbar" style="padding:0;margin:8px 0 4px">
         <button class="mini sec" id="btnExp">Exportar registro</button>
         <button class="mini sec" id="btnImp">Importar registro</button>
@@ -1900,6 +1973,7 @@ const LS_CFG='bk_cfg_v1';
 const CFG_DEF = {
   logo:null,
   empresa:{nombre:'',dir:'',cif:'',tel:'',email:'',web:''},
+  rojo:{benef:'',bic:'',iban:'',pie:''}, facPlantilla:'std', empresas:null, empresaDef:'principal', empLogos:{},   /* empresas que facturan y sus series (p2d_empresas.js) */   /* factura con diseño «Rojo» (p2c_rojo.js): datos del pago y diseño por defecto */
   fp:['60 DIAS','90 DIAS','CONTADO','RECIBO BANCARIO','TRANSFERENCIA BANCARIA','CONTADO 50% A LA RECOGIDA DEL MATERIAL, 50% EN LA ENTREGA DEL MISMO'],
   conceptos:['Alquiler de Backline'],
   cuenta:'',
@@ -2816,7 +2890,7 @@ function gColorPop(G, k, anchor){
    ===================================================================== */
 let CFG_DRAFT=null;
 function cfgOpen(){
-  CFG_DRAFT=clone(CFG);
+  CFG_DRAFT=clone(CFG); if(typeof empCfgPrep==='function') empCfgPrep(CFG_DRAFT);
   const E=CFG_DRAFT.empresa;
   const yo=(CLOUD.token&&CLOUD.usuario)||'', foto=yo&&(CFG_DRAFT.fotos||{})[yo];
   $('#cfgBody').innerHTML=`
@@ -2837,7 +2911,7 @@ function cfgOpen(){
       <div class="hint">PNG, JPG o SVG. Se usa en presupuesto, factura y contrarider.</div>
       <label class="rng">Tamaño del logo <input type="range" min="50" max="200" step="5" data-c="logoH" value="${+CFG_DRAFT.logoH||100}"><b id="cfgLogoH">${+CFG_DRAFT.logoH||100} px</b></label></div></div>
   </section>
-  <section><h4>Datos de empresa <span class="hint">(recuadro del pie del presupuesto)</span></h4>
+  <section><h4>Datos de empresa <span class="hint">(recuadro del pie del presupuesto; es también la empresa principal que factura)</span></h4>
     <div class="cfggrid">
       <label>Nombre<input data-c="empresa.nombre" value="${esc(E.nombre)}"></label>
       <label>Dirección<input data-c="empresa.dir" value="${esc(E.dir)}"></label>
@@ -2847,6 +2921,7 @@ function cfgOpen(){
       <label>Web<input data-c="empresa.web" value="${esc(E.web)}"></label>
     </div>
   </section>
+  ${typeof empCfgHTML==='function'?empCfgHTML():''}
   <section><h4>Cobro</h4>
     <label class="full">Conceptos <span class="hint">(categorías del desplegable «Concepto»; una por línea, la primera es la que sale por defecto)</span><textarea data-c="conceptos" rows="4">${esc((CFG_DRAFT.conceptos||CFG_DEF.conceptos).join('\n'))}</textarea></label>
     <label class="full">Formas de pago <span class="hint">(una por línea; el orden es el del desplegable del presupuesto)</span><textarea data-c="fp" rows="6">${esc((CFG_DRAFT.fp||[]).join('\n'))}</textarea></label>
@@ -2908,6 +2983,7 @@ function cfgOpen(){
     try{ CFG_DRAFT.logo=await imgToDataURL(f); $('#cfgLogo').src=CFG_DRAFT.logo; $('#cfgLogo').style.display=''; $('#cfgLogoReset').disabled=false; }catch(err){ toast('No pude leer esa imagen','#c00'); } };
   $('#cfgLogoReset').onclick=()=>{ CFG_DRAFT.logo=null; $('#cfgLogo').src=''; $('#cfgLogo').style.display='none'; $('#cfgLogoReset').disabled=true; };
   cfgGFpaint();
+  if(typeof empCfgPaint==='function'){ empCfgPaint(); empCfgBind(); }
   $('#cfgGF').addEventListener('input',e=>{ const t=e.target, m=/^(\d+)\.(\w)$/.exec(t.dataset.gfx||''); if(!m) return; CFG_DRAFT.gastosFijos[+m[1]][m[2]]=t.value; });
   $('#cfgGF').addEventListener('click',e=>{ const b=e.target.closest('[data-gfdel]'); if(!b) return; CFG_DRAFT.gastosFijos.splice(+b.dataset.gfdel,1); cfgGFpaint(); });
   $('#cfgGFadd').onclick=()=>{ const L=CFG_DRAFT.gastosFijos; L.push({t:(L[L.length-1]||{}).t||'',e:'',c:'',o:''}); cfgGFpaint(); const i=$$('#cfgGF [data-gfx$=".e"]'); if(i.length) i[i.length-1].focus(); };
@@ -2949,6 +3025,7 @@ function cfgSave(){
   const iv=+CFG_DRAFT.iva; if(isNaN(iv)||iv<0||iv>100){ toast('El IVA tiene que ser un número entre 0 y 100','#c00'); return; }
   CFG_DRAFT.iva=iv; if(!CFG_DRAFT.fp.length) CFG_DRAFT.fp=clone(CFG_DEF.fp);
   { const an=$('#cfgAbrirNuevo'); if(an) lsSet('bk_abrir_nuevo', !!an.checked); }   /* de este ordenador, no de los ajustes compartidos */
+  if(typeof empCfgValida==='function' && !empCfgValida(CFG_DRAFT)) return;
   CFG=CFG_DRAFT; if(!saveCfg()) return; cfgClose(); cfgApply(); toast('Configuración guardada');
 }
 function cfgApply(){ setLogoTop(); renderTab(); userCard(); }
@@ -3611,7 +3688,7 @@ const facProfNum = f => 'PF-'+String(facRefTxt(f)||DOC.meta.num||'').trim().toUp
 /* referencia del presupuesto con su año (OCT014-BK-2026): que no se confunda con la del mismo nº de otro año */
 function facRefTxt(f){ const r=String((f&&f.ref)||'').trim(); if(!r) return ''; if(/-\d{4}$/.test(r) && !/-BK$/i.test(r)) return r; const y=(f&&f.refY) || (f&&f.fecha&&+String(f.fecha).slice(0,4)) || ''; return y ? r+'-'+y : r; }
 function facCabecera(f){
-  const E=CFG.empresa||{}, prof=FAC_PROF;
+  const E=facEmisor(f), prof=FAC_PROF;   /* la empresa que emite (p2d_empresas.js); una emitida, con los datos que tenía al emitirla */
   const tipo = prof ? 'Proforma' : f.serie==='R' ? 'Rectificativa' : 'Factura';
   const num = prof ? facProfNum(f) : (f.num||'BORRADOR');
   const dirE=String(E.dir||'').replace(/,\s*(?=\d{5}\b)/,'\n');
@@ -3626,7 +3703,7 @@ function facCabecera(f){
         <div class="fel ftl"><span>Tlf:</span><input class="cel fel" data-e="tel" value="${esc(E.tel||'')}" placeholder="Teléfono"></div>
         <input class="cel fel" data-e="email" value="${esc(E.email||'')}" placeholder="E-mail">
         ${E.web?`<input class="cel fel" data-e="web" value="${esc(E.web)}" placeholder="Web">`:''}</div>
-        <div class="flogo">${logoImg(logoPx(1.1))}</div></div>
+        <div class="flogo">${facLogoHTML(f,logoPx(1.1))}</div></div>
       <div class="fsep"></div>
       <div class="fpara">
         <div class="fcli"><div class="fh">Para:</div>
@@ -3645,6 +3722,13 @@ function renderFactura(){
   const f=F(); const T=fTotShown();
   $('#tglFree').checked=!!f.free; $('#swFree').classList.toggle('on',!!f.free); $('#freeHint').classList.toggle('hidden',!f.free);
   $$('[data-colchk]').forEach(ch=> ch.checked = f.cols[ch.dataset.colchk]!==false);
+  { const fc0=$('#factura');   /* diseño «Rojo» (p2c_rojo.js): misma factura, otra hoja */
+    if(typeof facPlant==='function' && facPlant(f)==='rojo'){
+      renderFacturaRojo(f,T); fTextareas(); fBind(); rojoBind(); renderReg();
+      fc0.classList.toggle('fdraftdoc', !f.num && !FAC_PROF);
+      if(f.emitida){ fc0.querySelectorAll('input,textarea').forEach(i=>{ i.readOnly=true; i.disabled=(i.id==='fFecha'||i.id==='fVence'); }); fc0.querySelectorAll('[data-fdel],#fAddItem,#fAddSec').forEach(b=>b.style.display='none'); }
+      facButtons(); return; }
+    fc0.classList.remove('rojo','pbleed'); }
   const L=f.lineas.map((l,i)=>{
     if(l.tipo==='sec') return `<tr class="sec"><td class="noprint" style="width:26px"><button class="mini danger" data-fdel="${i}" title="Eliminar">&times;</button></td><td><input class="cel" data-l="${i}" data-f="concepto" value="${esc(l.concepto)}"></td><td colspan="5"></td></tr>`;
     const impCell = f.free
@@ -3701,6 +3785,7 @@ function facButtons(){
   const f=F(), b=$('#fSave'), r=$('#fRect'), fr=$('#tglFree');
   b.textContent='Emitir factura'; b.classList.toggle('hidden',!!f.emitida); { const pf=$('#fProf'); if(pf) pf.classList.toggle('hidden',!!f.emitida); } r.classList.toggle('hidden',!(f.emitida && f.serie!=='R'));
   fr.disabled=!!f.emitida;
+  if(typeof rojoButtons==='function') rojoButtons();
   const bar=$('#fSyncBar');
   if(f.emitida){ bar.className='banner ok noprint'; bar.innerHTML=`Factura <b>${esc(f.num)}</b> emitida${f.emitidaPor?' por '+esc(f.emitidaPor):''}${f.emitidaEn?' el '+esc(new Date(f.emitidaEn).toLocaleString('es-ES',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'})):''}. Ya no se puede modificar: para corregirla haz una <b>rectificativa</b>.`; }
 }
@@ -3720,30 +3805,37 @@ async function emitFactura(){
   if(!/^\d{4}-\d\d-\d\d$/.test(fecha)){ toast('Pon la fecha de emisión','#c00'); return; }
   const faltan=[]; if(!(f.cliente.cliente||'').trim()) faltan.push('nombre del cliente'); if(!(f.cliente.cif||'').trim()) faltan.push('CIF del cliente'); if(!(f.cliente.domicilio||'').trim()) faltan.push('domicilio del cliente');
   if(!f.lineas.some(l=>l.tipo==='item')) faltan.push('líneas');
+  const EMP=facEmp(f), EM=empDatos(EMP), PG=empPago(EMP), rojo=facPlant(f)==='rojo', SER=facSerieObj(f);
+  if(!(EM.nombre||'').trim()) faltan.push('nombre de la empresa que emite'); if(!(EM.cif||'').trim()) faltan.push('NIF de la empresa que emite');
+  if(rojo && !(PG.iban||'').trim()) faltan.push('IBAN (detalles del pago)');
   if(faltan.length && !await confirmDlg('A esta factura le falta algo', 'Falta: '+faltan.join(', ')+'.', {ok:'Emitirla igualmente', danger:true})) return;
-  const serie=f.serie||'F', year=+fecha.slice(0,4), id=serie+'-'+year;
-  if(!await confirmDlg(`¿Emitir la factura${serie==='R'?' RECTIFICATIVA':''}?`, `Con fecha ${xlDMY(fecha)} por ${eur(T.total)} €. Se le asignará el siguiente número de la serie ${id} y ya no se podrá modificar.`, {ok:'Emitir factura'})) return;
+  const serie=f.serie||'F', year=+fecha.slice(0,4);
+  if(!SER){ alertDlg('Falta la serie', `«${empNombre(EMP)}» no tiene ninguna serie de ${serie==='R'?'rectificativas':'facturas'}. Créala en ⚙ Configuración › Empresas que facturan.`); return; }
+  const id=serieCnt(SER,year), etq=`${SER.pref}-${year}`;
+  if(!await confirmDlg(`¿Emitir la factura${serie==='R'?' RECTIFICATIVA':''}?`, `Emite ${(EM.nombre||'(sin nombre de empresa)').trim()} · serie «${SER.nombre||SER.pref}» (${etq}-…)${rojo?' · diseño Rojo':''}. Con fecha ${xlDMY(fecha)} por ${eur(T.total)} €. Se le asignará el siguiente número de esa serie y ya no se podrá modificar.`, {ok:'Emitir factura'})) return;
   EMITTING=true; const btn=$('#fSave'); btn.disabled=true; btn.textContent='Emitiendo…';
   try{
     let num='';
     for(let k=0;k<5 && !num;k++){
       const c=await facCounter(id); let ultimo;
       if(!c){
-        const sug=nextNum(serie,year); const n0=parseInt(sug.slice(-4))-1;
-        const r=await promptDlg(`Primera factura de la serie ${id} desde el almacén`, `¿Cuál es el número de la ÚLTIMA factura ${serie==='R'?'rectificativa ':''}que emitisteis en ${year}? (0 si esta es la primera)`, String(n0));
+        const n0=serieUltimoReg(SER,year);
+        const r=await promptDlg(`Primera factura de la serie ${etq} · ${SER.nombre||SER.pref} (${EM.nombre||''})`, `¿Cuál es el número de la ÚLTIMA factura de esta serie que emitisteis en ${year}? Si venís de otro programa (por ejemplo Qonto), pon el último de allí. 0 si esta es la primera.`, String(n0));
         if(r==null) return; ultimo=parseInt(r,10); if(isNaN(ultimo)||ultimo<0){ toast('Número no válido','#c00'); return; }
       } else {
         ultimo=c.ultimo;
         if(c.fecha && fecha<c.fecha && !await confirmDlg('Fecha anterior a la última factura', `La última factura de la serie (${c.num}) tiene fecha ${xlDMY(c.fecha)} y esta lleva ${xlDMY(fecha)}, que es anterior. Las facturas tienen que ir en orden de fecha.`, {ok:'Emitirla igualmente', danger:true})) return;
       }
-      const next=ultimo+1, cand=`${serie}-${year}-${String(next).padStart(4,'0')}`;
-      const j=await api('col_guardar',{col:FAC_CNT, items:[{id, nombre:'Contador '+id, datos:JSON.stringify({ultimo:next, fecha:(c&&c.fecha>fecha)?c.fecha:fecha, num:cand}), base:c?c.version:0}]});
+      const next=ultimo+1, cand=serieNum(SER,year,next);
+      if(REG.some(x=>x.num===cand)) throw new Error(`el número ${cand} ya está en el registro: revisa la serie en ⚙ Configuración`);
+      const j=await api('col_guardar',{col:FAC_CNT, items:[{id, nombre:'Contador '+etq+(SER.legacy?'':' · '+(SER.nombre||'')+' · '+(EM.nombre||'')), datos:JSON.stringify({ultimo:next, fecha:(c&&c.fecha>fecha)?c.fecha:fecha, num:cand}), base:c?c.version:0}]});
       const r0=j.ok && j.res && j.res[0];
       if(r0 && r0.ok) num=cand;
       else if(!(r0 && r0.conflicto)) throw new Error(j.error||'no se pudo reservar el número');
     }
     if(!num) throw new Error('el almacén está muy ocupado, prueba otra vez');
-    snap(); f.num=num; f.fecha=fecha; f.emitida=true; f.serie=serie; f.auto=false; f.emitidaPor=CLOUD.usuario; f.emitidaEn=new Date().toISOString();
+    snap(); f.plantilla=rojo?'rojo':'std'; f.empresa=EMP.id; f.serieId=SER.id; f.emisor=facEmisorCopia(f);   /* empresa, serie y una copia del emisor quedan con la factura */
+    f.num=num; f.fecha=fecha; f.emitida=true; f.serie=serie; f.auto=false; f.emitidaPor=CLOUD.usuario; f.emitidaEn=new Date().toISOString();
     const rec=clone(f); delete rec.auto; delete rec.cols; rec.id=num; rec.totales={ base:+T.base||0, iva:+T.iva||0, total:+T.total||0 }; rec.estado='PENDIENTE'; rec.presupuesto=DOC.meta.num||'';
     REG=REG.filter(x=>x.num!==num); REG.push(rec);
     if(serie==='R' && f.rectifica){ const o=REG.find(x=>x.num===f.rectifica); if(o){ o.estado='RECTIFICADA'; o.rectificadaPor=num; } }
@@ -3759,8 +3851,9 @@ async function emitFactura(){
 async function facRectificar(){
   const f=F(); if(!f.emitida) return;
   if(!await confirmDlg(`Rectificar la factura ${f.num}`, `Se abre como borrador con las mismas líneas: déjala como debe quedar (o en negativo si anulas), pon el motivo y pulsa «Emitir factura». La ${f.num} quedará marcada como RECTIFICADA en el registro.`, {ok:'Preparar rectificativa'})) return;
-  snap(); const nf=Object.assign(clone(f),{num:'',emitida:false,emitidaPor:'',emitidaEn:'',serie:'R',rectifica:f.num,rectFecha:f.fecha,rectMotivo:'',fecha:today(),auto:false});
-  DOC.factura=nf; save(); renderFactura(); window.scrollTo({top:0,behavior:'smooth'});
+  const E0=facEmp(f), SR=empSerieDef(E0,'R');   /* la rectificativa la emite la misma empresa, con su serie de rectificativas */
+  snap(); const nf=Object.assign(clone(f),{empresa:E0.id, serieId:SR?SR.id:'', num:'',emitida:false,emitidaPor:'',emitidaEn:'',serie:'R',rectifica:f.num,rectFecha:f.fecha,rectMotivo:'',fecha:today(),auto:false});
+  delete nf.emisor; DOC.factura=nf; save(); renderFactura(); window.scrollTo({top:0,behavior:'smooth'});
 }
 /* campos de texto de la factura: saltan de línea y la celda crece con el texto */
 function fGrow(t){ t.style.height='auto'; if(t.scrollHeight) t.style.height=(t.scrollHeight+1)+'px'; }
@@ -3776,7 +3869,7 @@ function fBind(){
   const fc=$('#factura'), f=F();
   fc.querySelectorAll('[data-c]').forEach(i=> i.oninput=()=>{ if(i.tagName==='TEXTAREA') fGrow(i); unlink(); const v=i.dataset.nl?i.value.replace(/\s*\n+\s*/g,', '):i.value; const p=i.dataset.c.split('.'); if(p.length===2) f[p[0]][p[1]]=v; else f[p[0]]=v; save(); });
   /* datos de la empresa: se editan aquí mismo y se guardan en Configuración (compartida) */
-  let eT=null; fc.querySelectorAll('[data-e]').forEach(i=> i.oninput=()=>{ if(i.tagName==='TEXTAREA') fGrow(i); CFG.empresa=CFG.empresa||{}; CFG.empresa[i.dataset.e]=i.dataset.nl?i.value.replace(/\s*\n+\s*/g,', '):i.value; clearTimeout(eT); eT=setTimeout(()=>saveCfg(),700); });
+  let eT=null; fc.querySelectorAll('[data-e]').forEach(i=> i.oninput=()=>{ if(i.tagName==='TEXTAREA') fGrow(i); const D=facEmisorEdit(); D[i.dataset.e]=i.dataset.nl?i.value.replace(/\s*\n+\s*/g,', '):i.value; clearTimeout(eT); eT=setTimeout(()=>saveCfg(),700); });
   fc.querySelectorAll('[data-l]').forEach(i=> i.oninput=()=>{ if(i.tagName==='TEXTAREA') fGrow(i);
     unlink(); const l=f.lineas[+i.dataset.l]; const k=i.dataset.f;
     if(k==='concepto'){ l.concepto=i.value; save(); return; }
@@ -3815,17 +3908,21 @@ function fBind(){
 }
 function renderReg(){
   const tb=$('#regTable tbody'); $('#regCount').textContent=REG.length;
-  tb.innerHTML=REG.slice().reverse().map(r=>`<tr>
-    <td>${esc(r.num)}</td><td>${esc(r.fecha)}</td><td>${esc((r.cliente&&r.cliente.cliente)||'')}</td>
+  const fe=$('#regEmp'), emps=[...new Set(REG.map(r=>typeof regEmpNombre==='function'?regEmpNombre(r):''))].filter(Boolean).sort();
+  if(fe){ const v=fe.value; fe.innerHTML='<option value="">Todas las empresas</option>'+emps.map(n=>`<option${n===v?' selected':''}>${esc(n)}</option>`).join(''); fe.classList.toggle('hidden', emps.length<2); fe.onchange=renderReg; }
+  const filtro=fe&&!fe.classList.contains('hidden')?fe.value:'';
+  tb.innerHTML=REG.slice().reverse().filter(r=>!filtro || regEmpNombre(r)===filtro).map(r=>`<tr>
+    <td>${esc(r.num)}</td><td>${esc(r.fecha)}</td><td class="regemp">${esc(typeof regEmpNombre==='function'?regEmpNombre(r):'')}</td><td>${esc((r.cliente&&r.cliente.cliente)||'')}</td>
     <td style="text-align:right">${eurS(r.totales&&r.totales.total)}</td>
     <td><select data-est="${esc(r.num)}" class="pill ${esc(r.estado||'PENDIENTE')}">${['PENDIENTE','COBRADA','RECTIFICADA'].map(o=>`<option ${(r.estado||'PENDIENTE')===o?'selected':''}>${o}</option>`).join('')}</select></td>
     <td><button class="mini sec" data-load="${esc(r.num)}">Abrir</button></td></tr>`).join('')
-    || '<tr><td colspan="6" style="text-align:center;color:#889">Sin facturas todavía</td></tr>';
+    || '<tr><td colspan="7" style="text-align:center;color:#889">Sin facturas todavía</td></tr>';
   tb.querySelectorAll('[data-est]').forEach(s=> s.onchange=()=>{ const r=REG.find(x=>x.num===s.dataset.est); if(r){ r.estado=s.value; lsSet(LS_REG,REG); if(typeof syncSoon==='function') syncSoon('facturas'); s.className='pill '+s.value; toast('Estado actualizado'); } });
   tb.querySelectorAll('[data-load]').forEach(b=> b.onclick=()=>regAbrir(b.dataset.load));
 
 }
 function initFactura(){
+  if(typeof rojoInit==='function') rojoInit();
   $('#tglFree').onchange=e=>{ snap(); const f=F(); f.free=e.target.checked;
     if(f.free){ unlink(); fCalc(); f.frozen={...f.totales}; f.totText=null; } else { f.lineas.forEach(l=>{ delete l.impText; }); f.totText=null; f.frozen=null; }
     save(); renderFactura(); toast(f.free?'Modo edición libre ACTIVO':'Modo cálculo restaurado'); };
@@ -3855,6 +3952,268 @@ async function regAbrir(num){
   if(!await askUnsaved()) return;
   await cloudOpen(d.id); if(String(DOC.meta.num||'').trim().toUpperCase()===ref) ir();
 }
+
+/* =====================================================================
+   FACTURA · DISEÑO «ROJO»  (Rojo Logística SL · marca Back to Track)
+   Calco del modelo de factura que pasó L.A. el 14-11-2026 (F-2026-080, hecho con Qonto):
+   mismas medidas, colores, columnas y orden. La letra del original (PolySans de Qonto) es de
+   licencia propia: aquí va Helvetica, que es también la que mete el generador de PDF de la app.
+   · Emisor: el de Configuración › Empresa, igual que el diseño «Estándar» (desde el 14-11 la única
+     empresa que factura es Rojo; Málaga 8 ya no). Lo propio de este diseño son los datos del pago
+     (beneficiario, BIC, IBAN, pie legal: CFG.rojo, compartidos por el almacén) y el logo de Back to Track.
+   · Al emitir, la factura guarda una copia de su emisor (f.emisor): si mañana cambian los datos de
+     empresa, una factura emitida sigue saliendo con los suyos.
+   · El diseño se guarda en cada factura (f.plantilla) y una emitida ya no cambia de diseño.
+     Las nuevas salen con el último diseño elegido (CFG.facPlantilla).
+   · En pantalla se edita igual que la estándar (mismos data-*, mismo fBind). Al imprimir o
+     hacer el PDF (PRINT.on) se pinta como texto, para que salga exacto.
+   Medidas del original en pt × 4/3 = px; la hoja mide un A4 justo (210 × 297 mm) y sale a sangre.
+   ===================================================================== */
+const ROJO_LOGO='data:image/png;base64,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';
+(()=>{ try{ const i=new Image(); i.src=ROJO_LOGO; }catch(e){} })();   /* ya decodificado cuando se haga el PDF */
+const ROJO_DEF={benef:'',bic:'',iban:'',pie:''};
+const facPlant = f => (f && (f.plantilla==='rojo'||f.plantilla==='std')) ? f.plantilla : (f && f.emitida) ? 'std' : typeof facEmp==='function' ? (facEmp(f||{}).plantilla==='rojo' ? 'rojo' : 'std') : (CFG.facPlantilla==='rojo' ? 'rojo' : 'std');
+function rojoCfg(){ if(!CFG.rojo || typeof CFG.rojo!=='object') CFG.rojo={}; Object.keys(ROJO_DEF).forEach(k=>{ if(CFG.rojo[k]==null) CFG.rojo[k]=''; }); return CFG.rojo; }
+const rjDMY = s => { const m=/^(\d{4})-(\d\d)-(\d\d)/.exec(String(s||'')); return m ? `${m[3]}-${m[2]}-${m[1]}` : String(s||''); };
+/* «Número de IVA»: el NIF español con ES delante (como el original). Si no parece un NIF español, no se pone. */
+function rjIVA(cif){ let c=String(cif||'').replace(/[\s.\-]/g,'').toUpperCase(); if(!c) return '';
+  if(/^ES/.test(c) && c.length>9) c=c.slice(2);
+  return /^(\d{8}[A-Z]|[XYZ]\d{7}[A-Z]|[A-HJ-NP-SUVW]\d{7}[0-9A-J])$/.test(c) ? 'ES'+c : ''; }
+/* una dirección guardada en una línea («Calle 7, 28014 Madrid») se parte antes del código postal, como en la estándar */
+const rjLineas = s => String(s||'').replace(/,\s*(?=\d{5}\b)/,'\n').split(/\n+/).map(x=>x.trim()).filter(Boolean);
+const rjDirTA = s => String(s||'').replace(/,\s*(?=\d{5}\b)/,'\n');
+
+function renderFacturaRojo(f,T){
+  const E=facEmisor(f), R=facPago(f), LG=facLogoSrc(f), P=!!(typeof PRINT!=='undefined' && PRINT.on), prof=FAC_PROF, em=!!f.emitida, fc=$('#factura');
+  const tipo = prof ? 'Factura proforma' : f.serie==='R' ? 'Factura rectificativa' : 'Factura';
+  const num = prof ? facProfNum(f) : (f.num||'BORRADOR');
+  const ref = facRefTxt(f), vence = f.vence || f.fecha;
+  /* un campo: en pantalla, editable; al imprimir, texto */
+  const fld = (val, attrs, ph, cls) => P ? (String(val||'').trim() ? `<div class="${cls||''}">${esc(val)}</div>` : '')
+    : `<input class="cel ${cls||''}" ${attrs} value="${esc(val||'')}" placeholder="${esc(ph||'')}">`;
+  const area = (val, attrs, ph) => P ? rjLineas(val).map(x=>`<div class="rj-ln">${esc(x)}</div>`).join('')
+    : `<textarea class="cel rj-ln" ${attrs} data-nl="1" rows="2" placeholder="${esc(ph||'')}">${esc(rjDirTA(val))}</textarea>`;
+  const fecha = (id, v) => P ? esc(rjDMY(v)) : `<input type="date" id="${id}" class="rj-date" value="${esc(v||'')}"${em?' disabled':''}>`;
+  const meta=[[prof?'Número de proforma':'Número de factura', `<span class="${f.num||prof?'':'rj-draft'}">${esc(num)}</span>`],
+    ['Fecha de emisión', fecha('fFecha', f.fecha)], ['Fecha de vencimiento', fecha('fVence', vence)]];
+  if(f.serie==='R' && f.rectifica) meta.push(['Rectifica a', esc(f.rectifica)+(f.rectFecha?' · '+esc(rjDMY(f.rectFecha)):'')]);
+  if(!P) meta.push(['Presupuesto', `<input id="fRef" class="rj-ref" value="${esc(ref)}" placeholder="—">`]);
+  else if(ref) meta.push(['Presupuesto', esc(ref)]);
+  const ivaC=rjIVA(f.cliente.cif), ivaPct=fmtIn(IVA())+' %';
+
+  const rows=f.lineas.map((l,i)=>{
+    const del = P ? '' : `<button class="mini danger rj-del noprint" data-fdel="${i}" title="Eliminar">&times;</button>`;
+    if(l.tipo==='sec') return `<tr class="rj-sec"><td class="rj-d">${del}${fld(l.concepto,`data-l="${i}" data-f="concepto"`,'Sección','rj-b')}</td><td></td><td></td><td></td><td></td></tr>`;
+    const sub=[]; if(l.dias!=='' && l.dias!=null && !isNaN(+l.dias) && +l.dias!==1) sub.push(fmtIn(+l.dias)+(+l.dias===1?' día':' días')); if(fPct(l)) sub.push('dto. '+fmtIn(fPct(l))+' %');
+    const cant = P ? esc(l.cant===''||l.cant==null?'':fmtIn(l.cant)) : `<input class="cel num" data-l="${i}" data-f="cant" value="${esc(l.cant??'')}">`;
+    const pvp = P ? esc(eurV(l.pvp)) : `<input class="cel num" data-l="${i}" data-f="pvp" data-eur value="${esc(eurV(l.pvp))}">`;
+    const imp = (f.free && !P) ? `<input class="cel num" data-l="${i}" data-f="impText" value="${esc(l.impText ?? fImp(l))}">` : esc(fImpShown(l));
+    return `<tr class="rj-it"><td class="rj-d">${del}${fld(l.concepto,`data-l="${i}" data-f="concepto"`,'Concepto')}${sub.length?`<div class="rj-sub">${esc(sub.join(' · '))}</div>`:''}</td>
+      <td class="num">${cant}</td><td class="num">${pvp}</td><td class="num">${ivaPct}</td><td class="num">${imp}</td></tr>`;
+  }).join('');
+  const tot = k => (f.free && !P) ? `<td class="num"><input class="cel num" data-tt="${k}" value="${esc(T[k]??'')}"></td>` : `<td class="num">${esc(f.free ? (typeof T[k]==='number'?eurS(T[k]):String(T[k]??'')) : eurS(T[k]))}</td>`;
+  const nota = String(prof ? (CFG.notaProforma||PROF_NOTA) : (CFG.notaFactura||'')).trim();
+
+  fc.classList.add('rojo','pbleed');
+  fc.innerHTML = `<div class="rj-main">
+    <div class="rj-top">
+      <div><h1 class="rj-tit">${esc(tipo)}</h1>
+        <div class="rj-meta">${meta.map(([k,v])=>`<div class="k">${esc(k)}</div><div>${v}</div>`).join('')}</div></div>
+      ${LG ? `<img class="rj-logo" src="${LG}" alt="logo">` : '<div class="rj-logo"></div>'}
+    </div>
+    <div class="rj-par">
+      <div class="rj-emi" title="Vuestros datos: son los de ⚙ Configuración › Datos de empresa (cambiarlos aquí los cambia allí)">
+        ${fld(E.nombre,'data-e="nombre"','Nombre de la empresa','rj-nom')}
+        ${area(E.dir,'data-e="dir"','Dirección\nC.P. y ciudad')}
+        ${fld(E.email,'data-e="email"','E-mail','rj-ln')}
+        ${fld(E.cif,'data-e="cif"','NIF / CIF','rj-ln')}</div>
+      <div class="rj-cli">
+        ${fld(f.cliente.cliente,'data-c="cliente.cliente"','Cliente','rj-nom')}
+        ${area(f.cliente.domicilio,'data-c="cliente.domicilio"','Domicilio')}
+        ${fld(f.cliente.cif,'data-c="cliente.cif"','CIF / NIF','rj-ln')}
+        <div class="rj-ln" id="rjIva">${ivaC?'Número de IVA: '+esc(ivaC):''}</div></div>
+    </div>
+    ${f.serie==='R'&&f.rectifica?`<div class="rj-rect"><b>Motivo de la rectificación:</b> ${P?esc(f.rectMotivo||''):`<textarea class="cel" data-c="rectMotivo" rows="1">${esc(f.rectMotivo||'')}</textarea>`}</div>`:''}
+    <table class="rj-tab"><colgroup><col style="width:48.28%"><col style="width:8.83%"><col style="width:14.68%"><col style="width:10.39%"><col style="width:17.82%"></colgroup>
+      <thead><tr><th>Descripción</th><th>Cant.</th><th>Precio unitario</th><th>IVA (%)</th><th>Total sin IVA</th></tr></thead>
+      <tbody>${rows}</tbody></table>
+    <div class="tools noprint"><button class="mini sec" id="fAddItem">+ línea</button><button class="mini sec" id="fAddSec">+ sección</button></div>
+    <table class="rj-tots">
+      <tr class="tot"><td class="t">Total sin IVA</td>${tot('base')}</tr>
+      <tr class="tot"><td class="t">Importe total del IVA</td>${tot('iva')}</tr>
+      <tr class="tot rj-gran"><td class="t">Total (IVA incluido)</td>${tot('total')}</tr></table>
+    ${nota?`<div class="rj-nota">${esc(nota)}</div>`:''}
+  </div>
+  <div class="rj-pie">
+    <div class="rj-ph">Detalles del pago</div>
+    <div class="rj-pg">
+      <div class="k">Nombre del beneficiario</div><div>${P ? esc(R.benef||E.nombre||'') : `<input class="cel" data-r="benef" value="${esc(R.benef)}" placeholder="${esc(E.nombre||'Beneficiario')}">`}</div>
+      <div class="k">BIC</div><div>${fld(R.bic,'data-r="bic"','BIC')}</div>
+      <div class="k">IBAN</div><div>${fld(R.iban,'data-r="iban"','IBAN')}</div>
+      <div class="k">Referencia</div><div title="El número de la factura: con él se cuadran las transferencias">${esc(num)}</div>
+    </div>
+    <div class="rj-hr"></div>
+    <div class="rj-legal">${P ? esc(R.pie||E.nombre||'') : `<input class="cel" data-r="pie" value="${esc(R.pie)}" placeholder="${esc(E.nombre||'Texto legal del pie')}">`}</div>
+    <div class="rj-pnum">${esc(num)} &nbsp;·&nbsp; 1/1</div>
+  </div>`;
+}
+/* datos de Rojo: se editan en la propia factura y se guardan en la configuración compartida */
+function rojoBind(){
+  const fc=$('#factura'), f=F(); let t=null;
+  fc.querySelectorAll('[data-r]').forEach(i=> i.oninput=()=>{ if(i.tagName==='TEXTAREA') fGrow(i); const R=facPagoEdit(); R[i.dataset.r]=i.dataset.nl ? i.value.replace(/\s*\n+\s*/g,', ') : i.value; clearTimeout(t); t=setTimeout(()=>saveCfg(),700); });
+  { const el=$('#fVence'); if(el) el.oninput=e=>{ f.vence=e.target.value; save(); }; }
+  { const el=fc.querySelector('[data-c="cliente.cif"]'), iv=$('#rjIva'); if(el && iv) el.addEventListener('input',()=>{ const v=rjIVA(el.value); iv.textContent=v?'Número de IVA: '+v:''; }); }
+}
+function facSetPlant(p){
+  const f=F(); if(p!=='rojo' && p!=='std') return;
+  if(f.emitida){ toast('Esta factura ya está emitida con su diseño (y su emisor): no se puede cambiar','#c60'); return; }
+  if(facPlant(f)===p && f.plantilla) return;
+  snap(); f.plantilla=p; empMat(); facEmp(f).plantilla=p; saveCfg(); save(); renderFactura();   /* las nuevas de esta empresa salen con este diseño */
+  toast(p==='rojo' ? 'Diseño Rojo' : 'Diseño estándar', '#026');
+}
+function rojoInit(){ $$('#fPlant [data-pl]').forEach(b=> b.onclick=()=>facSetPlant(b.dataset.pl)); if(typeof empInit==='function') empInit(); }
+function rojoButtons(){ const f=F(), p=facPlant(f);
+  $$('#fPlant [data-pl]').forEach(b=>{ b.classList.toggle('on', b.dataset.pl===p); b.disabled=!!f.emitida; });
+  const s=$('#fPlant'); if(s) s.title = f.emitida ? 'Emitida con este diseño: no se puede cambiar' : 'Estándar: el diseño de siempre, con el logo de Configuración. Rojo: el modelo de Rojo Logística, con el logo de Back to Track y los datos del pago (BIC, IBAN).';
+  const c=$('#fCols'); if(c) c.classList.toggle('hidden', p==='rojo'); if(typeof empButtons==='function') empButtons(); }
+
+/* =====================================================================
+   EMPRESAS QUE FACTURAN Y SUS SERIES  (14-11-2026)
+   · Cada empresa: sus datos, sus datos de pago, su logo, su diseño de factura y sus series.
+   · La empresa «principal» es la de ⚙ Configuración › Datos de empresa (CFG.empresa, la del pie del
+     presupuesto) y sus datos de pago son CFG.rojo: no se duplican. Las demás guardan los suyos.
+   · Cada serie tiene su contador en el almacén («contadores») y su formato: PREFIJO-AÑO-NNN.
+     Las series de siempre (F y R, 4 dígitos) son «legacy»: siguen con su contador F-2026 / R-2026.
+     Las nuevas cuentan por su id (s…-2026), así un mismo prefijo no se pisa entre empresas.
+     La primera vez que se usa una serie en un año, la app pregunta por qué número va
+     (con eso se continúa una serie que venía de otro sitio, o se empieza en 0).
+   · Factura: f.empresa (id), f.serieId (id de serie), f.serie sigue siendo el TIPO ('F' normal,
+     'R' rectificativa). Al emitir queda f.emisor con una copia de los datos (y la clave del logo).
+   ===================================================================== */
+const EMP_SERIES_DEF = () => [{id:'F',pref:'F',dig:4,tipo:'F',nombre:'Facturas',legacy:true},{id:'R',pref:'R',dig:4,tipo:'R',nombre:'Rectificativas',legacy:true}];
+const EMP_LOGOS=[['btt','Back to Track'],['general','El de «Logo» (arriba)'],['propio','Propio de esta empresa']];
+function empPrincipalDef(C){ C=C||CFG; return {id:'principal', plantilla:C.facPlantilla==='rojo'?'rojo':'std', logo:'btt', activa:true, series:EMP_SERIES_DEF(), serieF:'F', serieR:'R'}; }
+function empLista(C){ C=C||CFG; let L=(Array.isArray(C.empresas) && C.empresas.length) ? C.empresas : [empPrincipalDef(C)];
+  if(!L.some(e=>e.id==='principal')) L=[empPrincipalDef(C), ...L]; return L; }
+/* antes de cambiar algo de una empresa desde la factura, la lista pasa a estar guardada */
+function empMat(){ if(!Array.isArray(CFG.empresas) || !CFG.empresas.length || !CFG.empresas.some(e=>e.id==='principal')) CFG.empresas=clone(empLista(CFG)); return CFG.empresas; }
+const empById = (id,C) => { const L=empLista(C); return L.find(e=>e.id===id) || L.find(e=>e.id==='principal'); };
+const empDatos = (e,C) => { C=C||CFG; if(e.id==='principal'){ C.empresa=C.empresa||{}; return C.empresa; } e.datos=e.datos||{nombre:'',dir:'',cif:'',tel:'',email:'',web:''}; return e.datos; };
+const empPago = (e,C) => { C=C||CFG; if(e.id==='principal'){ if(!C.rojo || typeof C.rojo!=='object') C.rojo={}; return C.rojo; } e.pago=e.pago||{benef:'',bic:'',iban:'',pie:''}; return e.pago; };
+const empNombre = (e,C) => (empDatos(e,C).nombre||'').trim() || (e.id==='principal' ? 'Empresa principal' : 'Empresa sin nombre');
+const empSerieDef = (e,tipo) => { const S=(e.series||[]).filter(s=>s.tipo===tipo); return S.find(s=>s.id===(tipo==='R'?e.serieR:e.serieF)) || S[0] || null; };
+/* la empresa y la serie de una factura (una emitida, las que tenía) */
+function facEmp(f){ const id=(f && f.empresa) || CFG.empresaDef || 'principal'; const e=empById(id); return e; }
+function facSerieObj(f){ const e=facEmp(f), tipo=(f&&f.serie)||'F'; return (e.series||[]).find(s=>s.id===f.serieId && s.tipo===tipo) || empSerieDef(e,tipo); }
+const serieCnt = (s,year) => s.legacy ? `${s.pref}-${year}` : `${s.id}-${year}`;
+const serieNum = (s,year,n) => `${s.pref}-${year}-${String(n).padStart(+s.dig||4,'0')}`;
+const serieMuestra = (s,year) => `${s.pref||'?'}-${year||new Date().getFullYear()}-${'0'.repeat(Math.max(0,(+s.dig||4)-1))}1`;
+/* el número más alto de una serie en el registro (solo para proponer por dónde va la primera vez) */
+function serieUltimoReg(s,year){ const re=new RegExp('^'+String(s.pref).replace(/[^A-Z0-9]/gi,'')+'-'+year+'-(\\d{'+(+s.dig||4)+'})$'); let m=0;
+  REG.forEach(r=>{ const k=re.exec(String(r.num||'')); if(!k) return; if(r.serieId ? r.serieId!==s.id : !s.legacy) return; m=Math.max(m,+k[1]); }); return m; }
+/* emisor que se pinta: el congelado de una emitida o el de su empresa */
+const facEmisor = f => (f.emitida && f.emisor) ? f.emisor : empDatos(facEmp(f));
+const facPago = f => (f.emitida && f.emisor) ? Object.assign({benef:'',bic:'',iban:'',pie:''}, f.emisor.pago||{}) : Object.assign({benef:'',bic:'',iban:'',pie:''}, empPago(facEmp(f)));
+const facEmisorEdit = () => { const f=F(); if(facEmp(f).id!=='principal') empMat(); return empDatos(facEmp(f)); };
+const facPagoEdit = () => { const f=F(); if(facEmp(f).id!=='principal') empMat(); return empPago(facEmp(f)); };
+function facLogoSrc(f){ const k=(f.emitida && f.emisor && f.emisor.logo) || facEmp(f).logo || 'btt', id=(f.emitida && f.emisor && f.emisor.empresa) || facEmp(f).id;
+  return k==='btt' ? (typeof ROJO_LOGO!=='undefined'?ROJO_LOGO:'') : k==='propio' ? ((CFG.empLogos||{})[id]||'') : (CFG.logo||''); }
+function facLogoHTML(f,h){ const k=(f.emitida && f.emisor && f.emisor.logo) || facEmp(f).logo || 'btt';
+  if(k==='general') return logoImg(h); const s=facLogoSrc(f); return s ? `<img src="${s}" alt="logo" style="height:${h}px">` : logoImg(h); }
+function facEmisorCopia(f){ const e=facEmp(f); return Object.assign(clone(empDatos(e)), {pago:clone(empPago(e)), logo:e.logo||'btt', empresa:e.id}); }
+
+/* ---------- en la barra de la factura: «Emite» y «Serie» ---------- */
+function facSetEmp(id){ const f=F(); if(f.emitida){ toast('Esta factura ya está emitida: su empresa no se puede cambiar','#c60'); return; }
+  const e=empLista().find(x=>x.id===id); if(!e) return; snap(); f.empresa=e.id; f.plantilla=e.plantilla==='rojo'?'rojo':'std'; f.serieId='';
+  CFG.empresaDef=e.id; saveCfg(); save(); renderFactura(); toast('Emite '+empNombre(e),'#026'); }
+function facSetSerie(id){ const f=F(); if(f.emitida) return; snap(); f.serieId=id; save(); renderFactura(); }
+function empInit(){ const se=$('#fEmp'), ss=$('#fSerie'); if(se) se.onchange=()=>facSetEmp(se.value); if(ss) ss.onchange=()=>facSetSerie(ss.value); }
+function empButtons(){ const f=F(), se=$('#fEmp'), ss=$('#fSerie'); if(!se||!ss) return; const e=facEmp(f), y=+String(f.fecha||today()).slice(0,4)||new Date().getFullYear();
+  const L=empLista().filter(x=>x.activa!==false || x.id===e.id);
+  se.innerHTML=L.map(x=>`<option value="${esc(x.id)}"${x.id===e.id?' selected':''}>${esc(f.emitida&&f.emisor&&x.id===e.id ? (f.emisor.nombre||empNombre(x)) : empNombre(x))}</option>`).join('');
+  const s=facSerieObj(f), S=(e.series||[]).filter(x=>x.tipo===((f.serie)||'F'));
+  ss.innerHTML=S.length ? S.map(x=>`<option value="${esc(x.id)}"${s&&x.id===s.id?' selected':''}>${esc((x.nombre||x.pref)+' · '+serieMuestra(x,y))}</option>`).join('') : '<option value="">(sin serie: créala en ⚙ Configuración)</option>';
+  se.disabled=ss.disabled=!!f.emitida;
+  se.title=f.emitida?'Emitida: la empresa queda fijada':'La empresa que emite la factura. Se dan de alta en ⚙ Configuración › Empresas que facturan';
+  ss.title=f.emitida?'Emitida: la serie queda fijada':'Serie de numeración. Cada serie lleva su propio contador'; }
+
+/* ---------- ⚙ Configuración › Empresas que facturan (trabaja sobre CFG_DRAFT, se guarda con «Guardar») ---------- */
+function empCfgPrep(C){ C.empresas=clone(empLista(C)); C.empLogos=Object.assign({},C.empLogos||{}); if(!C.empresas.some(e=>e.id===C.empresaDef)) C.empresaDef='principal'; }
+const empCfgHTML = () => `<section id="empCfgSec"><h4>Empresas que facturan <span class="hint">(datos, logo, diseño de factura y series de numeración de cada una)</span></h4>
+  <div id="empCfg"></div><div class="cfgbtns"><button class="sec mini" id="empAdd">+ Nueva empresa</button></div>
+  <div class="hint">La primera vez que se emite con una serie, la app pregunta por qué número va: pon el último que hicisteis (por ejemplo, el de Qonto) o 0 para empezar.</div></section>`;
+const empUsada = e => REG.some(r=>(r.empresa||'principal')===e.id);
+const serieUsada = (e,s) => s.legacy || REG.some(r=>r.serieId===s.id);
+function empCfgPaint(){ const C=CFG_DRAFT, box=$('#empCfg'); if(!C || !box) return; const y=new Date().getFullYear();
+  box.innerHTML=C.empresas.map((e,i)=>{ const pr=e.id==='principal', D=empDatos(e,C), P=empPago(e,C), lg=e.logo||'btt', lsrc=lg==='btt'?(typeof ROJO_LOGO!=='undefined'?ROJO_LOGO:''):lg==='propio'?(C.empLogos[e.id]||''):(C.logo||'');
+    const inp=(path,val,ph,w)=>`<input data-em="${i}.${path}" value="${esc(val||'')}" placeholder="${esc(ph||'')}"${w?` style="width:${w}"`:''}>`;
+    return `<div class="empc${e.activa===false?' off':''}">
+      <div class="empc-h"><b>${esc(empNombre(e,C))}</b>${pr?'<span class="hint">sus datos son los de «Datos de empresa», arriba</span>':''}
+        <span style="flex:1"></span>
+        <label class="ck"><input type="radio" name="empDef" data-emdef="${esc(e.id)}"${C.empresaDef===e.id?' checked':''}> Por defecto</label>
+        ${pr?'':`<label class="ck"><input type="checkbox" data-em="${i}.activa"${e.activa!==false?' checked':''}> Activa</label><button class="mini danger" data-emdel="${i}" title="Quitar esta empresa">Quitar</button>`}</div>
+      ${pr?'':`<div class="cfggrid"><label>Nombre${inp('datos.nombre',D.nombre)}</label><label>Dirección${inp('datos.dir',D.dir)}</label><label>NIF / CIF${inp('datos.cif',D.cif)}</label><label>Teléfono${inp('datos.tel',D.tel)}</label><label>E-mail${inp('datos.email',D.email)}</label><label>Web${inp('datos.web',D.web)}</label></div>`}
+      <div class="cfggrid"><label>Beneficiario de las transferencias${inp('pago.benef',P.benef,empNombre(e,C))}</label><label>IBAN${inp('pago.iban',P.iban,'ES00 0000 0000 0000 0000 0000')}</label><label>BIC${inp('pago.bic',P.bic)}</label><label>Pie legal de la factura <span class="hint">(diseño Rojo)</span>${inp('pago.pie',P.pie,empNombre(e,C))}</label>
+        <label>Diseño de factura<select data-em="${i}.plantilla"><option value="std"${e.plantilla!=='rojo'?' selected':''}>Estándar</option><option value="rojo"${e.plantilla==='rojo'?' selected':''}>Rojo</option></select></label>
+        <label>Logo<select data-em="${i}.logo">${EMP_LOGOS.map(([k,t])=>`<option value="${k}"${lg===k?' selected':''}>${esc(t)}</option>`).join('')}</select></label></div>
+      <div class="emplogo">${lsrc?`<img src="${lsrc}" alt="">`:'<span class="hint">sin logo</span>'}${lg==='propio'?` <button class="sec mini" data-emlogo="${i}">${lsrc?'Cambiar imagen…':'Elegir imagen…'}</button>`:''}</div>
+      <table class="empser"><thead><tr><th>Serie</th><th>Prefijo</th><th>Dígitos</th><th>Para</th><th>Ejemplo</th><th title="La que sale al hacer una factura nueva con esta empresa">Por defecto</th><th></th></tr></thead><tbody>
+      ${(e.series||[]).map((s,k)=>{ const u=serieUsada(e,s), def=s.id===(s.tipo==='R'?e.serieR:e.serieF);
+        return `<tr><td><input data-es="${i}.${k}.nombre" value="${esc(s.nombre||'')}" placeholder="Nombre"></td>
+          <td><input data-es="${i}.${k}.pref" value="${esc(s.pref||'')}" placeholder="F" style="width:64px;text-transform:uppercase"${u?' disabled title="Ya tiene facturas: no se cambia"':''}></td>
+          <td><select data-es="${i}.${k}.dig"${u?' disabled':''}>${[1,2,3,4,5,6].map(n=>`<option${(+s.dig||4)===n?' selected':''}>${n}</option>`).join('')}</select></td>
+          <td><select data-es="${i}.${k}.tipo"${u?' disabled':''}><option value="F"${s.tipo!=='R'?' selected':''}>Facturas</option><option value="R"${s.tipo==='R'?' selected':''}>Rectificativas</option></select></td>
+          <td class="hint">${esc(serieMuestra(s,y))}</td>
+          <td style="text-align:center"><input type="radio" name="sdef_${i}_${s.tipo}" data-esdef="${i}.${k}"${def?' checked':''}></td>
+          <td>${u?'<span class="hint">en uso</span>':`<button class="mini danger" data-esdel="${i}.${k}" title="Quitar esta serie">&times;</button>`}</td></tr>`; }).join('')}
+      </tbody></table><button class="sec mini" data-esadd="${i}">+ Nueva serie</button></div>`; }).join('');
+}
+function empCfgBind(){ const box=$('#empCfg'); if(!box) return; const C=CFG_DRAFT;
+  const emp=i=>C.empresas[+i];
+  box.addEventListener('input',e=>{ const t=e.target; let m;
+    if((m=/^(\d+)\.(datos|pago)\.(\w+)$/.exec(t.dataset.em||''))){ const E=emp(m[1]); (m[2]==='datos'?empDatos(E,C):empPago(E,C))[m[3]]=t.value; if(m[3]==='nombre'){ const b=t.closest('.empc').querySelector('.empc-h b'); if(b) b.textContent=empNombre(E,C); } return; }
+    if((m=/^(\d+)\.(\d+)\.(nombre|pref)$/.exec(t.dataset.es||''))){ const s=emp(m[1]).series[+m[2]]; if(m[3]==='pref'){ t.value=t.value.toUpperCase().replace(/[^A-Z0-9]/g,'').slice(0,6); } s[m[3]]=t.value;
+      if(m[3]==='pref'){ const ej=t.closest('tr').querySelector('td.hint'); if(ej) ej.textContent=serieMuestra(s); } } });
+  box.addEventListener('change',e=>{ const t=e.target; let m;
+    if(t.dataset.emdef){ C.empresaDef=t.dataset.emdef; return; }
+    if((m=/^(\d+)\.(activa|plantilla|logo)$/.exec(t.dataset.em||''))){ const E=emp(m[1]); E[m[2]] = m[2]==='activa' ? t.checked : t.value;
+      if(m[2]==='activa' && !t.checked && C.empresaDef===E.id) C.empresaDef='principal'; empCfgPaint(); return; }
+    if((m=/^(\d+)\.(\d+)\.(dig|tipo)$/.exec(t.dataset.es||''))){ const E=emp(m[1]), s=E.series[+m[2]]; s[m[3]] = m[3]==='dig' ? +t.value : t.value; empSerieFix(E); empCfgPaint(); return; }
+    if((m=/^(\d+)\.(\d+)$/.exec(t.dataset.esdef||''))){ const E=emp(m[1]), s=E.series[+m[2]]; if(s.tipo==='R') E.serieR=s.id; else E.serieF=s.id; } });
+  box.addEventListener('click',async e=>{ const b=e.target.closest('button'); if(!b) return; let m;
+    if(b.dataset.esadd!=null){ const E=emp(b.dataset.esadd); E.series=E.series||[]; E.series.push({id:'s'+uid(), pref:'', dig:3, tipo:'F', nombre:''}); empSerieFix(E); empCfgPaint();
+      const r=$$(`#empCfg [data-es^="${b.dataset.esadd}."][data-es$=".nombre"]`); if(r.length) r[r.length-1].focus(); return; }
+    if((m=/^(\d+)\.(\d+)$/.exec(b.dataset.esdel||''))){ const E=emp(m[1]); E.series.splice(+m[2],1); empSerieFix(E); empCfgPaint(); return; }
+    if(b.dataset.emdel!=null){ const E=emp(b.dataset.emdel);
+      if(empUsada(E)){ alertDlg('No se puede quitar','Esta empresa ya tiene facturas emitidas. Desmarca «Activa» para que deje de salir en las facturas nuevas.'); return; }
+      if(!await confirmDlg('Quitar empresa',`Se quita «${empNombre(E,C)}» de la lista (al pulsar «Guardar»).`,{ok:'Quitar',danger:true})) return;
+      C.empresas.splice(+b.dataset.emdel,1); if(C.empLogos[E.id]) C.empLogos[E.id]=''; if(C.empresaDef===E.id) C.empresaDef='principal'; empCfgPaint(); return; }
+    if(b.dataset.emlogo!=null){ const E=emp(b.dataset.emlogo), fi=document.createElement('input'); fi.type='file'; fi.accept='image/*';
+      fi.onchange=async()=>{ const f=fi.files[0]; if(!f) return; try{ C.empLogos[E.id]=await imgToDataURL(f); empCfgPaint(); }catch(err){ toast('No pude leer esa imagen','#c00'); } }; fi.click(); } });
+  $('#empAdd').onclick=()=>{ const a='s'+uid(), r='s'+uid();
+    C.empresas.push({id:'e'+uid(), datos:{nombre:'',dir:'',cif:'',tel:'',email:'',web:''}, pago:{benef:'',bic:'',iban:'',pie:''}, plantilla:'std', logo:'general', activa:true,
+      series:[{id:a,pref:'',dig:3,tipo:'F',nombre:'Facturas'},{id:r,pref:'',dig:3,tipo:'R',nombre:'Rectificativas'}], serieF:a, serieR:r});
+    empCfgPaint(); const n=$$('#empCfg [data-em$=".datos.nombre"]'); if(n.length) n[n.length-1].focus(); };
+}
+/* que cada empresa tenga bien apuntada su serie por defecto de cada tipo */
+function empSerieFix(E){ const ok=(id,t)=>(E.series||[]).some(s=>s.id===id && s.tipo===t);
+  if(!ok(E.serieF,'F')){ const s=(E.series||[]).find(s=>s.tipo==='F'); E.serieF=s?s.id:''; }
+  if(!ok(E.serieR,'R')){ const s=(E.series||[]).find(s=>s.tipo==='R'); E.serieR=s?s.id:''; } }
+/* al pulsar «Guardar» en Configuración: si algo no vale, se dice y no se guarda */
+function empCfgValida(C){ if(!Array.isArray(C.empresas)) return true; const vistos={};
+  for(const E of C.empresas){ const nom=empNombre(E,C);
+    if(E.id!=='principal' && !(empDatos(E,C).nombre||'').trim()){ toast('Falta el nombre de una de las empresas que facturan','#c00'); return false; }
+    empSerieFix(E);
+    if(E.activa!==false && !(E.series||[]).some(s=>s.tipo==='F')){ toast(`«${nom}» necesita al menos una serie de facturas`,'#c00'); return false; }
+    for(const s of (E.series||[])){
+      s.pref=String(s.pref||'').toUpperCase().replace(/[^A-Z0-9]/g,''); s.dig=Math.min(6,Math.max(1,+s.dig||4));
+      if(!s.pref){ toast(`A una serie de «${nom}» le falta el prefijo (por ejemplo F)`,'#c00'); return false; }
+      const k=s.pref+'|'+s.dig; if(vistos[k]){ toast(`La serie ${serieMuestra(s)} está repetida (${vistos[k]} y ${nom}): cambia el prefijo o los dígitos`,'#c00'); return false; } vistos[k]=nom; } }
+  if(!C.empresas.some(e=>e.id===C.empresaDef && e.activa!==false)) C.empresaDef='principal';
+  return true; }
+
+/* ---------- registro de facturas: quién emite cada una ---------- */
+function regEmpNombre(r){ if(r.emisor && r.emisor.nombre) return r.emisor.nombre; const e=empLista().find(x=>x.id===(r.empresa||'principal')); return e?empNombre(e):''; }
 
 /* =====================================================================
    3 · CONTRARIDER  (rejilla tipo Excel, formato de contrarider)
@@ -6480,7 +6839,7 @@ const canon = o => Array.isArray(o) ? '['+o.map(canon).join(',')+']'
 const noMod = o => { const c=Object.assign({},o); delete c.mod; return c; };
 const typing = sel => { const a=document.activeElement; return !!(a && a.closest && a.closest(sel) && /INPUT|TEXTAREA|SELECT/.test(a.tagName)); };
 let INV_BASE_MAP=null;
-const SHARED_CFG=[['empresa','Empresa'],['liqReparto','Reparto de la liquidación'],['redondeo','Redondeo del TOTAL'],['facProv','Proveedores de facturas recibidas'],['facNuestros','NIF propios (destinatario de las facturas)'],['fp','Formas de pago'],['conceptos','Conceptos'],['cuenta','Cuenta bancaria'],['iva','IVA'],['validez','Validez'],['obs','Observaciones por defecto'],['notaFactura','Nota de la factura'],['fmtDefault','Formato por defecto'],['priceMode','Precio del inventario'],['logoH','Tamaño del logo'],['cColor','Color del contrarider'],['cPrintCols','Columnas del contrarider'],['gastoTipos','Tipos de gasto del Bolo'],['gastosFijos','Gastos fijos de la hoja del bolo'],['gastoEmpresas','Empresas de los gastos del Bolo']];
+const SHARED_CFG=[['empresa','Empresa'],['rojo','Datos del pago (factura Rojo)'],['facPlantilla','Diseño de factura'],['empresas','Empresas que facturan y sus series'],['empresaDef','Empresa que factura por defecto'],['liqReparto','Reparto de la liquidación'],['redondeo','Redondeo del TOTAL'],['facProv','Proveedores de facturas recibidas'],['facNuestros','NIF propios (destinatario de las facturas)'],['fp','Formas de pago'],['conceptos','Conceptos'],['cuenta','Cuenta bancaria'],['iva','IVA'],['validez','Validez'],['obs','Observaciones por defecto'],['notaFactura','Nota de la factura'],['fmtDefault','Formato por defecto'],['priceMode','Precio del inventario'],['logoH','Tamaño del logo'],['cColor','Color del contrarider'],['cPrintCols','Columnas del contrarider'],['gastoTipos','Tipos de gasto del Bolo'],['gastosFijos','Gastos fijos de la hoja del bolo'],['gastoEmpresas','Empresas de los gastos del Bolo']];
 const shortV = v => { if(v==null||v==='') return ''; if(typeof v==='object'){ const t=JSON.stringify(v); return t.length>140?t.slice(0,140)+'…':t; } return String(v); };
 const SY_COLS={
   clientes:{
@@ -6551,18 +6910,19 @@ const SY_COLS={
   ajustes:{
     label:'ajustes compartidos', uno:'ajuste',
     get:()=>{ const c={id:'cfg'}; SHARED_CFG.forEach(([k])=>c[k]=CFG[k]===undefined?null:CFG[k]);
-      return [c, {id:'logo', img:CFG.logo||''}, {id:'listas', tecnicos:PLAN.listas.tecnicos, empresas:PLAN.listas.empresas, tipos:PLAN.listas.tipos}, ...Object.keys(CFG.fotos||{}).map(u=>({id:'foto:'+u, img:CFG.fotos[u]||''}))]; },
+      return [c, {id:'logo', img:CFG.logo||''}, {id:'listas', tecnicos:PLAN.listas.tecnicos, empresas:PLAN.listas.empresas, tipos:PLAN.listas.tipos}, ...Object.keys(CFG.fotos||{}).map(u=>({id:'foto:'+u, img:CFG.fotos[u]||''})), ...Object.keys(CFG.empLogos||{}).map(k=>({id:'elogo:'+k, img:CFG.empLogos[k]||''}))]; },
     set:a=>{ a.forEach(o=>{
         if(o.id==='cfg') SHARED_CFG.forEach(([k])=>{ if(k in o) CFG[k]=o[k]==null?CFG_DEF[k]:o[k]; });
         else if(o.id==='logo') CFG.logo=o.img||null;
+        else if(String(o.id).startsWith('elogo:')){ CFG.empLogos=CFG.empLogos||{}; const k=o.id.slice(6); if(o.img) CFG.empLogos[k]=o.img; else delete CFG.empLogos[k]; }
         else if(String(o.id).startsWith('foto:')){ CFG.fotos=CFG.fotos||{}; const u=o.id.slice(5); if(o.img) CFG.fotos[u]=o.img; else delete CFG.fotos[u]; }
         else if(o.id==='listas') ['tecnicos','empresas','tipos'].forEach(k=>{ if(Array.isArray(o[k])) PLAN.listas[k]=o[k]; }); });
       CFG.empresa=Object.assign(clone(CFG_DEF.empresa),CFG.empresa||{}); lsSet(LS_CFG,CFG); lsSet(LS_PLAN,PLAN); },
-    name:o=>String(o.id).startsWith('foto:') ? 'Foto de '+o.id.slice(5) : ({cfg:'Configuración (empresa, IVA, textos…)',logo:'Logo',listas:'Listas del Planning (personal, empresas, tipos)'})[o.id]||o.id,
+    name:o=>String(o.id).startsWith('elogo:') ? 'Logo de una empresa que factura' : String(o.id).startsWith('foto:') ? 'Foto de '+o.id.slice(5) : ({cfg:'Configuración (empresa, IVA, textos…)',logo:'Logo',listas:'Listas del Planning (personal, empresas, tipos)'})[o.id]||o.id,
     key:()=>'',
-    pristine:o=>{ if(o.id==='logo' || String(o.id).startsWith('foto:')) return !o.img; if(o.id==='listas') return canon({tecnicos:o.tecnicos,empresas:o.empresas,tipos:o.tipos})===canon({tecnicos:['Itu','Luis'],empresas:['Tramisa','Videoenlace','Transfenix'],tipos:['Bolo','Entrega','Recogida','Tarimas','Otros']});
+    pristine:o=>{ if(o.id==='logo' || String(o.id).startsWith('foto:') || String(o.id).startsWith('elogo:')) return !o.img; if(o.id==='listas') return canon({tecnicos:o.tecnicos,empresas:o.empresas,tipos:o.tipos})===canon({tecnicos:['Itu','Luis'],empresas:['Tramisa','Videoenlace','Transfenix'],tipos:['Bolo','Entrega','Recogida','Tarimas','Otros']});
       return SHARED_CFG.every(([k])=>canon(o[k]==null?CFG_DEF[k]:o[k])===canon(CFG_DEF[k]==null?null:CFG_DEF[k])); },
-    rows:o=>String(o.id).startsWith('foto:') ? [['Foto',o.img?'imagen de '+Math.round(o.img.length*0.75/1024)+' KB':'sin foto']] : o.id==='cfg' ? SHARED_CFG.map(([k,t])=>[t,shortV(o[k])]) : o.id==='logo' ? [['Logo',o.img?'imagen de '+Math.round(o.img.length*0.75/1024)+' KB':'sin logo']] : [['Personal',(o.tecnicos||[]).join(', ')],['Empresas',(o.empresas||[]).join(', ')],['Tipos',(o.tipos||[]).join(', ')]],
+    rows:o=>String(o.id).startsWith('elogo:') ? [['Logo',o.img?'imagen de '+Math.round(o.img.length*0.75/1024)+' KB':'sin logo']] : String(o.id).startsWith('foto:') ? [['Foto',o.img?'imagen de '+Math.round(o.img.length*0.75/1024)+' KB':'sin foto']] : o.id==='cfg' ? SHARED_CFG.map(([k,t])=>[t,shortV(o[k])]) : o.id==='logo' ? [['Logo',o.img?'imagen de '+Math.round(o.img.length*0.75/1024)+' KB':'sin logo']] : [['Personal',(o.tecnicos||[]).join(', ')],['Empresas',(o.empresas||[]).join(', ')],['Tipos',(o.tipos||[]).join(', ')]],
     after:()=>{ try{ setLogoTop(); }catch(e){} if(typeof userCard==='function') userCard(); if(['ppto','mail','fact','contra','bolo'].includes(TAB) && !GACT) renderTab(); }
   }
 };
@@ -7075,7 +7435,7 @@ async function pdfFillable(tab,opt){
       if(ks.length){ const rs=ks.map(el=>el.getBoundingClientRect()), L=Math.min(...rs.map(r=>r.left)), Rr=Math.max(...rs.map(r=>r.right));
         if(Rr-L>50 && Rr-L<R0.width-4) R0={left:L, right:Rr, width:Rr-L, top:R0.top, bottom:R0.bottom, height:R0.height}; } }
     const pdf=await PDFDocument.create();
-    const PW=595.28, PH=841.89, MG=5*72/25.4, MX=4*72/25.4;
+    const BLEED=sheet.classList.contains('pbleed'), PW=595.28, PH=841.89, MG=BLEED?0:5*72/25.4, MX=BLEED?0:4*72/25.4;   /* pbleed: hoja que ya lleva sus márgenes (factura Rojo): sale a sangre */
     const multi=!!opt.multi;
     const s=multi ? Math.min((PW-2*MX)/R0.width, .75) : Math.min((PW-2*MX)/R0.width,(PH-2*MG)/R0.height);
     const ox=MX+((PW-2*MX)-R0.width*s)/2, oy=MG; let page=null, off=0;
@@ -10150,10 +10510,11 @@ function facLeer(lines){
   const r={emisor:'', nif:'', fecha:'', num:'', base:null, iva:null, total:null, leido:lines.length>0};
   if(!lines.length) return r;
   const yo=flNifN(CFG.empresa&&CFG.empresa.cif), cli=new Set((CLI||[]).map(c=>flNifN(c.cif)).filter(Boolean));
-  const misNombres=[CFG.empresa&&CFG.empresa.nombre,'btbackline','bt backline'].filter(Boolean).map(norm);
+  const EMPS=typeof empLista==='function'?empLista().map(e=>empDatos(e)):[];
+  const misNombres=[CFG.empresa&&CFG.empresa.nombre,'btbackline','bt backline',...EMPS.map(d=>d.nombre)].filter(Boolean).map(norm);
   /* NIF del emisor: el primero que no es el nuestro */
   /* el bloque del destinatario («Para:», «Cliente:», «Facturar a»…) no es el emisor */
-  const nuestros=new Set([yo, ...((CFG.facNuestros||[]).map(flNifN))].filter(Boolean)), zona=new Set();
+  const nuestros=new Set([yo, ...((CFG.facNuestros||[]).map(flNifN)), ...EMPS.map(d=>flNifN(d.cif))].filter(Boolean)), zona=new Set();
   lines.forEach((l,i)=>{ if(/^\s*(para|cliente|facturar\s+a|factura\s+a|destinatario|datos\s+del\s+cliente|bill\s+to|customer|se[ñn]or(es)?)\b\s*:?/i.test(l)) for(let k=i;k<=Math.min(lines.length-1,i+5);k++) zona.add(k); });
   const busca=excl=>{ for(let i=0;i<lines.length;i++){ if(excl && zona.has(i)) continue; let m; FL_NIF.lastIndex=0; while((m=FL_NIF.exec(lines[i]))){ const n=flNifN(m[1]); if(n && !nuestros.has(n)){ r.nif=n; r._li=i; return true; } } } return false; };
   busca(true) || busca(false);
@@ -10348,6 +10709,7 @@ function preparePrint(list){
   document.body.classList.toggle('cfoot', list.length===1 && list[0]==='contra');
   const nRows=(GRIDS.contra&&GRIDS.contra.def)?GRIDS.contra.def.rows.filter(r=>r.ref).length:0; const pg=$('#cFoot .pg'); if(pg) pg.textContent = nRows<=CONTRA_PRINT_ROWS ? 'Página 1' : '';
   $$('.tab.printme .sheet').forEach(sh=>{ sh.style.zoom=''; sh.style.height=''; sh.classList.remove('fit1'); const f0=sh.querySelector('.frame'); if(f0) f0.style.zoom=''; if(sh.id==='contra') return;
+    if(sh.classList.contains('pbleed')) return;   /* hoja a sangre (factura Rojo): ya mide un A4 justo, no se reduce */
     if((sh.id==='ppto'||sh.id==='mail'||sh.id==='bolo') && CFG.fit1!==false){            /* todo en una hoja A4 vertical */
       const sec=sh.closest('.tab'), hid=sec.classList.contains('hidden'); if(hid) sec.classList.remove('hidden');
       const box=sh.querySelector('.frame')||sh; const w=Math.max(box.scrollWidth,box.offsetWidth), h=box.scrollHeight; if(hid) sec.classList.add('hidden');
