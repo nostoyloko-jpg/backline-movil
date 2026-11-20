@@ -498,7 +498,7 @@ b.dr{color:#b42318}b.da{color:#b54708}#invDispBtn.on{background:var(--navy);colo
 .djp.dj-fuera{background:#e0eaff;color:#2f4a9e}.djp.dj-rev{background:#fef0c7;color:#93370d}.djp.dj-falta{background:#fee4e2;color:#b42318}.djp.dj-ok{background:#dcfae6;color:#067647}.djp.dj-sin{background:#f2f4f7;color:#667085}
 .djf{display:block;font-size:11.5px;color:#b42318;margin-top:2px}
 .djs{display:block;font-size:11.5px;color:#b54708;margin-top:2px}
-.djp.dj-sal{background:#e3f5ea;color:#0a5c38}
+.djp.dj-sal{background:#e3f5ea;color:#0a5c38}.djp.dj-sinm{background:#fff4e5;color:#b54708}.dvk.dvwarn{background:#fff4e5;color:#b54708}
 #tab-dev .djt tr.dvv td{background:#e3f5ea!important}
 .djt input.ckvue{width:17px;height:17px;margin:0;accent-color:#067647;cursor:pointer}
 .djt input.ckvue:disabled{opacity:.5;cursor:default}
@@ -616,7 +616,7 @@ tr.pan td.pc{text-decoration:line-through}
 .pch.ok{color:#1f7a45;background:#ecf7f0;border-color:#bfe3cc}
 .pch.ko{color:#c62828;background:#fdeeee;border-color:#f3c3c3}
 .pch.na{color:#8a93a3;background:#f3f4f7;border-color:#e2e5eb}
-#tab-plan td[data-cf] .pch{cursor:pointer}
+#tab-plan td[data-cf] .pch{cursor:pointer}#tab-plan .pch[data-cf]{cursor:pointer}
 #tab-plan td[data-cf] .pch:hover{filter:brightness(.95)}
 .plpill{display:inline-block;padding:2px 9px;border-radius:999px;font-size:11px;font-weight:700;white-space:nowrap}
 .plpill.e-conf{background:#e6f4ec;color:#1f7a45}.plpill.e-pend{background:#fff6d6;color:#8a6400}.plpill.e-anul{background:#fdeaea;color:#c62828}.plpill.e-none{background:#f2f4f7;color:#667085}
@@ -1090,7 +1090,7 @@ table.g.gp td.lk,table.g.gp td.nt{background-color:transparent}
 #askDlg{z-index:98;align-items:center}#dlgBox{z-index:99;align-items:center}#dlgBox .mbox{width:min(500px,100%)}#dlgBox .mh b{font-size:16px;color:var(--navy)}
 .dlgtx{margin:0 0 10px;color:#344054;font-size:14px;line-height:1.5;white-space:pre-line}
 .dlgin{width:100%;box-sizing:border-box;border:1.5px solid #d0d5dd;border-radius:8px;padding:9px 11px;font:inherit;font-size:14px}.dlgin:focus{outline:none;border-color:var(--navy);box-shadow:0 0 0 3px rgba(31,58,120,.12)}
-#dlgBox .mf .acts{justify-content:flex-end}#factura.flocked .ftl{align-items:center}#factura.flocked .cel,#factura.flocked #fRef,#factura.flocked .rj-ref{cursor:default}#factura.flocked .cel:hover,#factura.flocked .rj-ref:hover,#factura.flocked .cel:focus{background:transparent!important;box-shadow:none!important;outline:none}#factura.flocked tr.fblank{cursor:default}#factura .frefv{display:flex;align-items:center;gap:5px}#factura .fver{font-size:12px;color:#1d1d1b;white-space:nowrap}#factura.rojo .rj-refv{display:flex;align-items:center;gap:4px}#factura.rojo .rj-meta .rj-refv:has(.rj-ver) .rj-ref{width:auto;min-width:60px;max-width:150px;field-sizing:content}#factura .frefv:has(.fver) #fRef{field-sizing:content;min-width:90px;width:auto}#factura.rojo .rj-ver{white-space:nowrap}#factura td.fsel{background:#dbe7fb!important;box-shadow:inset 0 0 0 1px #6f93d8}#factura .cel.fsel{background:transparent!important}body.fsel-drag #factura,body.fsel-drag #factura *{user-select:none;cursor:cell}@media print{#factura td.fsel{background:transparent!important;box-shadow:none}}.nsform label{display:block;margin:0 0 10px;font-size:13px;color:#344054}.nsform input:not([type=checkbox]),.nsform select{display:block;width:100%;box-sizing:border-box;margin-top:4px;border:1.5px solid #d0d5dd;border-radius:8px;padding:8px 10px;font:inherit;font-size:14px}.nsform .nsrow{display:flex;gap:12px}.nsform .nsrow label{flex:1}.nsform .nsej{margin:2px 0 12px;font-size:14px}.nsform .nsej b{color:var(--navy)}.nsform label.ck{display:flex;gap:8px;align-items:center;font-size:14px;color:#101828}.nsform .hint{font-size:12px}button.dlgdanger{background:#c62828!important;border-color:#c62828!important;color:#fff!important}#askDlg .mbox{width:min(560px,100%)}#askDlg .mh b{font-size:16px;color:var(--navy)}
+#dlgBox .mf .acts{justify-content:flex-end}.dvhist{max-height:52vh;overflow:auto;border:1px solid #e4e7ec;border-radius:8px}.dvh{padding:7px 10px;border-bottom:1px solid #f2f4f7;font-size:13px}.dvh:last-child{border-bottom:0}.dvh.ult{background:#f5f8ff}.dvhw{display:block;font-size:11px;color:#667085}.predo{font-size:12px;margin:6px 0 2px;padding:4px 10px;border-radius:6px;display:inline-block}.predo.on{background:#ecfdf3;color:#067647}.predo.off{background:#fef3f2;color:#b42318;font-weight:600}@media print{.predo{display:none!important}}#factura.flocked .ftl{align-items:center}#factura.flocked .cel,#factura.flocked #fRef,#factura.flocked .rj-ref{cursor:default}#factura.flocked .cel:hover,#factura.flocked .rj-ref:hover,#factura.flocked .cel:focus{background:transparent!important;box-shadow:none!important;outline:none}#factura.flocked tr.fblank{cursor:default}#factura .frefv{display:flex;align-items:center;gap:5px}#factura .fver{font-size:12px;color:#1d1d1b;white-space:nowrap}#factura.rojo .rj-refv{display:flex;align-items:center;gap:4px}#factura.rojo .rj-meta .rj-refv:has(.rj-ver) .rj-ref{width:auto;min-width:60px;max-width:150px;field-sizing:content}#factura .frefv:has(.fver) #fRef{field-sizing:content;min-width:90px;width:auto}#factura.rojo .rj-ver{white-space:nowrap}#fFmt{display:flex;flex-wrap:wrap;align-items:center;gap:6px;flex:0 0 100%;box-sizing:border-box;margin:2px 0 0;box-shadow:0 2px 8px rgba(16,24,40,.08);padding:6px 10px;border:1px solid #d0d5dd;border-radius:8px;background:#f8fafc}#fFmt.hidden{display:none}#fFmt .fsel{padding:3px 6px;font-size:12px}#fFmt button{min-width:30px}#fFmt button.on{background:var(--navy)!important;color:#fff!important;border-color:var(--navy)!important}#fFmt .fmtsep{width:1px;height:20px;background:#d0d5dd;margin:0 2px}#fFmt #fmtWho{margin-left:4px}#factura td.fsel{background:#dbe7fb!important;box-shadow:inset 0 0 0 1px #6f93d8}#factura .cel.fsel{background:transparent!important}body.fsel-drag #factura,body.fsel-drag #factura *{user-select:none;cursor:cell}@media print{#factura td.fsel{background:transparent!important;box-shadow:none}}.nsform label{display:block;margin:0 0 10px;font-size:13px;color:#344054}.nsform input:not([type=checkbox]),.nsform select{display:block;width:100%;box-sizing:border-box;margin-top:4px;border:1.5px solid #d0d5dd;border-radius:8px;padding:8px 10px;font:inherit;font-size:14px}.nsform .nsrow{display:flex;gap:12px}.nsform .nsrow label{flex:1}.nsform .nsej{margin:2px 0 12px;font-size:14px}.nsform .nsej b{color:var(--navy)}.nsform label.ck{display:flex;gap:8px;align-items:center;font-size:14px;color:#101828}.nsform .hint{font-size:12px}button.dlgdanger{background:#c62828!important;border-color:#c62828!important;color:#fff!important}#askDlg .mbox{width:min(560px,100%)}#askDlg .mh b{font-size:16px;color:var(--navy)}
 .asktx{margin:0 0 8px;color:#475467;font-size:13px}
 .asklist{background:#f5f8ff;border:1px solid #e1e8f5;border-radius:8px;padding:8px 12px;margin:0 0 14px;font-size:13px;color:#1d2939;display:flex;flex-direction:column;gap:3px;font-weight:600}
 .askchk label{display:flex;align-items:center;gap:8px;cursor:pointer;padding:2px 0}.askchk input{width:16px;height:16px;accent-color:var(--navy);flex:none}
@@ -1429,6 +1429,13 @@ body.mvsub .tab .wrap{padding-top:calc(var(--mvTopH,52px) + 56px)!important}
     <label class="ck"><input type="checkbox" data-colchk="dto" checked> Dto.%</label>
     <label class="ck"><input type="checkbox" data-colchk="dias" checked> días</label>
     <label class="ck"><input type="checkbox" data-colchk="imp" checked> Importe</label></span>
+    <div class="noprint hidden fmtbar" id="fFmt"><span class="hint">Formato del texto:</span>
+    <select id="fmtFont" class="fsel" title="Tipografía (el PDF solo admite estas tres)"><option value="">Arial / Helvetica</option><option value="t">Times</option><option value="c">Courier</option></select>
+    <select id="fmtSize" class="fsel" title="Tamaño de la letra"><option value="">Tamaño</option><option value="8">8</option><option value="9">9</option><option value="10">10</option><option value="11">11</option><option value="12">12</option><option value="13">13</option><option value="14">14</option><option value="16">16</option><option value="18">18</option><option value="20">20</option><option value="24">24</option></select>
+    <button class="mini sec" data-fmt="b" title="Negrita (Cmd+B)"><b>N</b></button><button class="mini sec" data-fmt="i" title="Cursiva (Cmd+I)"><i>K</i></button><button class="mini sec" data-fmt="u" title="Subrayado (Cmd+U)"><u>S</u></button>
+    <span class="fmtsep"></span><button class="mini sec" data-fmt="al:left" title="Alinear a la izquierda">Izq.</button><button class="mini sec" data-fmt="al:center" title="Centrar">Centro</button><button class="mini sec" data-fmt="al:right" title="Alinear a la derecha">Der.</button>
+    <span class="fmtsep"></span><button class="mini sec" data-fmt="x" title="Quita el formato de las celdas marcadas">Quitar formato</button>
+    <span class="hint" id="fmtWho"></span></div>
   </div>
   <div class="banner noprint" id="fSyncBar"></div>
   <div class="banner noprint hidden" id="freeHint">Modo edición libre ACTIVO: puedes reescribir cualquier cosa de la factura (también importes, IVA y totales) y no se recalcula nada. Lo que escribas se queda aunque apagues el modo; solo «Volver a sincronizar con el presupuesto» vuelve a calcularlo todo.</div>
@@ -1607,10 +1614,13 @@ body.mvsub .tab .wrap{padding-top:calc(var(--mvTopH,52px) + 56px)!important}
   <div class="invbar">
     <div class="ivrow">
       <input type="search" id="devQ" placeholder="Buscar presupuesto, nº, material…">
-      <select id="devEst"><option value="revisar">Por revisar</option><option value="faltas">Con faltas</option><option value="fuera">Fuera ahora</option><option value="ok">Devueltos</option><option value="sinmat">Sin material registrado</option><option value="*">Todos</option></select>
+      <select id="devEst" title="Por revisar: ya pasó la recogida · Ha salido: marcado como salido, aún en fechas · Sin marcar la salida: ya llegó la entrega y nadie ha marcado nada · Próximos: todavía no tienen que salir"><option value="revisar">Por revisar</option><option value="faltas">Con faltas</option><option value="salio">Ha salido</option><option value="sinmarcar">Sin marcar la salida</option><option value="prox">Próximos</option><option value="ok">Devueltos</option><option value="sinmat">Sin material registrado</option><option value="*">Todos</option></select>
       <span class="cnt" id="devCnt"></span>
       <span class="sys off sysst"></span><button class="sec hidden sysbtn" title="Comprueba ahora todo con el almacén común">Sincronizar</button>
       <span style="flex:1"></span>
+      <span class="pmut" id="devUndoLbl" style="font-size:12px;max-width:240px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"></span>
+      <button class="sec" id="devUndo" title="Deshacer la última acción de Devoluciones (Cmd+Z)" disabled>↶ Deshacer</button>
+      <button class="sec" id="devHist" title="Qué se ha marcado en Devoluciones, quién y cuándo">Historial</button>
       <button class="sec" id="devExp">Exportar a Excel</button>
     </div>
   </div>
@@ -1982,7 +1992,7 @@ const CFG_DEF = {
   fmtDefault:null, priceMode:'max', logoH:100,
   gastosFijos:[{t:'Material Alquilado',e:'',c:'',o:''},{t:'Personal',e:'Luis',c:'Preparación de Material',o:''},{t:'Personal',e:'Itu',c:'Preparación de Material',o:''},{t:'TRANSPORTE',e:'',c:'',o:''},{t:'GASTOS/COMPRAS',e:'',c:'',o:''}],
   gastoTipos:[{n:'Material Alquilado',c:[]},{n:'Varios',c:[]},{n:'Comisiones',c:[]},{n:'Gastos material',c:[]}],
-  facProv:{}, facNuestros:[], redondeo:true,
+  facProv:{}, facNuestros:[], redondeo:true, redondear:true,
   liqReparto:[{n:'Roni',p:40},{n:'Madrid Musical',p:20},{n:'Fondo Asociación',p:20},{n:'Itu',p:20}],
   cColor:'#548DD4', cPrintCols:{E:false,U:false,F:false,G:false,H:false,I:false}
 };
@@ -2172,13 +2182,14 @@ function secCalc(s, on){ if(on===undefined) on=libreOn();
 function pptoTotals(){
   const on=libreOn(), M=(on && DOC.libre.tot) || {};
   let base0=0; DOC.secciones.forEach(s=>{ const v=secCalc(s,on).imp; if(typeof v==='number') base0+=v; });
-  const baseM = manNum(M.base) ? N0(M.base) : base0, base = REDONDEO ? redE(baseM) : baseM, iva0 = base*IVA()/100, iva = manNum(M.iva) ? N0(M.iva) : iva0, total0 = base+iva, total = manNum(M.total) ? N0(M.total) : total0;
+  const baseM = manNum(M.base) ? N0(M.base) : base0, base = redOn() ? redE(baseM) : baseM, iva0 = base*IVA()/100, iva = manNum(M.iva) ? N0(M.iva) : iva0, total0 = base+iva, total = manNum(M.total) ? N0(M.total) : total0;
   let puro=0; DOC.secciones.forEach(s=>{ const v=secCalc(s,false).imp; if(typeof v==='number') puro+=v; });   /* lo que dan las fórmulas, sin nada a mano ni redondeo */
   return {base, iva, total, base0, iva0, total0, baseM, puro};
 }
-/* redondeo del TOTAL sin IVA, SIEMPRE (decide L.A. el 14-11: «eso tiene que estar por defecto… y en todo caso quitarlo»): con ,50 o más sube al euro siguiente; con menos se queda en ,00.
-   Ya no es una opción de Configuración; CFG.redondeo se queda sin uso. */
-const REDONDEO=true;
+/* redondeo del TOTAL sin IVA del presupuesto: con ,50 o más sube al euro siguiente; con menos se queda en ,00. Ningún otro importe se redondea.
+   Opción de ⚙ Configuración, ENCENDIDA de serie (L.A., 17-11: «quiero tener la opción de vuelta en configuración… porque si no palmamos y no sabemos si está activado o no»).
+   Clave nueva `redondear` (compartida): la vieja `redondeo` podía estar guardada apagada y ya no se usa. La factura y la contabilidad siguen al presupuesto. */
+const redOn = () => CFG.redondear !== false;
 function redE(v){ const c=Math.round(N0(v)*100)/100; return Math.floor(c+0.5+1e-9); }
 
 /* ---------- binding genérico para campos sueltos: data-k="ruta.de.datos" data-t="n" ---------- */
@@ -2942,7 +2953,7 @@ function cfgOpen(){
       <label>IVA (%)<input data-c="iva" value="${esc(CFG_DRAFT.iva)}" inputmode="decimal"></label>
       <label>Validez del presupuesto<input data-c="validez" value="${esc(CFG_DRAFT.validez)}"></label>
     </div>
-    <p class="hint full">El TOTAL (sin IVA) de los presupuestos se redondea <b>siempre</b> a euros: con ,50 o más sube al euro siguiente; con menos se queda en ,00. La diferencia sale en la factura como línea «Redondeo».</p>
+    <label class="ck full" style="flex-direction:row;align-items:center;gap:8px"><input type="checkbox" data-c="redondear" ${CFG_DRAFT.redondear!==false?'checked':''}> <span><b>Redondear el TOTAL (sin IVA) de los presupuestos a euros</b>: con ,50 o más sube al euro siguiente; con menos se queda en ,00. Solo el TOTAL; la factura recoge la diferencia en su línea «Redondeo». Viene activado; se comparte con todo el equipo. En el presupuesto, bajo la hoja, siempre pone si está activado o no.</span></label>
     <label class="full">Observaciones de los presupuestos nuevos<textarea data-c="obs" rows="2">${esc(CFG_DRAFT.obs)}</textarea></label>
     <label class="full">Nota legal de la factura<textarea data-c="notaFactura" rows="2">${esc(CFG_DRAFT.notaFactura)}</textarea></label>
     <label class="full">Nota de la factura proforma<textarea data-c="notaProforma" rows="2" placeholder="${esc(PROF_NOTA)}">${esc(CFG_DRAFT.notaProforma||'')}</textarea></label>
@@ -3286,8 +3297,10 @@ async function setDocEstado(e){
 function ajTxt(calc, queda){ if(typeof calc!=='number' || typeof queda!=='number') return ''; const d=Math.round((queda-calc)*100)/100; if(Math.abs(d)<0.005) return '';
   return `Calculado: ${eurS(calc)} · Ajuste: ${d>0?'+':''}${eurS(d)}${calc?` (${d>0?'+':''}${(d/calc*100).toLocaleString('es-ES',{maximumFractionDigits:2})} %)`:''} · Queda: ${eurS(queda)}`; }
 function pAjustePaint(){ const el=$('#pAjuste'); if(!el) return; const T=pptoTotals(), t=ajTxt(T.puro, T.base);
-  const red=REDONDEO && Math.abs(T.base-T.baseM)>=0.005;
-  el.innerHTML = t ? `<div class="pajb"><b>TOTAL sin IVA</b> · ${esc(t)}${red?` <span class="hint">(incluye redondeo de ${eurS(Math.round((T.base-T.baseM)*100)/100)})</span>`:''}</div>` : ''; }
+  const red=redOn() && Math.abs(T.base-T.baseM)>=0.005;
+  /* siempre a la vista (no se imprime): si el redondeo del TOTAL está activado o no */
+  const ind=`<div class="predo ${redOn()?'on':'off'}" title="Se cambia en ⚙ Configuración › Cobro">Redondeo del TOTAL: <b>${redOn()?'activado':'DESACTIVADO'}</b>${redOn()?' (,50 o más sube al euro; menos, baja)':' · el TOTAL lleva céntimos'}</div>`;
+  el.innerHTML = ind + (t ? `<div class="pajb"><b>TOTAL sin IVA</b> · ${esc(t)}${red?` <span class="hint">(incluye redondeo de ${eurS(Math.round((T.base-T.baseM)*100)/100)})</span>`:''}</div>` : ''); }
 const impManN = () => DOC.secciones.reduce((t,s)=>t+s.lineas.filter(l=>manV(l.impMan)).length+s.lineas.reduce((u,l)=>u+(l.man?Object.keys(l.man).length:0),0)+(manV(s.subMan)?1:0)+(manV(s.impMan)?1:0),0) + Object.values((DOC.libre&&DOC.libre.tot)||{}).filter(manV).length;
 function pLibrePaint(){
   const ed=libreEd(), hay=libreOn(), b=$('#pLibre'), bar=$('#pLibreBar');
@@ -3615,7 +3628,7 @@ function fPct(l){ const v=+l.dto; return isNaN(v)?0:v; }
 function fImp(l){
   if(l.tipo!=='item') return null;
   if(l.dto!=='' && l.dto!=null && fPct(l)===100) return 'S/C';
-  const p=+l.pvp, c=+l.cant; if(isNaN(p)||isNaN(c)||l.pvp===''||l.cant==='') return null;
+  const p=+l.pvp, c=(l.uno && (l.cant===''||l.cant==null))?1:+l.cant; if(isNaN(p)||isNaN(c)||l.pvp===''||(l.cant===''&&!l.uno)) return null;   /* l.uno: la línea resumen de la Estándar, con Cant. y días vacías cuenta como 1 */
   const d=(l.dias===''||l.dias==null||isNaN(+l.dias))?1:+l.dias;
   return Math.round(p*c*d*(1-fPct(l)/100)*100)/100;
 }
@@ -3685,6 +3698,17 @@ function facturaFromPpto(){                      /* convierte el presupuesto en 
     if(Math.abs(a2)>=0.005) out.push({tipo:'item',concepto:'Redondeo',pvp:a2,cant:1,dto:'',dias:1}); }
   return out;
 }
+/* ESTÁNDAR (20-11, L.A., como la NOV014-BK de Itu): una línea azul vacía, el concepto con el TOTAL sin IVA del presupuesto
+   (ya redondeado), el evento, las fechas, la referencia con el año y 6 líneas en blanco. Sin desglose de material ni línea de redondeo. */
+function facturaResumen(f){
+  const T=pptoTotals(), C=DOC.concepto||{}, num=String(DOC.meta.num||'').trim(), y=(f&&f.refY)||new Date().getFullYear();
+  const it=c=>({tipo:'item',concepto:c||'',pvp:'',cant:'',dto:'',dias:''});
+  return [{tipo:'sec',concepto:''},
+    {tipo:'item',concepto:C.texto||'',pvp:r2(T.base),cant:'',dto:'',dias:'',uno:true},
+    it(C.evento), it(C.fechas), it(num?num+' '+y:''),
+    ...Array.from({length:6},()=>it(''))];
+}
+const fLineaVacia = l => l.tipo==='item' && !l.uno && ['concepto','pvp','cant','dto','dias'].every(k=>l[k]===''||l[k]==null) && !String(l.impText??'').trim();
 function syncFactura(){
   const f=F(); if(!f.auto) return;
   /* siempre de la versión que CUENTA (✓ Confirmada / Vigente), aunque se esté viendo otra; con varias versiones, la factura dice cuál */
@@ -3695,7 +3719,7 @@ function facSyncDe(f){
   f.mano=false; f.frozen=null; f.totText=null;   /* enlazada = calculada desde el presupuesto */
   if(typeof verMulti==='function' && verMulti()) f.verN=verSt().ok; else delete f.verN;
   f.cliente=clone(DOC.cliente); f.contacto=clone(DOC.contacto); f.concepto=clone(DOC.concepto);
-  f.ref=DOC.meta.num||''; f.refY=(()=>{ const d=typeof rentalDate==='function'&&rentalDate(); return d?d.getFullYear():new Date().getFullYear(); })(); f.lineas=facturaFromPpto();
+  f.ref=DOC.meta.num||''; f.refY=(()=>{ const d=typeof rentalDate==='function'&&rentalDate(); return d?d.getFullYear():new Date().getFullYear(); })(); f.lineas=(typeof facPlant==='function' && facPlant(f)==='rojo') ? facturaFromPpto() : facturaResumen(f);
   f.pago=FP_()[(+DOC.fp||0)-1]||''; f.cuenta=facCuenta(f);
   if(!f.fecha) f.fecha=today();
 }
@@ -3765,14 +3789,14 @@ function renderFactura(){
       renderFacturaRojo(f,T); fTextareas(); fBind(); rojoBind(); renderReg();
       fc0.classList.toggle('fdraftdoc', !f.num && !FAC_PROF);
       if(f.emitida){ fc0.querySelectorAll('input,textarea').forEach(i=>{ i.readOnly=true; i.disabled=(i.id==='fFecha'||i.id==='fVence'); }); fc0.querySelectorAll('[data-fdel],#fAddItem,#fAddSec').forEach(b=>b.style.display='none'); }
-      facLock(f);
+      facLock(f); if(typeof fmtApply==='function') fmtApply();
       facButtons(); return; }
     fc0.classList.remove('rojo','pbleed'); }
   const L=f.lineas.map((l,i)=>{
     if(l.tipo==='sec') return `<tr class="sec"><td class="noprint" style="width:26px"><button class="mini danger" data-fdel="${i}" title="Eliminar">&times;</button></td><td><input class="cel" data-l="${i}" data-f="concepto" value="${esc(l.concepto)}"></td><td colspan="5"></td></tr>`;
     const impCell = f.free
       ? `<td data-col="imp" style="width:90px"><input class="cel num" data-l="${i}" data-f="impText" value="${esc(l.impText ?? (typeof fImp(l)==='number'?eurS(fImp(l)):fImp(l)))}"></td>`
-      : `<td data-col="imp" style="width:90px" class="num">${fImpShown(l)}</td>`;
+      : `<td data-col="imp" style="width:90px" class="num" data-fl="${i}" data-ff="impText">${esc(fImpShown(l))}</td>`;
     return `<tr>
       <td class="noprint" style="width:26px"><button class="mini danger" data-fdel="${i}" title="Eliminar">&times;</button></td>
       <td><input class="cel" data-l="${i}" data-f="concepto" value="${esc(l.concepto)}"></td>
@@ -3790,7 +3814,7 @@ function renderFactura(){
   <table style="margin-top:8px">
     <tr><th class="noprint"></th><th>Concepto</th><th data-col="pvp">pvp unidad</th><th data-col="cant">Cant.</th><th data-col="dto">Dto. %</th><th data-col="dias">dias</th><th data-col="imp">IMPORTE € (Euros)</th></tr>
     ${L}
-    ${'<tr class="fblank"><td class="noprint" style="width:26px"></td><td>&nbsp;</td><td data-col="pvp" style="width:70px"></td><td data-col="cant" style="width:46px"></td><td data-col="dto" style="width:46px"></td><td data-col="dias" style="width:46px"></td><td data-col="imp" style="width:90px"></td></tr>'.repeat(5)}
+    ${'<tr class="fblank"><td class="noprint" style="width:26px"></td><td>&nbsp;</td><td data-col="pvp" style="width:70px"></td><td data-col="cant" style="width:46px"></td><td data-col="dto" style="width:46px"></td><td data-col="dias" style="width:46px"></td><td data-col="imp" style="width:90px"></td></tr>'.repeat((()=>{ let n=0; for(let k=f.lineas.length-1;k>=0 && fLineaVacia(f.lineas[k]);k--) n++; return Math.max(0,5-n); })())}
     <tr class="tot"><td class="noprint"></td><td colspan="5" class="t">TOTAL</td>${totCell('base')}</tr>
     <tr class="tot"><td class="noprint"></td><td colspan="5" class="t">I.V.A. (${IVA()}%)</td>${totCell('iva')}</tr>
     <tr class="tot"><td class="noprint"></td><td colspan="5" class="t grand">TOTAL FACTURA</td>${totCell('total')}</tr>
@@ -3806,6 +3830,7 @@ function renderFactura(){
   facLock(f);
   fc.classList.toggle('fdraftdoc', !f.num && !FAC_PROF);
   if(f.emitida){ fc.querySelectorAll('input,textarea').forEach(i=>{ i.readOnly=true; i.disabled=i.id==='fFecha'; }); fc.querySelectorAll('[data-fdel],#fAddItem,#fAddSec').forEach(b=>b.style.display='none'); }
+  if(typeof fmtApply==='function') fmtApply();   /* formato de texto de cada celda (p2f_ffmt.js) */
   facButtons();
 }
 const PROF_NOTA='Factura proforma: documento informativo, sin validez fiscal. La factura definitiva se emitirá una vez realizado el servicio.';
@@ -3948,6 +3973,20 @@ function fBind(){
   { const el=$('#fFecha'); if(el) el.oninput=e=>{ f.fecha=e.target.value; save(); }; }
   { const el=$('#fRef'); if(el) el.oninput=e=>{ const v=e.target.value.trim(), m=/^(.*?)-(\d{4})$/.exec(v); if(m && /-BK$/i.test(m[1])){ f.ref=m[1]; f.refY=+m[2]; } else { f.ref=v; f.refY=''; } save(); }; }
   fc.onfocusin = e=>{ if(e.target.matches('input,textarea')) snap(); };
+  if(!fc.dataset.feur){ fc.dataset.feur='1'; fc.addEventListener('focusout', e=>fEurFix(e.target), true); }   /* captura: va antes que cualquier otro aviso de salida */
+}
+/* todas las cantidades con su €: al salir de una casilla de importe, «312» o «312,5» se queda como «312,00 €» */
+function fEurNum(s){ s=String(s??'').replace(/€/g,'').replace(/\s/g,''); if(!s) return null;
+  if(!s.includes(',') && /^-?\d+\.\d{1,2}$/.test(s)) return +s;   /* 312.5 = decimal */
+  s=s.replace(/\./g,'').replace(',','.'); return /^-?\d+(\.\d+)?$/.test(s) ? +s : null; }
+function fEurFix(t){
+  if(!t || !t.matches || !t.matches('#factura input.cel.num')) return; const f=F(); if(f.emitida) return;
+  const k=t.dataset.f, tt=t.dataset.tt; if(!(tt || k==='pvp' || k==='impText')) return;
+  const n=fEurNum(t.value); if(n==null) return; const v=eurS(Math.round(n*100)/100); if(v===t.value) return;
+  t.value=v;
+  if(tt){ f.totText=f.totText||{...f.totales}; f.totText[tt]=Math.round(n*100)/100; }
+  else if(k==='impText'){ const l=f.lineas[+t.dataset.l]; if(l) l.impText=v; }
+  save();
 }
 function renderReg(){
   const tb=$('#regTable tbody'); $('#regCount').textContent=REG.length;
@@ -3966,6 +4005,7 @@ function renderReg(){
 }
 function initFactura(){
   if(typeof rojoInit==='function') rojoInit();
+  if(typeof fmtInit==='function') fmtInit();
   $('#tglFree').onchange=e=>{ snap(); const f=F(); const era=fMano(f); f.free=e.target.checked;
     if(f.free){ unlink(); if(!era) fFreeze(f); else f.mano=true; }   /* al apagarlo NO se recalcula: lo escrito se queda */
     save(); renderFactura(); toast(f.free?'Modo edición libre ACTIVO: puedes cambiar todo':'Edición libre apagada: la factura se queda como la has dejado. Para volver a los cálculos, «Volver a sincronizar con el presupuesto»', f.free?undefined:'#026'); };
@@ -6968,7 +7008,7 @@ const canon = o => Array.isArray(o) ? '['+o.map(canon).join(',')+']'
 const noMod = o => { const c=Object.assign({},o); delete c.mod; return c; };
 const typing = sel => { const a=document.activeElement; return !!(a && a.closest && a.closest(sel) && /INPUT|TEXTAREA|SELECT/.test(a.tagName)); };
 let INV_BASE_MAP=null;
-const SHARED_CFG=[['empresa','Empresa'],['rojo','Datos del pago de la empresa (IBAN, BIC…)'],['facPlantilla','Diseño de factura'],['empresas','Empresas que facturan y sus series'],['empresaDef','Empresa que factura por defecto'],['liqReparto','Reparto de la liquidación'],['redondeo','Redondeo del TOTAL'],['facProv','Proveedores de facturas recibidas'],['facNuestros','NIF propios (destinatario de las facturas)'],['fp','Formas de pago'],['conceptos','Conceptos'],['cuenta','Cuenta bancaria'],['iva','IVA'],['validez','Validez'],['obs','Observaciones por defecto'],['notaFactura','Nota de la factura'],['fmtDefault','Formato por defecto'],['priceMode','Precio del inventario'],['logoH','Tamaño del logo'],['cColor','Color del contrarider'],['cPrintCols','Columnas del contrarider'],['gastoTipos','Tipos de gasto del Bolo'],['gastosFijos','Gastos fijos de la hoja del bolo'],['gastoEmpresas','Empresas de los gastos del Bolo']];
+const SHARED_CFG=[['empresa','Empresa'],['rojo','Datos del pago de la empresa (IBAN, BIC…)'],['facPlantilla','Diseño de factura'],['empresas','Empresas que facturan y sus series'],['empresaDef','Empresa que factura por defecto'],['liqReparto','Reparto de la liquidación'],['redondeo','Redondeo del TOTAL (antiguo)'],['redondear','Redondeo del TOTAL'],['facProv','Proveedores de facturas recibidas'],['facNuestros','NIF propios (destinatario de las facturas)'],['fp','Formas de pago'],['conceptos','Conceptos'],['cuenta','Cuenta bancaria'],['iva','IVA'],['validez','Validez'],['obs','Observaciones por defecto'],['notaFactura','Nota de la factura'],['fmtDefault','Formato por defecto'],['priceMode','Precio del inventario'],['logoH','Tamaño del logo'],['cColor','Color del contrarider'],['cPrintCols','Columnas del contrarider'],['gastoTipos','Tipos de gasto del Bolo'],['gastosFijos','Gastos fijos de la hoja del bolo'],['gastoEmpresas','Empresas de los gastos del Bolo']];
 const shortV = v => { if(v==null||v==='') return ''; if(typeof v==='object'){ const t=JSON.stringify(v); return t.length>140?t.slice(0,140)+'…':t; } return String(v); };
 const SY_COLS={
   clientes:{
@@ -7437,7 +7477,7 @@ async function exportAllXlsx(opt){
       return null; });
     Object.values(P.cells).forEach(x=>{ if(!x.f) return;
       if(x.f.startsWith('@SUB')){ const [,si,R]=/@SUB(\d+)@(\d+)/.exec(x.f); const rs=rowsOf[si]||[]; x.f=rs.length?`SUM(G${Math.min(...rs)}:G${Math.max(...rs)})`:'0'; }
-      if(x.f==='@T1@'){ x.f=secs.length?`SUM(${secs.map(r=>'G'+r).join(',')})`:'0'; if(REDONDEO) x.f=`ROUND(${x.f},0)`; } });   /* redondeo del TOTAL (Configuración): ,50 o más sube al euro; menos, ,00 */
+      if(x.f==='@T1@'){ x.f=secs.length?`SUM(${secs.map(r=>'G'+r).join(',')})`:'0'; if(redOn()) x.f=`ROUND(${x.f},0)`; } });   /* redondeo del TOTAL (Configuración): ,50 o más sube al euro; menos, ,00 */
     xlHeader(P,5,6,DOC.meta); if(logo) P.img={png:logo.png,w:logo.w,h:logo.h,c:0,r:0,dx:4,dy:4};
     /* EMAIL (texto libre, tal cual) */
     if(DOC.mail && GRIDS.mail && GRIDS.mail.def){ const E=B.sheet('EMAIL'); xlFromGrid(B,E,'mail',HR,null); xlHeader(E,5,6,DOC.mail.head||{}); if(logo) E.img=Object.assign({},P.img); }
@@ -7492,6 +7532,7 @@ function xlFactura(B,logo){
     const n=v=>(v===''||v==null||isNaN(+v))?(v??''):+v;
     S.set(r,0,l.concepto||'',val); S.set(r,1,n(l.pvp),Object.assign({nf:XL_CUR},val)); S.set(r,2,n(l.cant),val); S.set(r,3,n(l.dto),val); S.set(r,4,n(l.dias),val);
     if(f.free) S.set(r,5,fImpShown(l),Object.assign({ha:'right'},val));
+    else if(l.uno){ const v=fImp(l); S.set(r,5,v==null?'':v,Object.assign({nf:XL_CUR},val),`IF(B${R}="","",ROUND(B${R}*IF(C${R}="",1,C${R})*IF(E${R}="",1,E${R})*(1-D${R}/100),2))`); }   /* línea resumen (Estándar): Cant. vacía = 1 */
     else { const v=fImp(l); S.set(r,5,v==null?'':v,Object.assign({nf:XL_CUR},val),`IF(COUNT(B${R},C${R})<2,"",IF(D${R}=100,"S/C",ROUND(B${R}*C${R}*IF(E${R}="",1,E${R})*(1-D${R}/100),2)))`); }
     r++; });
   for(let k=0;k<5;k++){ for(let c=0;c<=5;c++) S.set(r,c,'',c===1||c===5?Object.assign({nf:XL_CUR},val):val); r++; }   /* 5 filas en blanco */
@@ -7610,7 +7651,11 @@ async function pdfFillable(tab,opt){
         page.drawImage(png,{x:X(l),y:Y(t+h),width:w*s,height:h*s}); }catch(e){} }
 
     /* 4 · textos, línea a línea tal como salen en pantalla */
-    const fontOf=cs=>F[(parseInt(cs.fontWeight)>=600?'b':'')+(cs.fontStyle==='italic'?'i':'')||'r']||F.r;
+    /* Times y Courier (formato de texto de la factura): solo se meten en el PDF si alguna celda las usa */
+    const FAM={t:{r:'TimesRoman',b:'TimesRomanBold',i:'TimesRomanItalic',bi:'TimesRomanBoldItalic'}, c:{r:'Courier',b:'CourierBold',i:'CourierOblique',bi:'CourierBoldOblique'}};
+    const famOf=cs=>{ const ff=cs.fontFamily||''; return /courier|monospace/i.test(ff)?'c':/times|georgia|(^|,)\s*serif\b/i.test(ff)?'t':''; };
+    const fontOf=cs=>{ const k=(parseInt(cs.fontWeight)>=600?'b':'')+(cs.fontStyle==='italic'?'i':'')||'r', fm=famOf(cs);
+      if(!fm) return F[k]||F.r; const id=fm+k; if(!F[id]) F[id]=pdf.embedStandardFont(StandardFonts[FAM[fm][k]]); return F[id]; };
     const drawLineText=(text,l,r,top,bot,cs,align,maxR)=>{
       text=text.replace(/\s+$/,''); if(!text) return; const font=fontOf(cs); text=safe(font,text);
       let size=parseFloat(cs.fontSize)*s; const domW=(r-l)*s; let w=font.widthOfTextAtSize(text,size);
@@ -7750,7 +7795,12 @@ function planDay(ds, jobs){
 }
 /* técnico y transporte: rojo si falta alguien o no está confirmado, verde si está confirmado; neutro si no hace falta o está anulado */
 function tecSt(j){ if(j.estado==='anul' || j.tecReq===false) return ''; return (j.tecnicos||[]).length && j.tecConf ? 'ok' : 'no'; }
-function traSt(j){ if(j.estado==='anul' || j.transporte===false) return ''; return (j.empresa||'').trim() && j.traConf ? 'ok' : 'no'; }
+/* TRANSPORTE con dos empresas (20-11, L.A.): por defecto una sola hace entrega y recogida; con «La recogida la hace otra empresa» (j.recAparte)
+   va j.empresaRec con su propia confirmación (j.recConf). Verde solo con las dos confirmadas. */
+const traDos = j => !!(j && j.recAparte);
+function traSt(j){ if(j.estado==='anul' || j.transporte===false) return ''; const a=(j.empresa||'').trim() && j.traConf; if(!traDos(j)) return a ? 'ok' : 'no'; return a && (j.empresaRec||'').trim() && j.recConf ? 'ok' : 'no'; }
+/* texto de la empresa (o empresas) de transporte, para Excel, bocadillos y búsquedas */
+function traEmpTxt(j){ const a=(j.empresa||'').trim(), b=(j.empresaRec||'').trim(); if(!traDos(j)) return a; return 'Entrega: '+(a||'¿?')+' · Recogida: '+(b||'¿?'); }
 const stCls = st => st==='ok'?'pcok':st==='no'?'pcno':'';
 function tecCell(j){ const st=tecSt(j), tt=j.tecnicos||[];
   let h; if(j.tecReq===false) h='<span class="pch na">No</span>';
@@ -7758,13 +7808,17 @@ function tecCell(j){ const st=tecSt(j), tt=j.tecnicos||[];
   else h=tt.map(n=>`<span class="pch ${st==='ok'?'ok':st?'ko':'na'}">${esc(n)}${st==='ok'?' ✓':st?' · ¿?':''}</span>`).join('');
   return `<td${st&&tt.length?` data-cf="tec" title="${j.tecConf?'Confirmado · clic para quitar la confirmación':'Sin confirmar · clic para confirmar'}"`:st?' title="Falta poner quién va de personal (abre la ficha)"':''}>${h}</td>`; }
 function traCell(j){ const st=traSt(j), e=(j.empresa||'').trim();
+  if(traDos(j) && j.transporte!==false && j.estado!=='anul'){   /* dos empresas: una pastilla por cada una, cada una se confirma con su clic */
+    const p=(lab,v,conf,cf)=>{ v=(v||'').trim(); if(!v) return `<span class="pch ko">${lab}: ¿quién?</span>`;
+      return `<span class="pch ${conf?'ok':'ko'}" data-cf="${cf}" title="${lab}: ${conf?'confirmada · clic para quitar la confirmación':'sin confirmar · clic para confirmar'}">${lab}: ${esc(v)}${conf?' ✓':' · ¿?'}</span>`; };
+    return `<td${!e||!(j.empresaRec||'').trim()?' title="Falta poner una de las empresas de transporte (abre la ficha)"':''}>${p('Entrega',j.empresa,j.traConf,'tra')}${p('Recogida',j.empresaRec,j.recConf,'rec')}</td>`; }
   let h; if(j.transporte===false) h='<span class="pch na">No</span>';
   else if(!e) h=st?'<span class="pch ko">¿quién?</span>':'';
   else h=`<span class="pch ${st==='ok'?'ok':st?'ko':'na'}">${esc(e)}${st==='ok'?' ✓':st?' · ¿?':''}</span>`;
   return `<td${st&&e?` data-cf="tra" title="${j.traConf?'Confirmado · clic para quitar la confirmación':'Sin confirmar · clic para confirmar'}"`:st?' title="Falta poner empresa de transporte (abre la ficha)"':''}>${h}</td>`; }
 const jobFechas = j => j.dias&&j.dias.length ? fechasText(j.dias,'varios') : (j.ini ? (j.fin&&j.fin!==j.ini ? fechasText([j.ini,j.fin],'rango') : fNum(j.ini)) : '');
 function jobFlags(j){
-  const f=[]; const all=[j.concepto,j.num,j.obs,j.empresa].join(' ');   /* «Otros» ya no se ve en el Planning (12-11-2026): no avisa por él */
+  const f=[]; const all=[j.concepto,j.num,j.obs,j.empresa,j.empresaRec].join(' ');   /* «Otros» ya no se ve en el Planning (12-11-2026): no avisa por él */
   if(!j.ini) f.push('sin fecha');
   if(j.estado==='pend') f.push('por confirmar');
   if(typeof jobShort==='function') jobShort(j).forEach(x=>f.push('⚠ '+x+(j.estado==='pend'?' si se confirma':'')));
@@ -7813,7 +7867,7 @@ const plEst = j => (PL_EST.find(e=>e[0]===(j.estado||''))||['',''])[1]||'Sin est
 const plPill = j => `<span class="plpill ${EST_CLS[j.estado||'']||'e-none'}">${esc(plEst(j))}</span>`;
 function planVisible(){
   const q=norm(PV.q);
-  const vis=j=>(PV.est==='*'||j.estado===PV.est) && (!q || norm([j.concepto,j.num,j.otros,j.obs,j.empresa,(j.tecnicos||[]).join(' '),j.tipo,j.etiqueta].join(' ')).includes(q));
+  const vis=j=>(PV.est==='*'||j.estado===PV.est) && (!q || norm([j.concepto,j.num,j.otros,j.obs,j.empresa,j.empresaRec,(j.tecnicos||[]).join(' '),j.tipo,j.etiqueta].join(' ')).includes(q));
   return PLAN.jobs.filter(j=>(j.ini||j.entrega||j.recogida) && vis(j));
 }
 function renderPlan(){
@@ -7921,8 +7975,11 @@ function planEdit(j, isNew){
       <input class="plotro" data-otro="1" placeholder="Otra persona (nombre)…" title="Escribe el nombre de otra persona; varias, separadas por comas">
       <label class="chip conf"><input type="checkbox" data-cfk="tecConf" ${j.tecConf?'checked':''}> ✓ Personal confirmado</label></div>
     <label>Transporte${yn('transporte',j.transporte)}</label>
-    <label class="w2">Empresa de transporte<input data-pf="empresa" list="plEmpList" value="${esc(j.empresa)}"><datalist id="plEmpList">${L.empresas.map(e=>`<option value="${esc(e)}">`).join('')}</datalist></label>
-    <label class="chip conf w3c"><input type="checkbox" data-cfk="traConf" ${j.traConf?'checked':''}> ✓ Transporte confirmado</label>
+    <label class="w2"><span class="plEmpQ">${traDos(j)?'Empresa de entrega':'Empresa de transporte'}</span><input data-pf="empresa" list="plEmpList" value="${esc(j.empresa)}"><datalist id="plEmpList">${L.empresas.map(e=>`<option value="${esc(e)}">`).join('')}</datalist></label>
+    <div class="w3 plchips"><label class="chip conf"><input type="checkbox" data-cfk="traConf" ${j.traConf?'checked':''}> ✓ <span class="plTraQ">${traDos(j)?'Entrega confirmada':'Transporte confirmado'}</span></label>
+      <label class="chip" title="Cuando la entrega y la recogida las hacen empresas diferentes"><input type="checkbox" data-cfk="recAparte" ${traDos(j)?'checked':''}> La recogida la hace otra empresa</label></div>
+    <label class="w2 plrec${traDos(j)?'':' hidden'}">Empresa de recogida<input data-pf="empresaRec" list="plEmpList" value="${esc(j.empresaRec||'')}"></label>
+    <div class="plrec plchips${traDos(j)?'':' hidden'}" style="align-self:end"><label class="chip conf"><input type="checkbox" data-cfk="recConf" ${j.recConf?'checked':''}> ✓ Recogida confirmada</label></div>
     <label class="w3">Observaciones<textarea data-pf="obs" rows="2">${esc(j.obs)}</textarea></label>
   </div>
   <div class="pllink">${j.jobId||j.cloudId?`<button class="mini" id="plOpenPpto">Abrir su presupuesto</button>`:''}<button class="mini sec" id="plLinkPpto" title="Enlaza este trabajo con el presupuesto que tienes abierto ahora">Enlazar con el presupuesto abierto${DOC.meta.num?' ('+esc(DOC.meta.num)+')':''}</button></div>`;
@@ -7943,6 +8000,7 @@ function planEdRead(){
   const otro=($('#plEdBody [data-otro]')||{}).value||''; otro.split(',').map(x=>x.trim()).filter(Boolean).forEach(n=>{ if(!j.tecnicos.some(t=>norm(t)===norm(n))) j.tecnicos.push(n); });
   $$('#plEdBody [data-cfk]').forEach(c=>j[c.dataset.cfk]=c.checked);
   if(!j.tecnicos.length) j.tecConf=false; if(!(j.empresa||'').trim()) j.traConf=false;
+  if(!j.recAparte){ j.recConf=false; } if(!(j.empresaRec||'').trim()) j.recConf=false;
   if(j.fin && j.ini && j.fin<j.ini) j.fin=j.ini; if(!j.fin) j.fin=j.ini;
   const o=PV.edit.j; if(j.dias && (j.ini!==o.ini || j.fin!==(o.fin||o.ini))) delete j.dias;
   return j;
@@ -8025,7 +8083,7 @@ async function planExportXlsx(){
           const txt = kd==='ent' ? 'ENTREGA · '+j.concepto+(j.entregaH?' · '+j.entregaH:'') : kd==='rec' ? 'DEVOLUCIÓN · '+j.concepto+(j.recogidaH?' · '+j.recogidaH:'') : kd==='fin' ? 'fin · '+j.concepto : j.concepto+(k>1?` (${jobFechas(j)})`:'');
           S.set(r,2,txt,Object.assign({bg:j.estado==='anul'?FILL.anul:kd==='ent'||kd==='rec'||(j.tipo&&/entrega|recogida/i.test(j.tipo))?'#FF9900':kd==='fin'?null:(j.etiqueta==='M. Ríos'?'#00FFFF':FILL[j.estado]),i:kd==='fin'},bd));
           S.set(r,3,j.num||'',bd);
-          S.set(r,4,j.tecReq===false?'NO':(j.tecnicos||[]).join(', '),Object.assign({bg:{ok:'#C6EFCE',no:'#FFC7CE'}[tecSt(j)]||null},bd)); S.set(r,5,yn(j.transporte),Object.assign({ha:'center'},bd)); S.set(r,6,j.empresa||'',Object.assign({bg:{ok:'#C6EFCE',no:'#FFC7CE'}[traSt(j)]||null},bd));
+          S.set(r,4,j.tecReq===false?'NO':(j.tecnicos||[]).join(', '),Object.assign({bg:{ok:'#C6EFCE',no:'#FFC7CE'}[tecSt(j)]||null},bd)); S.set(r,5,yn(j.transporte),Object.assign({ha:'center'},bd)); S.set(r,6,traEmpTxt(j),Object.assign({wr:true},{bg:{ok:'#C6EFCE',no:'#FFC7CE'}[traSt(j)]||null},bd));
           S.set(r,7,j.obs||'',Object.assign({wr:true},bd)); S.set(r,8,(PL_EST.find(e=>e[0]===j.estado)||['',''])[1],bd); }
         else for(let c=2;c<=8;c++) S.set(r,c,'',bd);
         r++; }); }
@@ -8042,9 +8100,10 @@ function initPlan(){
   $('#plQ').oninput=e=>{ PV.q=e.target.value; renderPlan(); };
   $('#plEst').onchange=e=>{ PV.est=e.target.value; renderPlan(); };
   $('#plNew').onclick=()=>planEdit(newJob({ini:ymd(new Date(PV.y,PV.m,1)),fin:ymd(new Date(PV.y,PV.m,1))}),true);
-  $('#plBody').addEventListener('click',e=>{ const cf=e.target.closest('td[data-cf]');
-    if(cf){ const j=PLAN.jobs.find(x=>x.id===cf.closest('tr').dataset.job); if(j){ const k=cf.dataset.cf==='tec'?'tecConf':'traConf'; j[k]=!j[k]; j.mod=new Date().toISOString(); planSave(); renderPlan();
-      toast((cf.dataset.cf==='tec'?'Personal':'Transporte')+(j[k]?' confirmado ✓':': sin confirmar'),j[k]?'#067647':'#b54708'); } return; }
+  $('#plBody').addEventListener('click',e=>{ const cf=e.target.closest('td[data-cf],span[data-cf]');
+    if(cf){ const j=PLAN.jobs.find(x=>x.id===cf.closest('tr').dataset.job); if(j){ const q=cf.dataset.cf, k={tec:'tecConf',tra:'traConf',rec:'recConf'}[q]; j[k]=!j[k]; j.mod=new Date().toISOString(); planSave(); renderPlan();
+      const nm=q==='tec'?'Personal':q==='rec'?'Recogida':traDos(j)?'Entrega':'Transporte', fem=q==='rec'||(q==='tra'&&traDos(j));
+      toast(nm+(j[k]?(fem?' confirmada ✓':' confirmado ✓'):': sin confirmar'),j[k]?'#067647':'#b54708'); } return; }
     const tr=e.target.closest('tr'); if(!tr) return;
     if(tr.dataset.job){ const j=PLAN.jobs.find(x=>x.id===tr.dataset.job); if(j) planEdit(j,false); }
     else if(tr.dataset.new) planEdit(newJob({ini:tr.dataset.new,fin:tr.dataset.new}),true); });
@@ -8058,7 +8117,11 @@ function initPlan(){
   $('#plDel').onclick=async()=>{ const j=PV.edit.j; if(!await confirmDlg('Eliminar del Planning', `¿Eliminar «${j.concepto}» del planning?`, {ok:'Eliminar', danger:true})) return; PLAN.jobs=PLAN.jobs.filter(x=>x.id!==j.id); planSave(); $('#plEd').classList.add('hidden'); renderPlan(); };
   $('#plDup').onclick=()=>{ const j=Object.assign(planEdRead(),{id:'p'+uid()}); planEdit(j,true); toast('Copia: cambia las fechas y guarda','#026'); };
   $('#plEdBody').addEventListener('change',e=>{ if(e.target.dataset.tec!=null || e.target.dataset.otro){ const c=$('#plEdBody [data-cfk="tecConf"]'); if(c && c.checked){ c.checked=false; toast('Has cambiado los técnicos: vuelve a marcar «confirmado» cuando lo esté','#c60'); } }
-    if(e.target.dataset.pf==='empresa'){ const c=$('#plEdBody [data-cfk="traConf"]'); if(c && c.checked){ c.checked=false; toast('Has cambiado la empresa: vuelve a marcar «confirmado» cuando lo esté','#c60'); } } });
+    if(e.target.dataset.pf==='empresa'){ const c=$('#plEdBody [data-cfk="traConf"]'); if(c && c.checked){ c.checked=false; toast('Has cambiado la empresa: vuelve a marcar «confirmado» cuando lo esté','#c60'); } }
+    if(e.target.dataset.pf==='empresaRec'){ const c=$('#plEdBody [data-cfk="recConf"]'); if(c && c.checked){ c.checked=false; toast('Has cambiado la empresa de recogida: vuelve a marcar «confirmada» cuando lo esté','#c60'); } }
+    if(e.target.dataset.cfk==='recAparte'){ const on=e.target.checked; $$('#plEdBody .plrec').forEach(x=>x.classList.toggle('hidden',!on));
+      const a=$('#plEdBody .plEmpQ'), b=$('#plEdBody .plTraQ'); if(a) a.textContent=on?'Empresa de entrega':'Empresa de transporte'; if(b) b.textContent=on?'Entrega confirmada':'Transporte confirmado';
+      if(on){ const i=$('#plEdBody [data-pf="empresaRec"]'); if(i && !i.value) i.focus(); } } });
   $('#plEdBody').addEventListener('click',e=>{
     if(e.target.id==='plLinkPpto'){ const j=PV.edit.j; j.jobId=DOC.jobId||''; j.cloudId=(DOC.cloud&&DOC.cloud.id)||''; const n=$('#plEdBody [data-pf="num"]'); if(DOC.meta.num) n.value=DOC.meta.num; toast('Enlazado: guarda la ficha para que quede'); }
     if(e.target.id==='plOpenPpto'){ const j=PV.edit.j; $('#plEd').classList.add('hidden');
@@ -8111,7 +8174,7 @@ function planTipHtml(j, ds, fuera){
   const r=(a,b)=>b?`<div class="stt-r"><span>${a}</span><b>${esc(b)}</b></div>`:'';
   return `<div class="stt-h">${esc(j.concepto||'(sin concepto)')}</div><div style="margin-bottom:6px">${plPill(j)}</div>`
     + (fuera?r('Material', 'fuera · vuelve el '+dmy(j.recogida||jobSpan(j)[1])):'') + r('Nº', j.num) + r('Fechas', jobFechas(j)) + (nd>1?r('Hoy', 'día '+jobIdx(j,ds)+' de '+nd):'') + r('Tipo', j.tipo)
-    + r('Personal', tec || (j.tecReq===false?'no':'')) + r('Transporte', j.empresa || (j.transporte===false?'no':''))
+    + r('Personal', tec || (j.tecReq===false?'no':'')) + r('Transporte', traEmpTxt(j) || (j.transporte===false?'no':''))
     + (fl.length?`<div class="stt-f ju">Pendiente: ${esc(fl.join(' · '))}</div>`:'') + `<div class="stt-n" style="margin-top:6px">Clic para abrir su ficha</div>`;
 }
 (()=>{ let t=null, cur=null;
@@ -8356,7 +8419,7 @@ const DV={q:'', est:'revisar', open:null};
 const DEV_EST=[['pend','Pendiente de devolver'],['dev','Devuelto'],['perd','Perdido'],['cobr','Cobrado al cliente']];
 const DEV_FALTA=[['pend','Pendiente de devolver'],['perd','Perdido'],['cobr','Cobrado al cliente'],['dev','Devuelto']];
 const DEV_TIPO=[['alq','Alquiler sin devolver'],['perd','Pérdida / rotura']];
-const DJ_EST={fuera:['Fuera','dj-fuera'],revisar:['Por revisar','dj-rev'],faltas:['Con faltas','dj-falta'],ok:['Devuelto','dj-ok'],sinmat:['Sin material registrado','dj-sin']};
+const DJ_EST={prox:['Próximo','dj-fuera'],sinmarcar:['Sin marcar la salida','dj-sinm'],salio:['Ha salido','dj-sal'],revisar:['Por revisar','dj-rev'],faltas:['Con faltas','dj-falta'],ok:['Devuelto','dj-ok'],sinmat:['Sin material registrado','dj-sin']};
 const devBaja = st => st==='perd' || st==='cobr';
 const devSuelta = e => e.kind!=='job';
 function devSave(){ lsSet(LS_DEV,DEV); devTabCnt(); if(typeof syncSoon==='function') syncSoon('devoluciones'); }
@@ -8368,10 +8431,17 @@ function devJobs(){ return PLAN.jobs.filter(j=>j.estado==='conf'); }
 function devJobEst(j){
   if(!(j.mat&&j.mat.length) && !(devRec(j.id)||{}).lineas) return 'sinmat';
   const r=devRec(j.id);
+  /* sin revisar (L.A., 20-11: «Fuera ahora» no tenía sentido para bolos que aún no tienen que salir):
+     · Por revisar: ya pasó la recogida.
+     · Ha salido: alguien marcó algo como salido y aún no ha llegado la recogida.
+     · Sin marcar la salida: ya llegó la entrega y nadie ha marcado nada.
+     · Próximo: todavía no tiene que salir. */
   if(!r || !r.rev){
-    if(devHaySal(j)) return 'revisar';          /* algo marcado como salido: ya se puede revisar, sin esperar a la fecha */
-    const b=jobSpan(j)[1]; if(!b || ymd(new Date())<=b) return 'fuera';
-    return 'revisar';
+    const [a,b]=jobSpan(j), hoy=ymd(new Date());
+    if(b && hoy>b) return 'revisar';
+    if(devHaySal(j)) return 'salio';
+    if(a && hoy>=a) return 'sinmarcar';
+    return 'prox';
   }
   return naveLineas(j).some(l=>stNum(l.falta)>0 && l.estado==='pend') ? 'faltas' : 'ok';
 }
@@ -8405,7 +8475,7 @@ function devPendQty(gk){
 /* unidades de trabajos ya recogidos pero sin revisar: se cuentan en la nave, avisando */
 function devRevQty(gk){
   let n=0, quien=[];
-  devJobs().forEach(j=>{ if(devJobEst(j)!=='revisar') return; let c=0; (j.mat||[]).forEach(m=>{ if(m.inv && stGk(m.inv)===gk) c+=Math.max(0, stNum(m.cant)-stNum(m.sal)); }); if(c){ n+=c; quien.push(`${j.concepto||'(sin concepto)'} (${c})`); } });
+  devJobs().forEach(j=>{ const s0=devJobEst(j); if(s0!=='revisar' && s0!=='salio') return; let c=0;   /* igual que antes del 20-11 («Por revisar» incluía lo ya salido) */ (j.mat||[]).forEach(m=>{ if(m.inv && stGk(m.inv)===gk) c+=Math.max(0, stNum(m.cant)-stNum(m.sal)); }); if(c){ n+=c; quien.push(`${j.concepto||'(sin concepto)'} (${c})`); } });
   return {n, quien};
 }
 
@@ -8423,26 +8493,26 @@ async function devStock(o, n, nuevo){
 
 /* ---------- pantalla ---------- */
 function devTabCnt(){ const b=$('#devTabCnt'); if(!b) return;
-  let n=0; try{ n=devJobs().filter(j=>{ const s=devJobEst(j); return s==='revisar'||s==='faltas'; }).length + DEV.filter(e=>devSuelta(e)&&e.estado==='pend').length; }catch(e){}
+  let n=0; try{ n=devJobs().filter(j=>{ const s=devJobEst(j); return s==='revisar'||s==='salio'||s==='faltas'; }).length + DEV.filter(e=>devSuelta(e)&&e.estado==='pend').length; }catch(e){}
   b.textContent=n; b.classList.toggle('hidden',!n); b.title=n+' por revisar o con faltas'; }
 function renderDev(){
   const q=norm(DV.q), hoy=ymd(new Date());
   const all=devJobs().map(j=>({j, st:devJobEst(j), b:jobSpan(j)[1]||''}));
   const cnt=k=>all.filter(x=>x.st===k).length;
   const list=all.filter(x=>(DV.est==='*' ? true : x.st===DV.est) && (!q || norm([x.j.concepto,x.j.num,x.j.obs,(x.j.mat||[]).map(m=>m.nombre).join(' ')].join(' ')).includes(q)))
-    .sort((a,b)=> DV.est==='fuera' ? a.b.localeCompare(b.b) : b.b.localeCompare(a.b));
+    .sort((a,b)=> (DV.est==='prox'||DV.est==='sinmarcar'||DV.est==='salio') ? a.b.localeCompare(b.b) : b.b.localeCompare(a.b));
   const sel=$('#devEst'); [...sel.options].forEach(o=>{ const base=o.dataset.l||(o.dataset.l=o.textContent); o.textContent= o.value==='*'?base:`${base} (${cnt(o.value)})`; });
   const sueltas=DEV.filter(devSuelta), pendS=sueltas.filter(e=>e.estado==='pend');
   const faltaU=all.filter(x=>x.st==='faltas').reduce((s,x)=>s+devRec(x.j.id).lineas.reduce((t,l)=>t+(l.estado==='pend'?stNum(l.falta):0),0),0);
-  $('#devSum').innerHTML=`<span class="dvk"><b>${cnt('revisar')}</b> por revisar</span><span class="dvk"><b>${cnt('faltas')}</b> con faltas <small>(${faltaU} uds.)</small></span><span class="dvk"><b>${all.filter(x=>x.st==='fuera' || (x.st==='revisar' && devHaySal(x.j))).length}</b> fuera ahora</span><span class="dvk"><b>${pendS.reduce((s,e)=>s+stNum(e.cant),0)}</b> uds. sueltas pendientes</span>`;
+  $('#devSum').innerHTML=`<span class="dvk"><b>${cnt('revisar')}</b> por revisar</span><span class="dvk"><b>${cnt('faltas')}</b> con faltas <small>(${faltaU} uds.)</small></span><span class="dvk"><b>${cnt('salio')}</b> han salido</span><span class="dvk${cnt('sinmarcar')?' dvwarn':''}"><b>${cnt('sinmarcar')}</b> sin marcar la salida</span><span class="dvk"><b>${pendS.reduce((s,e)=>s+stNum(e.cant),0)}</b> uds. sueltas pendientes</span>`;
   $('#devCnt').textContent=`${list.length} presupuesto${list.length===1?'':'s'}`;
   $('#devJobs').innerHTML = list.map(({j,st,b})=>{
     const L=devLineas(j), uds=L.reduce((s,l)=>s+stNum(l.sal),0), ext=L.reduce((s,l)=>s+stNum(l.ext),0);
-    let [et,ec]=DJ_EST[st]; if(st==='revisar' && devHaySal(j)) [et,ec]=['Salió · por revisar','dj-sal'];
+    let [et,ec]=DJ_EST[st];
     const falt=st==='faltas'?L.filter(l=>l.estado==='pend'&&stNum(l.falta)>0).map(l=>`${stNum(l.falta)} ${l.nombre}`).join(' · '):'';
     const open=DV.open===j.id;
     return `<tr class="djr ${open?'open':''}" data-dj="${j.id}"><td>${b?fNum(b):'—'}</td><td><span class="pnum">${esc(j.num||'—')}</span></td>
-      <td><b>${esc(j.concepto||'(sin concepto)')}</b>${falt?`<span class="djf">Falta: ${esc(falt)}</span>`:''}${devSinMarcar(j)?'<span class="djs">La entrega ya pasó y nadie ha marcado la salida en el contrarider</span>':''}</td><td class="pmut">${esc(jobFechas(j))}</td>
+      <td><b>${esc(j.concepto||'(sin concepto)')}</b>${falt?`<span class="djf">Falta: ${esc(falt)}</span>`:''}${devSinMarcar(j)?'<span class="djs">Ya llegó la entrega y nadie ha marcado la salida</span>':''}</td><td class="pmut">${esc(jobFechas(j))}</td>
       <td>${st==='sinmat'?'<span class="pmut">abre y guarda el presupuesto</span>':`${uds} uds. · ${L.length} material${L.length===1?'':'es'}${ext?` <span class="pmut">(${ext} extra)</span>`:''}`}</td>
       <td><span class="djp ${ec}">${et}</span></td><td class="djgo">${st==='sinmat'?'':open?'▴':'Revisar ▸'}</td></tr>`
       + (open&&st!=='sinmat' ? `<tr class="djd"><td colspan="7">${devDetalle(j,st)}</td></tr>` : '');
@@ -8466,7 +8536,7 @@ function devDetalle(j,st){
     <div class="djsellos">${r.prep&&r.prep.en?sello('Preparado por',r.prep.por,r.prep.en,'ok'):`<span class="djsel">Sin el OK de preparado <small>(${nSal} de ${L.length} marcados)</small></span>`}
       ${r.rev?sello('Revisado por',r.revPor||r.autor,r.rev,'ok'):`<span class="djsel">Sin revisar <small>(${nVue} de ${nSal||L.length} devueltos)</small></span>`}</div>
     <div class="djacts"><span class="pmut">${cerr?'Revisión cerrada. Reábrela para tocar algo.':'Marca cada material al salir y al volver. Pon solo lo que falte.'}</span><span style="flex:1"></span>
-      ${st==='fuera'&&!nSal?'<span class="pmut">Aún no ha llegado la fecha de devolución.</span>':''}
+      ${st==='prox'?'<span class="pmut">Aún no tiene que salir.</span>':st==='sinmarcar'?'<span class="pmut">Ya debería haber salido: marca lo que se lleve.</span>':st==='salio'?'<span class="pmut">Aún no ha llegado la fecha de recogida.</span>':''}
       <button class="sec" data-djact="salall" ${cerr?'disabled':''}>${nSal===L.length&&L.length?'↩ Quitar las salidas':'✓ Todo salido'}</button>
       <button class="sec" data-djact="prep" ${cerr?'disabled':''}>${r.prep&&r.prep.en?'↩ Quitar el OK de preparado':'✓ OK, preparado'}</button>
       <button data-djact="rev">${cerr?'↩ Reabrir la revisión':'✓ OK, revisado'}</button></div></div>`;
@@ -8557,19 +8627,22 @@ function initDev(){
   devTabCnt();
   $('#devQ').oninput=e=>{ DV.q=e.target.value; renderDev(); };
   $('#devEst').onchange=e=>{ DV.est=e.target.value; DV.open=null; renderDev(); };
-  $('#devNew').onclick=devAdd; $('#devExp').onclick=devExport;
+  $('#devNew').onclick=()=>devHaz('Apuntar pérdida suelta', devAdd); $('#devExp').onclick=devExport;
+  { const u=$('#devUndo'); if(u) u.onclick=devUndo; const hb=$('#devHist'); if(hb) hb.onclick=devHistVer; devUndoPaint(); }
   $('#devJobs').addEventListener('change',ev=>{
     const j=PLAN.jobs.find(x=>x.id===DV.open); if(!j) return;
-    const v=ev.target.closest('[data-dvue]'); if(v){ devVuelta(j, +v.dataset.dvue, v.checked); return; }
-    const s=ev.target.closest('[data-dsal]'); if(s) devSalida(j, +s.dataset.dsal, s.checked);
+    const nom=i=>((devLineas(j)[i]||{}).nombre||'material'), bolo=' · '+(j.num||j.concepto||'bolo');
+    const v=ev.target.closest('[data-dvue]'); if(v){ const i=+v.dataset.dvue, on=v.checked; devHaz(`${on?'Marcar':'Desmarcar'} devuelto «${nom(i)}»${bolo}`, ()=>devVuelta(j, i, on)); return; }
+    const s=ev.target.closest('[data-dsal]'); if(s){ const i=+s.dataset.dsal, on=s.checked; devHaz(`${on?'Marcar':'Desmarcar'} salido «${nom(i)}»${bolo}`, ()=>devSalida(j, i, on)); }
   });
   $('#devJobs').addEventListener('click',ev=>{
     if(ev.target.closest('[data-dvue],[data-dsal]')) return;        /* las casillas se marcan solas */
     const a=ev.target.closest('[data-djact]');
     if(a){ const j=PLAN.jobs.find(x=>x.id===DV.open); if(!j) return; const k=a.dataset.djact;
-      if(k==='salall'){ const L=devLineas(j); naveGuarda(j, devLeeTabla(j)); naveTodo(j,'salio', L.filter(l=>l.salio).length!==L.length); renderDev(); }
-      else if(k==='prep') navePrep(j).then(ok=>{ if(ok) renderDev(); });
-      else if(k==='rev') naveRev(j);
+      const bolo=' · '+(j.num||j.concepto||'bolo'), r0=devRec(j.id)||{};
+      if(k==='salall'){ const L=devLineas(j), on=L.filter(l=>l.salio).length!==L.length; devHaz((on?'Todo salido':'Quitar todas las salidas')+bolo, ()=>{ naveGuarda(j, devLeeTabla(j)); naveTodo(j,'salio', on); renderDev(); }); }
+      else if(k==='prep') devHaz((r0.prep&&r0.prep.en?'Quitar el OK de preparado':'OK, preparado')+bolo, ()=>navePrep(j, devLeeTabla(j)).then(ok=>{ if(ok) renderDev(); }));
+      else if(k==='rev') devHaz((r0.rev?'Reabrir la revisión':'OK, revisado')+bolo, ()=>naveRev(j, devLeeTabla(j)));
       return; }
     if(ev.target.closest('tr.djd')) return;
     const tr=ev.target.closest('tr.djr'); if(!tr) return; const j=PLAN.jobs.find(x=>x.id===tr.dataset.dj); if(!j || devJobEst(j)==='sinmat') return;
@@ -8587,16 +8660,23 @@ function initDev(){
       acOpen(t, it=>{ e.inv=it.id; e.material=itemLabel(it); devSave(); renderDevSueltas(); const n=$(`tr[data-dev="${e.id}"] [data-dv="cant"]`); if(n){ n.focus(); n.select(); } }); }
     else e[k]=t.value;
     devSave(); });
+  /* escribir en un apunte suelto: se apunta al salir de la casilla */
+  let devFocoF=null;
+  body.addEventListener('focusin',ev=>{ if(ev.target.matches('input')) setTimeout(()=>{ devFocoF=devFoto(); },0); });   /* después de que se apunte la acción que haya puesto el foco (p. ej. «Apuntar pérdida») */
+  body.addEventListener('focusout',ev=>{ if(!devFocoF || !ev.target.matches('input')) return; const a=devFocoF; devFocoF=null; const e=devById((ev.target.closest('tr')||{dataset:{}}).dataset.dev);
+    setTimeout(()=>devApunta('Escribir en «'+((e&&e.material)||'apunte suelto')+'»', a), 0); });
   body.addEventListener('change',async ev=>{ const t=ev.target, k=t.dataset.dv; if(k!=='estado'&&k!=='tipo') return; const e=devById(t.closest('tr').dataset.dev); if(!e) return;
+    devFocoF=null; const a=devFoto(); try{
     if(k==='estado'){ await devStock(e, stNum(e.cant), t.value); e.estado=t.value; e.cierre=t.value==='pend'?'':(e.cierre||today()); }
     else e.tipo=t.value;
-    devSave(); renderDev(); });
+    devSave(); renderDev(); } finally { devApunta(`${k==='estado'?'Estado':'Tipo'} de «${e.material||'apunte suelto'}»: ${(k==='estado'?DEV_EST:DEV_TIPO).find(x=>x[0]===t.value)?.[1]||t.value}`, a); } });
   body.addEventListener('keydown',ev=>{ if(ev.target.dataset.dv==='material') acKey(ev); });
   body.addEventListener('focusout',ev=>{ if(ev.target.dataset.dv==='material') setTimeout(()=>{ if(document.activeElement!==ev.target) acClose(); },150); });
   body.addEventListener('click',async ev=>{ const d=ev.target.closest('[data-dvdel]'); if(!d) return; const e=devById(d.dataset.dvdel); if(!e) return;
     if(!await confirmDlg('Borrar apunte', `¿Borrar el apunte «${e.material||'(sin material)'}»?`, {ok:'Borrar', danger:true})) return;
+    await devHaz(`Borrar el apunte «${e.material||'(sin material)'}»`, async()=>{
     if(e.restado) await devStock(e, stNum(e.cant), 'dev');
-    DEV=DEV.filter(x=>x!==e); devSave(); renderDev(); });
+    DEV=DEV.filter(x=>x!==e); devSave(); renderDev(); }); });
 }
 
 /* =====================================================================
@@ -8674,7 +8754,9 @@ function naveGuarda(j, lineas, extra){
   /* la revisión se cierra sola cuando todo lo que salió está devuelto o tiene su falta declarada */
   const sal=r.lineas.filter(l=>l.salio);
   const fin = sal.length>0 && sal.every(l=>l.vuelto || stNum(l.falta)>0);
-  if(fin && !r.rev){ r.rev=today(); if(!r.revPor){ r.revPor=naveQuien(); r.autor=r.revPor; } }
+  /* …salvo al reabrirla a propósito (extra.rev vacío): si no, se volvía a cerrar en el acto y «Reabrir» no hacía nada (arreglado 20-11) */
+  const reabre = !!(extra && 'rev' in extra && !extra.rev);
+  if(fin && !r.rev && !reabre){ r.rev=today(); if(!r.revPor){ r.revPor=naveQuien(); r.autor=r.revPor; } }
   if(!fin && r.rev && !(extra&&extra.rev)){ r.rev=''; delete r.revPor; }
   devSave(); if(typeof stockBuild==='function') stockBuild();
   return r;
@@ -8710,8 +8792,8 @@ function naveTodo(j, campo, on){
 }
 
 /* ---------- los dos OK ---------- */
-async function navePrep(j){
-  const L=naveLineas(j); if(!L.length){ toast('Este bolo no tiene material registrado','#c60'); return false; }
+async function navePrep(j, Lpant){
+  const L=Lpant||naveLineas(j); if(!L.length){ toast('Este bolo no tiene material registrado','#c60'); return false; }
   const r=naveRec(j.id);
   if(r && r.prep && r.prep.en){
     if(!await confirmDlg('Quitar el OK de preparado', `Lo dio ${naveSelloTxt(r.prep.por,r.prep.en)||'alguien'}. ¿Lo quito? Las marcas de cada material se quedan como están.`, {ok:'Quitar el OK', danger:true})) return false;
@@ -8729,8 +8811,8 @@ async function navePrep(j){
   naveGuarda(j, L, {prep:{por:naveQuien(), en:naveAhora()}});
   toast('✓ Preparado'+(naveQuien()?' · '+naveQuien():''),'#067647'); return true;
 }
-async function naveRev(j){
-  const L=naveLineas(j); const r=naveRec(j.id);
+async function naveRev(j, Lpant){
+  const r=naveRec(j.id); const L=(Lpant && !(r && r.rev)) ? Lpant : naveLineas(j);   /* al cerrar, con lo escrito en pantalla (antes se perdían las «Faltan», arreglado 20-11) */
   if(r && r.rev){
     if(!await confirmDlg('Reabrir la revisión', `La cerró ${naveSelloTxt(r.revPor||r.autor,r.rev)||'alguien'}. ¿La reabro para seguir tocando?`, {ok:'Reabrir'})) return false;
     for(const l of L) if(l.restado) await devStock(l, stNum(l.falta), 'dev');
@@ -8825,6 +8907,72 @@ function naveMigra(){
   });
   lsSet('bk_nave_v1',true);
   if(n){ lsSet(LS_DEV,DEV); if(typeof syncSoon==='function') syncSoon('devoluciones'); }
+}
+
+/* =====================================================================
+   DEVOLUCIONES · DESHACER E HISTORIAL  (L.A., 20-11: «necesito que se puedan deshacer
+   también las acciones de las devoluciones… he marcado algo que no sé qué era»)
+   · Cada acción de Devoluciones (marcar salido/devuelto, todo salido, OK de preparado,
+     OK de revisado, reabrir, apuntes sueltos…) se apunta con quién, cuándo y qué cambió.
+   · «↶ Deshacer» vuelve atrás la última, solo en lo que tocó esa acción (no pisa lo
+     que otros hayan cambiado en otros bolos). Si ese mismo bolo ha cambiado después,
+     lo dice y pregunta antes.
+   · «Historial» enseña las últimas acciones, para saber qué se marcó.
+   · Si la acción restó o sumó unidades al inventario, deshacerla las devuelve.
+   · Se guarda en este ordenador (las últimas 40), también al cerrar la app.
+   ===================================================================== */
+const LS_DEVH='bk_dev_hist_v1';
+let DEV_HIST=lsGet(LS_DEVH,[]); if(!Array.isArray(DEV_HIST)) DEV_HIST=[];
+const devHistSave = () => { if(DEV_HIST.length>40) DEV_HIST=DEV_HIST.slice(-40); lsSet(LS_DEVH,DEV_HIST); devUndoPaint(); };
+const devRecMap = () => { const m={}; DEV.forEach(e=>{ if(e && e.id) m[e.id]=JSON.stringify(e); }); return m; };
+const devInvMap = () => { const m={}; (INV||[]).forEach(it=>{ if(it && it.id && it.qty!=='' && it.qty!=null) m[it.id]=String(it.qty); }); return m; };
+const devFoto = () => ({rec:devRecMap(), inv:devInvMap()});
+/* compara antes y después y apunta solo lo que cambió */
+function devApunta(label, a){
+  if(!a) return;
+  const b=devFoto(), ids=new Set([...Object.keys(a.rec), ...Object.keys(b.rec)]), recs=[];
+  ids.forEach(id=>{ if(a.rec[id]!==b.rec[id]) recs.push({id, antes:a.rec[id]||null, despues:b.rec[id]||null}); });
+  const iids=new Set([...Object.keys(a.inv), ...Object.keys(b.inv)]), inv=[];
+  iids.forEach(id=>{ if(a.inv[id]!==b.inv[id]) inv.push({id, antes:a.inv[id]??null, despues:b.inv[id]??null}); });
+  if(!recs.length && !inv.length) return;
+  DEV_HIST.push({label, por:naveQuien(), en:naveAhora(), recs, inv}); devHistSave();
+}
+/* envuelve una acción: foto antes, la acción, y se apunta lo que haya cambiado */
+async function devHaz(label, fn){ const a=devFoto(); try{ return await fn(); } finally { devApunta(typeof label==='function'?label():label, a); } }
+const devQue = id => { const e=DEV.find(x=>x.id===id) || null; if(!e) return ''; return e.kind==='job' ? (e.num||e.concepto||'bolo') : (e.material||'apunte suelto'); };
+async function devUndo(){
+  const h=DEV_HIST[DEV_HIST.length-1]; if(!h){ toast('Nada que deshacer en Devoluciones','#c60'); return; }
+  /* ¿ha cambiado después lo que tocó (otra persona, el móvil u otra acción)? */
+  const cur=devRecMap(), cambiado=h.recs.filter(r=>(cur[r.id]||null)!==r.despues);
+  if(cambiado.length && !await confirmDlg('Ha cambiado desde entonces',
+      `«${h.label}» se hizo el ${naveFecha(h.en)}${h.por?' ('+h.por+')':''}. Después se ha vuelto a tocar ${cambiado.map(r=>'«'+(devQue(r.id)||'un apunte')+'»').join(', ')}. Si lo deshago, también se pierde lo que se hizo después en eso. ¿Lo deshago?`,
+      {ok:'Deshacer igualmente', danger:true})) return;
+  const ahora=naveAhora();
+  h.recs.forEach(r=>{
+    const i=DEV.findIndex(e=>e.id===r.id);
+    if(r.antes==null){ if(i>=0) DEV.splice(i,1); return; }        /* lo creó la acción: se quita */
+    const o=JSON.parse(r.antes); o.mod=ahora;                       /* más reciente que lo del almacén, para que mande al sincronizar */
+    if(i>=0) DEV[i]=o; else DEV.push(o);
+  });
+  let invT=false;
+  h.inv.forEach(x=>{ const it=invById(x.id); if(!it) return; it.qty = x.antes==null ? '' : (isNaN(+x.antes)?x.antes:+x.antes); it.mod=true; invT=true; });
+  if(invT) invSave();
+  DEV_HIST.pop(); devHistSave(); devSave(); if(typeof stockBuild==='function') stockBuild();
+  if(TAB==='dev') renderDev(); if(TAB==='inv' && typeof renderInvRows==='function') renderInvRows();
+  toast(`Deshecho: ${h.label}${invT?' (y el inventario)':''}`,'#067647');
+}
+function devHistVer(){
+  const L=DEV_HIST.slice().reverse();
+  const html=L.length ? `<div class="dvhist">${L.map((h,i)=>`<div class="dvh${i===0?' ult':''}"><span class="dvhw">${esc(naveFecha(h.en))} ${esc(String(h.en||'').slice(11,16))}${h.por?' · '+esc(h.por):''}</span><b>${esc(h.label)}</b>${h.inv.length?' <span class="pmut">· inventario</span>':''}${i===0?' <span class="pmut">← la última</span>':''}</div>`).join('')}</div>
+    <p class="hint">«Deshacer» vuelve atrás la última; pulsándolo otra vez, la anterior, y así. Se guardan las últimas 40 acciones hechas en este ordenador.</p>`
+    : '<p class="hint">Todavía no hay nada apuntado en este ordenador.</p>';
+  dlgBox({title:'Historial de Devoluciones', form:html, buttons:[{k:'',label:'Cerrar',kind:'sec'},...(L.length?[{k:'ok',label:'↶ Deshacer la última',kind:'pri'}]:[])]})
+    .then(r=>{ if(r && r.k==='ok') devUndo(); });
+}
+function devUndoPaint(){
+  const b=$('#devUndo'); if(!b) return; const h=DEV_HIST[DEV_HIST.length-1];
+  b.disabled=!h; b.textContent = h ? '↶ Deshacer' : '↶ Deshacer'; b.title = h ? 'Deshacer: '+h.label+' ('+naveFecha(h.en)+')' : 'Nada que deshacer';
+  const l=$('#devUndoLbl'); if(l) l.textContent = h ? 'Última: '+h.label : '';
 }
 
 /* =====================================================================
@@ -10251,7 +10399,7 @@ function liqFila(D, x){
   const rd=v=>Math.round(v*100)/100;
   /* IVA y total con IVA: los del propio presupuesto, como salen en su hoja (también si en «Edición libre» se escribieron a mano) */
   let iva=null, tot=null;
-  { const TM=(libreOn(P) && P.libre.tot)||{}; if(manNum(TM.base)) base=N0(TM.base); if(REDONDEO) base=redE(base);
+  { const TM=(libreOn(P) && P.libre.tot)||{}; if(manNum(TM.base)) base=N0(TM.base); if(redOn()) base=redE(base);
     iva = manNum(TM.iva) ? N0(TM.iva) : base*IVA()/100; tot = manNum(TM.total) ? N0(TM.total) : base+iva; }
   r.base=rd(base); r.iva=rd(iva); r.tot=rd(tot); r.bkl=rd(bkl==null?0:bkl); r.bk=rd((bkl==null?0:bkl)-r.alq); r.sinBk=bkl==null; LIQ_COLS.forEach(([k])=>r[k]=rd(r[k]));
   const num=(x&&x.numero)||D.meta.num||'', F=new Set(); if(D.factura && D.factura.emitida && D.factura.num) F.add(D.factura.num);
@@ -10885,7 +11033,7 @@ function init(){
   $('#tabs').onclick=e=>{ const b=e.target.closest('[data-tab]'); if(b) switchTab(b.dataset.tab); };
   initFile(); initCloud(); initSync(); initPlan(); if(typeof initLiq==='function') initLiq(); initFechas(); initStock(); initDev(); initExtras(); initVers(); initBgClose(); $('#btnDrive').onclick=()=>drvAbrirCarpeta(DOC.drvCarpeta); $('#btnExpDrive').onclick=()=>driveExport();
   $('#fileOpen').onchange=e=>{ const f=e.target.files[0]; e.target.value=''; if(f) openFile(f); };
-  $('#btnUndo').onclick=undo;
+  $('#btnUndo').onclick=()=>{ if(TAB==='dev' && typeof devUndo==='function') devUndo(); else undo(); };   /* en Devoluciones deshace lo de Devoluciones */
   $('#btnPrint').onclick=()=>{ if(TAB!=='inv'&&TAB!=='cli'&&TAB!=='dev') printTabs([TAB]); };
   $('#btnPrintAll').onclick=()=>printTabs(['ppto','fact','contra','bolo']);
   $('#btnPrintMore').onclick=e=>{ e.stopPropagation(); prMenuToggle(); };
@@ -10893,6 +11041,10 @@ function init(){
   document.addEventListener('keydown',e=>{
     if(!(e.ctrlKey||e.metaKey) || TAB==='inv') return; const k=e.key.toLowerCase();
     if(document.activeElement && (document.activeElement.id==='ged' || document.activeElement.closest('.modal'))) return;
+    if(TAB==='dev'){   /* en Devoluciones, Cmd+Z deshace lo de Devoluciones (escribiendo en una casilla, deshace lo escrito) */
+      const ae=document.activeElement; if(ae && ae.matches && ae.matches('input:not([type=checkbox]),textarea')) return;
+      if(k==='z' && !e.shiftKey && typeof devUndo==='function'){ e.preventDefault(); devUndo(); }
+      return; }
     if(k==='z' && !e.shiftKey){ e.preventDefault(); undo(); }
     else if(k==='y' || (k==='z' && e.shiftKey)){ e.preventDefault(); redo(); }
   });

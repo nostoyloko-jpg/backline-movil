@@ -70,6 +70,9 @@ input:focus{outline:2.5px solid var(--azul);outline-offset:-1px;border-color:var
 .btn:active{filter:brightness(.9)}
 .btn[disabled]{opacity:.55}
 .btn.sec{background:var(--tarjeta);color:var(--texto);border:1.5px solid var(--linea)}
+.btn.peligro{background:var(--tarjeta);color:var(--rojo);border:1.5px solid var(--rojo)}
+.hoja .acciones .btn.peligro:not(:disabled):active{background:var(--rojosuave)}
+#semLista .card{-webkit-touch-callout:none;-webkit-user-select:none;user-select:none}
 .btn.ok{background:var(--verde)}
 .btn.chico{width:auto;padding:9px 13px;font-size:14.5px;border-radius:10px}
 .aviso{background:var(--rojosuave);color:var(--rojo);border-radius:10px;padding:11px 12px;font-size:14.5px;margin-bottom:14px}
@@ -1129,7 +1132,9 @@ function pintaSemana(){
       if(j.num) meta.push(esc(j.num));
       if(j.tipo) meta.push(esc(j.tipo));
       if((j.tecnicos || []).length) meta.push(esc(j.tecnicos.join(', ')));
-      if(j.empresa) meta.push(esc(j.empresa));
+      if(j.recAparte && que === 'recogida'){ if(j.empresaRec) meta.push(esc(j.empresaRec)); }   /* recogida con otra empresa (20-11) */
+      else if(j.recAparte && que !== 'entrega'){ if(j.empresa || j.empresaRec) meta.push('Entrega: ' + esc(j.empresa || '¿?') + ' · Recogida: ' + esc(j.empresaRec || '¿?')); }
+      else if(j.empresa) meta.push(esc(j.empresa));
       html += '<button class="card" data-job="' + esc(j.id) + '"><div class="t">' + esc(j.concepto || '(sin concepto)') + ' ' + estPill(j.estado) + '</div>' +
         (meta.length ? '<div class="m">' + meta.map(x => '<span>' + x + '</span>').join('') + '</div>' : '') + '</button>';
     });
@@ -1147,55 +1152,115 @@ function fichaJob(id){
   if(j.entrega) f.push(['Entrega', fechaLarga(j.entrega) + (j.entregaH ? ' · ' + j.entregaH : '')]);
   if(j.recogida) f.push(['Recogida', fechaLarga(j.recogida) + (j.recogidaH ? ' · ' + j.recogidaH : '')]);
   if((j.tecnicos || []).length) f.push(['Personal', j.tecnicos.join(', ') + (j.tecConf ? '' : ' (sin confirmar)')]);
-  if(j.transporte === true || j.empresa) f.push(['Transporte', (j.empresa || 'sí') + (j.traConf ? '' : ' (sin confirmar)')]);
+  if(j.recAparte && j.transporte !== false){   /* entrega y recogida con empresas diferentes */
+    f.push(['Transporte · entrega', (j.empresa || '¿quién?') + (j.traConf ? '' : ' (sin confirmar)')]);
+    f.push(['Transporte · recogida', (j.empresaRec || '¿quién?') + (j.recConf ? '' : ' (sin confirmar)')]); }
+  else if(j.transporte === true || j.empresa) f.push(['Transporte', (j.empresa || 'sí') + (j.traConf ? '' : ' (sin confirmar)')]);
   else if(j.transporte === false) f.push(['Transporte', 'no']);
   if(j.mat && j.mat.length) f.push(['Material', j.mat.map(m => m.cant + ' ' + (m.nombre || (inv().byId[m.inv] ? itemLabel(inv().byId[m.inv]) : '?'))).join('\n')]);
   if(j.obs) f.push(['Observaciones', j.obs]);
-  if(j.confPor || j.confEn) f.push(['Confirmado por', nvSello(j.confPor, j.confEn)]);
-  const sePuede = j.estado !== 'conf' && j.estado !== 'anul';
+  if((j.confPor || j.confEn) && j.estado === 'conf') f.push(['Confirmado por', nvSello(j.confPor, j.confEn)]);
+  if((j.anuPor || j.anuEn) && j.estado === 'anul') f.push(['Anulado por', nvSello(j.anuPor, j.anuEn)]);
+  if((j.pendPor || j.pendEn) && j.estado !== 'conf' && j.estado !== 'anul') f.push(['Dejado por confirmar por', nvSello(j.pendPor, j.pendEn)]);
   abreHoja('<h2>' + esc(j.concepto || '(sin concepto)') + '</h2><div class="sub">' + estPill(j.estado) + '</div>' +
     '<dl class="dl">' + f.map(([a,b]) => '<dt>' + esc(a) + '</dt><dd style="white-space:pre-line">' + esc(b) + '</dd>').join('') + '</dl>' +
-    '<div class="acciones">' + (sePuede ? '<button class="btn" data-act="confBolo" data-id="' + esc(j.id) + '">Confirmar bolo</button>' : '') +
+    '<div class="acciones">' + estBotones(j) + '<button class="btn sec" data-cerrar>Cerrar</button></div>');
+}
+/* los cambios de estado que se pueden hacer desde el móvil, según cómo esté el bolo */
+function estOpciones(j){
+  const e = j.estado === 'conf' || j.estado === 'anul' ? j.estado : 'pend', o = [];
+  if(e !== 'conf') o.push(['conf', 'Confirmar bolo', '']);
+  if(e === 'conf') o.push(['pend', 'Dejar por confirmar', 'sec']);
+  if(e === 'anul') o.push(['pend', 'Quitar la anulación', 'sec']);
+  if(e !== 'anul') o.push(['anul', 'Anular bolo', 'peligro']);
+  return o;
+}
+const estBotones = j => estOpciones(j).map(([e, t, c]) => '<button class="btn' + (c ? ' ' + c : '') + '" data-act="estBolo" data-est="' + e + '" data-id="' + esc(j.id) + '">' + esc(t) + '</button>').join('');
+/* pulsación larga (o clic derecho) sobre un bolo de la Semana: menú con lo que se puede hacer */
+function menuJob(id){
+  const j = DATOS.planning.items.find(x => x.id === id); if(!j) return;
+  const fechas = j.ini ? (j.fin && j.fin !== j.ini ? 'del ' + fechaCorta(j.ini) + ' al ' + fechaCorta(j.fin) : fechaCorta(j.ini)) : '';
+  abreHoja('<h2>' + esc(j.concepto || '(sin concepto)') + '</h2><div class="sub">' + estPill(j.estado) + (j.num ? ' · ' + esc(j.num) : '') + (fechas ? ' · ' + esc(fechas) : '') + '</div>' +
+    '<div class="acciones menuJob">' + estBotones(j) + '<button class="btn sec" data-act="verJob" data-id="' + esc(j.id) + '">Ver la ficha</button>' +
     '<button class="btn sec" data-cerrar>Cerrar</button></div>');
 }
+(function(){   /* pulsación larga en las tarjetas de la Semana (el clic corto sigue abriendo la ficha) */
+  let tm = null, x0 = 0, y0 = 0, id = '', hecho = 0, enEsta = false, solto = 0;
+  const para = () => { if(tm){ clearTimeout(tm); tm = null; } };
+  const abre = jid => { para(); hecho = Date.now(); enEsta = true; try{ navigator.vibrate && navigator.vibrate(15); }catch(_){ } menuJob(jid); };
+  document.addEventListener('pointerdown', e => { enEsta = false; const c = e.target.closest && e.target.closest('#semLista [data-job]'); if(!c || e.button > 0) return;
+    id = c.dataset.job; x0 = e.clientX; y0 = e.clientY; para(); tm = setTimeout(() => abre(id), 550); }, true);
+  document.addEventListener('pointermove', e => { if(tm && Math.hypot(e.clientX - x0, e.clientY - y0) > 10) para(); }, true);
+  ['pointerup', 'pointercancel', 'scroll'].forEach(ev => document.addEventListener(ev, e => { para(); if(e.type !== 'scroll' && enEsta){ enEsta = false; solto = Date.now(); } }, true));
+  document.addEventListener('contextmenu', e => { const c = e.target.closest && e.target.closest('#semLista [data-job]'); if(!c) return;
+    e.preventDefault(); if(Date.now() - hecho > 800) abre(c.dataset.job); }, true);
+  /* el clic que llega al soltar después de una pulsación larga no abre además la ficha */
+  document.addEventListener('click', e => { if(Date.now() - solto < 350 || (enEsta && Date.now() - hecho < 3000)){ e.preventDefault(); e.stopImmediatePropagation(); } }, true);
+})();
 
-/* ---------- confirmar un bolo desde el móvil ----------
+/* ---------- cambiar el estado de un bolo desde el móvil: confirmar, dejar por confirmar, anular ----------
    El estado del trabajo en el Planning es el que manda en toda la app: el presupuesto, el stock, la Nave
-   y el libro de contabilidad lo leen de aquí. Por eso confirmar es cambiarlo aquí, sin tocar el documento
-   del presupuesto: el ordenador lo verá así en cuanto lo abra. Queda apuntado quién lo confirmó y cuándo.
-   Desde el móvil SOLO se confirma: anular o volver a dejarlo provisional sigue siendo cosa del ordenador. */
-function confirmaBolo(id){
-  const j = DATOS.planning.items.find(x => x.id === id); if(!j) return;
-  const d = [['Fechas', j.ini ? (j.fin && j.fin !== j.ini ? 'del ' + fechaCorta(j.ini) + ' al ' + fechaLarga(j.fin) : fechaLarga(j.ini)) : '(sin fechas)']];
+   y el libro de contabilidad lo leen de aquí. Por eso se cambia aquí, sin tocar el documento del presupuesto:
+   el ordenador lo verá así en cuanto lo abra. Queda apuntado quién y cuándo (confPor/confEn, anuPor/anuEn, pendPor/pendEn).
+   Desde el 17-11 (L.A.): además de confirmar, se puede anular y dejar por confirmar (pulsación larga en la Semana o desde la ficha). */
+const EST_TXT = {
+  conf:{t:'¿Confirmar', boton:'Sí, confirmar', hecho:'Bolo confirmado', haciendo:'Confirmando…',
+    sub:'Pasa a <b>Confirmado</b> para todos, aquí y en el ordenador: su material deja de estar libre esas fechas, sale en la Nave y el bolo entra en la contabilidad.'},
+  anul:{t:'¿Anular', boton:'Sí, anular', hecho:'Bolo anulado', haciendo:'Anulando…',
+    sub:'Pasa a <b>Anulado</b> para todos, aquí y en el ordenador: su material vuelve a quedar libre esas fechas, sale de la Nave y de la contabilidad. Se puede deshacer con «Quitar la anulación».'},
+  pend:{t:'¿Dejar por confirmar', boton:'Sí, por confirmar', hecho:'Bolo por confirmar', haciendo:'Guardando…',
+    sub:'Pasa a <b>Por confirmar</b> para todos: su material sigue apartado esas fechas como provisional, y deja de contar en la Nave y en la contabilidad hasta que se confirme.'}
+};
+function cambiaEstado(id, nuevo){
+  const j = DATOS.planning.items.find(x => x.id === id); if(!j || !EST_TXT[nuevo]) return;
+  const T = EST_TXT[nuevo], d = [['Ahora', (EST[j.estado] || EST[''])[1]], ['Fechas', j.ini ? (j.fin && j.fin !== j.ini ? 'del ' + fechaCorta(j.ini) + ' al ' + fechaLarga(j.fin) : fechaLarga(j.ini)) : '(sin fechas)']];
   if(j.num) d.push(['Nº presupuesto', j.num]);
   const uds = (j.mat || []).reduce((t, m) => t + N0(m.cant), 0);
   if(uds) d.push(['Material', uds + (uds === 1 ? ' unidad' : ' unidades') + ' · ' + j.mat.length + (j.mat.length === 1 ? ' línea' : ' líneas')]);
-  abreHoja('<h2>¿Confirmar «' + esc(j.concepto || 'este bolo') + '»?</h2>' +
-    '<div class="sub">Pasa a <b>Confirmado</b> para todos, aquí y en el ordenador: su material deja de estar libre esas fechas, sale en la Nave y el bolo entra en la contabilidad.</div>' +
+  abreHoja('<h2>' + T.t + ' «' + esc(j.concepto || 'este bolo') + '»?</h2>' +
+    '<div class="sub">' + T.sub + '</div>' +
     '<dl class="dl">' + d.map(([a,b]) => '<dt>' + esc(a) + '</dt><dd>' + esc(b) + '</dd>').join('') + '</dl>' +
-    '<p class="hint">El importe no se ve desde el móvil. Si dudas de cuál es este presupuesto, ábrelo antes en «Abrir».</p>' +
+    '<p class="hint">El importe no se ve desde el móvil. Si dudas de cuál es este presupuesto, ábrelo antes en «Abrir».' +
+    (nuevo === 'anul' && j.estado === 'conf' ? ' Si ya tiene una factura emitida, la factura no se anula sola: hay que hacer la rectificativa desde el ordenador.' : '') + '</p>' +
     '<p class="hint" id="cbAviso"></p>' +
-    '<div class="acciones"><button class="btn" data-act="confBoloSi" data-id="' + esc(j.id) + '">Sí, confirmar</button>' +
+    '<div class="acciones"><button class="btn' + (nuevo === 'anul' ? ' peligro' : '') + '" data-act="estBoloSi" data-est="' + nuevo + '" data-id="' + esc(j.id) + '">' + T.boton + '</button>' +
     '<button class="btn sec" data-cerrar>Ahora no</button></div>', true);
 }
-async function confirmaBoloYa(id, boton){
-  const j = DATOS.planning.items.find(x => x.id === id); if(!j) return;
-  if(j.estado === 'conf'){ cierraHoja(); toast('Ya estaba confirmado'); return; }
-  const txt = boton.textContent; boton.disabled = true; boton.textContent = 'Confirmando…';
+const confirmaBolo = id => cambiaEstado(id, 'conf');   /* nombre de antes */
+async function cambiaEstadoYa(id, nuevo, boton){
+  const j = DATOS.planning.items.find(x => x.id === id); if(!j || !EST_TXT[nuevo]) return;
+  const T = EST_TXT[nuevo], actual = j.estado === 'conf' || j.estado === 'anul' ? j.estado : 'pend';
+  if(actual === nuevo){ cierraHoja(); toast('Ya estaba así'); return; }
+  const txt = boton.textContent; boton.disabled = true; boton.textContent = T.haciendo;
   const av = $('#cbAviso'); if(av) av.textContent = '';
-  const antes = {estado:j.estado, mod:j.mod, por:j.confPor, en:j.confEn, tenia:('confPor' in j)};
-  j.estado = 'conf'; j.confEn = new Date().toISOString(); j.confPor = USUARIO; j.mod = j.confEn;
+  const K = {conf:['confPor','confEn'], anul:['anuPor','anuEn'], pend:['pendPor','pendEn']}[nuevo];
+  const antes = {estado:j.estado, mod:j.mod, por:j[K[0]], en:j[K[1]], tenia:(K[0] in j)};
+  const ahora = new Date().toISOString();
+  j.estado = nuevo; j[K[1]] = ahora; j[K[0]] = USUARIO; j.mod = ahora;
   try{
     const r = await guardaCol('planning', [j], o => (o.concepto || '(sin concepto)') + (o.ini ? ' · ' + fechaCorta(o.ini) : ''));
-    if(r.conflicto) throw new Error('alguien lo ha cambiado desde otro sitio mientras tanto. Vuelve a entrar en el bolo, míralo y confírmalo otra vez.');
-    INV_CACHE = null; cierraHoja(); pintaSemana(); pintaNave(); toast('Bolo confirmado');
+    if(r.conflicto) throw new Error('alguien lo ha cambiado desde otro sitio mientras tanto. Vuelve a entrar en el bolo, míralo y prueba otra vez.');
+    INV_CACHE = null; cierraHoja(); pintaSemana(); pintaNave(); toast(T.hecho);
+    if((nuevo === 'anul' || antes.estado === 'anul') && j.num) marcaCarpeta(j.num, nuevo);
   }catch(e){
     j.estado = antes.estado; j.mod = antes.mod;
-    if(antes.tenia){ j.confPor = antes.por; j.confEn = antes.en; } else { delete j.confPor; delete j.confEn; }
+    if(antes.tenia){ j[K[0]] = antes.por; j[K[1]] = antes.en; } else { delete j[K[0]]; delete j[K[1]]; }
     INV_CACHE = null;
     boton.disabled = false; boton.textContent = txt;
-    const a2 = $('#cbAviso'); if(a2) a2.textContent = 'No se ha confirmado: ' + e.message;
+    const a2 = $('#cbAviso'); if(a2) a2.textContent = 'No se ha cambiado: ' + e.message;
   }
+}
+const confirmaBoloYa = (id, boton) => cambiaEstadoYa(id, 'conf', boton);
+/* como en el ordenador: al anular (o quitar la anulación), su carpeta de Drive se renombra con «(ANULADO)» al final (o se le quita) */
+const drvNumM = t => { const m = /^([A-Z]{3})\s*(\d{1,3})\s*-?\s*BK/i.exec(String(t || '').trim()); return m ? (m[1] + m[2].padStart(3, '0') + '-BK').toUpperCase() : ''; };
+async function marcaCarpeta(num, estado){
+  try{
+    const j = await api('drive_lista', {}, 60000), n = drvNumM(num);
+    const b = n && (j.bolos || []).find(x => drvNumM(x.carpeta) === n && x.carpetaId);
+    if(!b){ toast('No encuentro su carpeta en Drive para marcarla'); return; }
+    const r = await api('carpeta_estado', {carpeta:b.carpetaId, estado}, 60000);
+    if(r.ok && r.cambiado) toast('Carpeta de Drive: «' + r.nombre + '»');
+  }catch(e){ toast('El estado está cambiado, pero no he podido marcar su carpeta de Drive'); }
 }
 
 /* ============================================================
@@ -1448,6 +1513,9 @@ document.addEventListener('click', e => {
   else if(act === 'bajaYa'){ const p = HOJA.pend; cierraHoja(); if(p) p.descarga(); }
   else if(act === 'confBolo') confirmaBolo(a.dataset.id);
   else if(act === 'confBoloSi') confirmaBoloYa(a.dataset.id, a);
+  else if(act === 'estBolo') cambiaEstado(a.dataset.id, a.dataset.est);
+  else if(act === 'estBoloSi') cambiaEstadoYa(a.dataset.id, a.dataset.est, a);
+  else if(act === 'verJob') fichaJob(a.dataset.id);
 });
 
 
